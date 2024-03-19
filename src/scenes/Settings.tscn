@@ -10,3 +10,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_0f5jk")
+
+[node name="Back" type="Button" parent="."]
+offset_left = 8.0
+offset_top = 6.0
+offset_right = 136.0
+offset_bottom = 54.0
+text = "BACK"

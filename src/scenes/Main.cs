@@ -1,7 +1,7 @@
 using Godot;
 using SpaceBreach.utils;
 
-namespace SpaceBreach;
+namespace SpaceBreach.scenes;
 
 public partial class Main : Control {
 	public override void _Ready() {
