@@ -1,0 +1,70 @@
+[gd_scene load_steps=5 format=3 uid="uid://ciqfxss27h1bf"]
+
+[ext_resource type="Theme" uid="uid://baa4tgvcxjno0" path="res://assets/themes/ui.tres" id="1_a8nbm"]
+[ext_resource type="Script" path="res://src/scene/Main.cs" id="2_6sbjt"]
+[ext_resource type="FontFile" uid="uid://dhspi3no357mn" path="res://assets/VT323-Regular.ttf" id="3_0aj3i"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_m7tej"]
+font = ExtResource("3_0aj3i")
+font_size = 100
+
+[node name="Main" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+theme = ExtResource("1_a8nbm")
+script = ExtResource("2_6sbjt")
+metadata/_edit_vertical_guides_ = [400.0]
+metadata/_edit_horizontal_guides_ = [300.0]
+
+[node name="Version" type="Label" parent="."]
+layout_mode = 0
+offset_left = 632.0
+offset_top = 573.0
+offset_right = 792.0
+offset_bottom = 595.0
+theme_override_font_sizes/font_size = 14
+text = "VERSION"
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="Play" type="Button" parent="."]
+layout_mode = 0
+offset_left = 304.0
+offset_top = 276.0
+offset_right = 496.0
+offset_bottom = 324.0
+text = "PLAY"
+
+[node name="Train" type="Button" parent="."]
+layout_mode = 0
+offset_left = 304.0
+offset_top = 336.0
+offset_right = 496.0
+offset_bottom = 384.0
+text = "TRAINING"
+
+[node name="Settings" type="Button" parent="."]
+layout_mode = 0
+offset_left = 304.0
+offset_top = 396.0
+offset_right = 496.0
+offset_bottom = 444.0
+text = "SETTINGS"
+
+[node name="Exit" type="Button" parent="."]
+layout_mode = 0
+offset_left = 304.0
+offset_top = 456.0
+offset_right = 496.0
+offset_bottom = 504.0
+text = "EXIT"
+
+[node name="Label2" type="Label" parent="."]
+layout_mode = 0
+offset_left = 112.0
+offset_right = 688.0
+offset_bottom = 192.0
+text = "SPACE BREACH"
+label_settings = SubResource("LabelSettings_m7tej")
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -1,0 +1,8 @@
+[gd_resource type="AtlasTexture" load_steps=2 format=2]
+
+[sub_resource type="StreamTexture" id=3]
+load_path = "res://.import/icon_sheet.png-46cfc13d98fbd673a40b5fd646a09491.stex"
+
+[resource]
+atlas = SubResource( 3 )
+region = Rect2( 16, 16, 16, 16 )
