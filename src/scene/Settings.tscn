@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://cv5ixdsu10rdm"]
+[gd_scene load_steps=3 format=3 uid="uid://cv5ixdsu10rdm"]
 
 [ext_resource type="Theme" uid="uid://baa4tgvcxjno0" path="res://assets/themes/ui.tres" id="1_0f5jk"]
+[ext_resource type="Script" path="res://src/scene/Settings.cs" id="2_vtaj1"]
 
 [node name="Settings" type="Control"]
 layout_mode = 3
@@ -10,8 +11,10 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_0f5jk")
+script = ExtResource("2_vtaj1")
 
 [node name="Back" type="Button" parent="."]
+layout_mode = 0
 offset_left = 8.0
 offset_top = 6.0
 offset_right = 136.0

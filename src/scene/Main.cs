@@ -1,7 +1,8 @@
 using Godot;
-using SpaceBreach.utils;
+using SpaceBreach.manager;
+using SpaceBreach.util;
 
-namespace SpaceBreach.scenes;
+namespace SpaceBreach.scene;
 
 public partial class Main : Control {
 	public override void _Ready() {
@@ -12,7 +13,7 @@ public partial class Main : Control {
 			GetNode<Label>("Version").Text = version.AsString();
 		});
 
-		GetNode<Button>("Settings").Pressed += () => GetTree().ChangeSceneToFile("res://src/scenes/Settings.tscn");
-		GetNode<Button>("Exit").Pressed += () => GetTree().Quit();
+		GetNode<Button>("Settings").Pressed += () => GetTree().Append("res://src/scene/Settings.tscn");
+		GetNode<Button>("Exit").Pressed += GetTree().Quit;
 	}
 }

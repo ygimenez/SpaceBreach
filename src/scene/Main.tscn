@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://ciqfxss27h1bf"]
 
 [ext_resource type="Theme" uid="uid://baa4tgvcxjno0" path="res://assets/themes/ui.tres" id="1_a8nbm"]
-[ext_resource type="Script" path="res://src/Main.cs" id="2_6sbjt"]
+[ext_resource type="Script" path="res://src/scene/Main.cs" id="2_6sbjt"]
 [ext_resource type="FontFile" uid="uid://dhspi3no357mn" path="res://assets/VT323-Regular.ttf" id="3_0aj3i"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_m7tej"]
