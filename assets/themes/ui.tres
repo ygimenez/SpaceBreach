@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=46 format=3 uid="uid://baa4tgvcxjno0"]
+[gd_resource type="Theme" load_steps=47 format=3 uid="uid://baa4tgvcxjno0"]
 
 [ext_resource type="FontFile" uid="uid://dmct5rbfg8hdi" path="res://assets/SpaceMono-Regular.ttf" id="1_wmloe"]
 [ext_resource type="StyleBox" uid="uid://cpsbkhvf8neub" path="res://assets/textures/box_disabled.tres" id="2_j7mdr"]
@@ -73,6 +73,8 @@ texture = ExtResource("5_4vig4")
 texture_margin_left = 16.0
 texture_margin_right = 16.0
 region_rect = Rect2(48, 32, 32, 16)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nho6u"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bdteg"]
 atlas = ExtResource("5_4vig4")
@@ -228,6 +230,8 @@ HSlider/icons/grabber_highlight = SubResource("AtlasTexture_ntoun")
 HSlider/styles/grabber_area = SubResource("StyleBoxEmpty_gvwfc")
 HSlider/styles/grabber_area_highlight = SubResource("StyleBoxEmpty_gvwfc")
 HSlider/styles/slider = SubResource("StyleBoxTexture_fwoxq")
+ItemList/styles/focus = SubResource("StyleBoxEmpty_nho6u")
+ItemList/styles/panel = ExtResource("4_leyh6")
 Label/font_sizes/font_size = 20
 Label/fonts/font = ExtResource("1_wmloe")
 LineEdit/font_sizes/font_size = 18
