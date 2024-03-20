@@ -1,6 +1,6 @@
 ﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceBreach", "SpaceBreach.csproj", "{1864E75F-81C2-44E2-B4AE-C1282DEF91B4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceBreach", "SpaceBreach.csproj", "{15CE74C9-064B-48BE-90EE-7B08E1335310}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -9,11 +9,11 @@ Global
 	ExportRelease|Any CPU = ExportRelease|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1864E75F-81C2-44E2-B4AE-C1282DEF91B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1864E75F-81C2-44E2-B4AE-C1282DEF91B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1864E75F-81C2-44E2-B4AE-C1282DEF91B4}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
-		{1864E75F-81C2-44E2-B4AE-C1282DEF91B4}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
-		{1864E75F-81C2-44E2-B4AE-C1282DEF91B4}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
-		{1864E75F-81C2-44E2-B4AE-C1282DEF91B4}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+		{15CE74C9-064B-48BE-90EE-7B08E1335310}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15CE74C9-064B-48BE-90EE-7B08E1335310}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15CE74C9-064B-48BE-90EE-7B08E1335310}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
+		{15CE74C9-064B-48BE-90EE-7B08E1335310}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
+		{15CE74C9-064B-48BE-90EE-7B08E1335310}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
+		{15CE74C9-064B-48BE-90EE-7B08E1335310}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
 	EndGlobalSection
 EndGlobal

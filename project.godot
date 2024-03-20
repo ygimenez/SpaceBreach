@@ -6,30 +6,31 @@
 ;   [section] ; section goes between []
 ;   param=value ; assign values to parameters
 
-config_version=5
+config_version=4
 
 [application]
 
 config/name="Space Breach"
 run/main_scene="res://src/scene/Main.tscn"
-config/features=PackedStringArray("4.2", "C#", "GL Compatibility")
-boot_splash/bg_color=Color(0, 0, 0, 1)
+boot_splash/bg_color=Color( 0, 0, 0, 1 )
 config/icon="res://icon.svg"
+config/features=PoolStringArray( "4.2", "C#", "GL Compatibility" )
 
 [display]
 
-window/size/viewport_width=800
-window/size/viewport_height=600
+window/size/width=800
 window/size/resizable=false
 mouse_cursor/custom_image="res://assets/icons/cursor.png"
+window/size/viewport_width=800
+window/size/viewport_height=600
 
-[dotnet]
+[mono]
 
 project/assembly_name="SpaceBreach"
 
 [rendering]
 
-renderer/rendering_method="gl_compatibility"
-renderer/rendering_method.mobile="gl_compatibility"
-textures/vram_compression/import_etc2_astc=true
-environment/defaults/default_clear_color=Color(0, 0, 0, 1)
+quality/driver/driver_name="GLES2"
+vram_compression/import_etc=true
+vram_compression/import_etc2=false
+environment/default_clear_color=Color( 0, 0, 0, 1 )

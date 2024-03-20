@@ -1,311 +1,153 @@
-[gd_resource type="Theme" load_steps=47 format=3 uid="uid://baa4tgvcxjno0"]
+[gd_resource type="Theme" load_steps=27 format=2]
 
-[ext_resource type="FontFile" uid="uid://dmct5rbfg8hdi" path="res://assets/SpaceMono-Regular.ttf" id="1_wmloe"]
-[ext_resource type="StyleBox" uid="uid://cpsbkhvf8neub" path="res://assets/textures/box_disabled.tres" id="2_j7mdr"]
-[ext_resource type="StyleBox" uid="uid://ujjkxw70r14b" path="res://assets/textures/box_hover.tres" id="3_7kwh3"]
-[ext_resource type="StyleBox" uid="uid://dl8cxxyc2l8c1" path="res://assets/textures/box_normal.tres" id="4_leyh6"]
-[ext_resource type="Texture2D" uid="uid://bduxsl1rc8b7b" path="res://assets/icons/icon_sheet.png" id="5_4vig4"]
+[ext_resource path="res://assets/textures/panel_normal.tres" type="StyleBox" id=1]
+[ext_resource path="res://assets/fonts/SpaceMono-Regular.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://assets/icons/icon_sheet.png" type="Texture" id=3]
+[ext_resource path="res://assets/textures/check_checked_d.tres" type="Texture" id=4]
+[ext_resource path="res://assets/textures/check_checked.tres" type="Texture" id=5]
+[ext_resource path="res://assets/textures/check_unchecked_d.tres" type="Texture" id=6]
+[ext_resource path="res://assets/textures/check_unchecked.tres" type="Texture" id=7]
+[ext_resource path="res://assets/textures/panel_focus.tres" type="StyleBox" id=8]
+[ext_resource path="res://assets/textures/panel_highlight.tres" type="StyleBox" id=9]
+[ext_resource path="res://assets/textures/panel_disabled.tres" type="StyleBox" id=10]
+[ext_resource path="res://assets/textures/h_slider.tres" type="StyleBox" id=11]
+[ext_resource path="res://assets/textures/grabber.tres" type="StyleBox" id=12]
+[ext_resource path="res://assets/textures/v_slider.tres" type="StyleBox" id=13]
+[ext_resource path="res://assets/textures/updown.tres" type="Texture" id=14]
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_10d0l"]
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 3 )
+region = Rect2( 48, 0, 16, 32 )
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ayvxx"]
-atlas = ExtResource("5_4vig4")
-region = Rect2(0, 0, 16, 16)
+[sub_resource type="StyleBoxEmpty" id=7]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_sahgq"]
-atlas = ExtResource("5_4vig4")
-region = Rect2(16, 0, 16, 16)
+[sub_resource type="StyleBoxEmpty" id=8]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_w5lgs"]
-atlas = ExtResource("5_4vig4")
-region = Rect2(0, 16, 16, 16)
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 3 )
+region = Rect2( 32, 32, 16, 16 )
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_78wt6"]
-atlas = ExtResource("5_4vig4")
-region = Rect2(16, 16, 16, 16)
+[sub_resource type="AtlasTexture" id=10]
+atlas = ExtResource( 3 )
+region = Rect2( 16, 32, 16, 16 )
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_kt6xn"]
-atlas = ExtResource("5_4vig4")
-region = Rect2(0, 0, 16, 16)
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 3 )
+region = Rect2( 41, 19, 9, 10 )
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_0gg3d"]
-atlas = ExtResource("5_4vig4")
-region = Rect2(16, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_2s7se"]
-atlas = ExtResource("5_4vig4")
-region = Rect2(0, 16, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_12twq"]
-atlas = ExtResource("5_4vig4")
-region = Rect2(16, 16, 16, 16)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_igdg0"]
-bg_color = Color(1, 1, 1, 1)
-border_width_left = 5
-border_width_top = 2
-border_width_right = 5
-border_width_bottom = 2
-border_color = Color(0.8, 0.8, 0.8, 0)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ognr7"]
-content_margin_left = 0.0
-content_margin_top = 8.0
-content_margin_right = 0.0
-content_margin_bottom = 8.0
-texture = ExtResource("5_4vig4")
-texture_margin_left = 16.0
-texture_margin_right = 16.0
-region_rect = Rect2(48, 32, 32, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ntoun"]
-atlas = ExtResource("5_4vig4")
-region = Rect2(48, 0, 16, 32)
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gvwfc"]
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fwoxq"]
-content_margin_left = 0.0
-content_margin_top = 8.0
-content_margin_right = 0.0
-content_margin_bottom = 8.0
-texture = ExtResource("5_4vig4")
-texture_margin_left = 16.0
-texture_margin_right = 16.0
-region_rect = Rect2(48, 32, 32, 16)
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nho6u"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_bdteg"]
-atlas = ExtResource("5_4vig4")
-region = Rect2(32, 32, 16, 16)
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cc438"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_dc2sc"]
-atlas = ExtResource("5_4vig4")
-region = Rect2(32, 11, 16, 5)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_b8yoj"]
-atlas = ExtResource("5_4vig4")
-region = Rect2(0, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_tvn0t"]
-atlas = ExtResource("5_4vig4")
-region = Rect2(16, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_fqrd3"]
-atlas = ExtResource("5_4vig4")
-region = Rect2(0, 16, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_oja6o"]
-atlas = ExtResource("5_4vig4")
-region = Rect2(16, 16, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_8ojwr"]
-atlas = ExtResource("5_4vig4")
-region = Rect2(43, 16, 5, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_6a0kp"]
-atlas = ExtResource("5_4vig4")
-region = Rect2(32, 16, 5, 16)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_joo18"]
-bg_color = Color(1, 1, 1, 1)
+[sub_resource type="StyleBoxFlat" id=9]
+bg_color = Color( 1, 1, 1, 1 )
 border_width_left = 5
 border_width_top = 5
 border_width_right = 5
 border_width_bottom = 5
-border_color = Color(0.8, 0.8, 0.8, 0)
+border_color = Color( 0.8, 0.8, 0.8, 0 )
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_x8hg4"]
-atlas = ExtResource("5_4vig4")
-region = Rect2(32, 0, 16, 16)
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_l5rhh"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gkooy"]
+[sub_resource type="StyleBoxFlat" id=11]
 content_margin_left = 5.0
-content_margin_top = 5.0
 content_margin_right = 5.0
+content_margin_top = 5.0
 content_margin_bottom = 5.0
-bg_color = Color(1, 1, 1, 1)
+bg_color = Color( 1, 1, 1, 1 )
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color( 1, 1, 1, 1 )
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_u40rn"]
+[sub_resource type="AtlasTexture" id=14]
+atlas = ExtResource( 3 )
+region = Rect2( 32, 11, 16, 5 )
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_6fqls"]
-atlas = ExtResource("5_4vig4")
-region = Rect2(32, 11, 16, 5)
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 3 )
+region = Rect2( 48, 48, 32, 16 )
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_g5ic1"]
-atlas = ExtResource("5_4vig4")
-region = Rect2(43, 16, 5, 16)
+[sub_resource type="StyleBoxEmpty" id=13]
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_nfdrp"]
-atlas = ExtResource("5_4vig4")
-region = Rect2(32, 16, 5, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_7ukwe"]
-atlas = ExtResource("5_4vig4")
-region = Rect2(0, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_xym7f"]
-atlas = ExtResource("5_4vig4")
-region = Rect2(0, 16, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_0r1qp"]
-atlas = ExtResource("5_4vig4")
-region = Rect2(32, 0, 16, 16)
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_avuqr"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tlbcv"]
-bg_color = Color(1, 1, 1, 1)
-border_width_left = 2
-border_width_top = 5
-border_width_right = 2
-border_width_bottom = 5
-border_color = Color(0.8, 0.8, 0.8, 0)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_uolog"]
-content_margin_left = 8.0
-content_margin_top = 0.0
-content_margin_right = 8.0
-content_margin_bottom = 0.0
-texture = ExtResource("5_4vig4")
-texture_margin_top = 16.0
-texture_margin_bottom = 16.0
-region_rect = Rect2(64, 0, 16, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_3be3h"]
-atlas = ExtResource("5_4vig4")
-region = Rect2(48, 48, 32, 16)
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ejtt1"]
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_k158q"]
-content_margin_left = 8.0
-content_margin_top = 0.0
-content_margin_right = 8.0
-content_margin_bottom = 0.0
-texture = ExtResource("5_4vig4")
-texture_margin_top = 16.0
-texture_margin_bottom = 16.0
-region_rect = Rect2(64, 0, 16, 32)
+[sub_resource type="DynamicFont" id=1]
+size = 18
+font_data = ExtResource( 2 )
 
 [resource]
-Button/font_sizes/font_size = 20
-Button/fonts/font = ExtResource("1_wmloe")
-Button/styles/disabled = ExtResource("2_j7mdr")
-Button/styles/focus = SubResource("StyleBoxEmpty_10d0l")
-Button/styles/hover = ExtResource("3_7kwh3")
-Button/styles/normal = ExtResource("4_leyh6")
-Button/styles/pressed = ExtResource("3_7kwh3")
-CheckBox/icons/checked = SubResource("AtlasTexture_ayvxx")
-CheckBox/icons/checked_disabled = SubResource("AtlasTexture_sahgq")
-CheckBox/icons/radio_checked = SubResource("AtlasTexture_ayvxx")
-CheckBox/icons/radio_checked_disabled = SubResource("AtlasTexture_sahgq")
-CheckBox/icons/radio_unchecked = SubResource("AtlasTexture_w5lgs")
-CheckBox/icons/radio_unchecked_disabled = SubResource("AtlasTexture_78wt6")
-CheckBox/icons/unchecked = SubResource("AtlasTexture_w5lgs")
-CheckBox/icons/unchecked_disabled = SubResource("AtlasTexture_78wt6")
-CheckBox/styles/hover_pressed = ExtResource("3_7kwh3")
-CheckButton/icons/checked = SubResource("AtlasTexture_kt6xn")
-CheckButton/icons/checked_disabled = SubResource("AtlasTexture_0gg3d")
-CheckButton/icons/checked_disabled_mirrored = SubResource("AtlasTexture_0gg3d")
-CheckButton/icons/checked_mirrored = SubResource("AtlasTexture_kt6xn")
-CheckButton/icons/unchecked = SubResource("AtlasTexture_2s7se")
-CheckButton/icons/unchecked_disabled = SubResource("AtlasTexture_12twq")
-CheckButton/icons/unchecked_disabled_mirrored = SubResource("AtlasTexture_12twq")
-CheckButton/icons/unchecked_mirrored = SubResource("AtlasTexture_2s7se")
-CheckButton/styles/hover_pressed = ExtResource("3_7kwh3")
-HScrollBar/styles/grabber = SubResource("StyleBoxFlat_igdg0")
-HScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_igdg0")
-HScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_igdg0")
-HScrollBar/styles/scroll = SubResource("StyleBoxTexture_ognr7")
-HScrollBar/styles/scroll_focus = SubResource("StyleBoxTexture_ognr7")
-HSlider/icons/grabber = SubResource("AtlasTexture_ntoun")
-HSlider/icons/grabber_disabled = SubResource("AtlasTexture_ntoun")
-HSlider/icons/grabber_highlight = SubResource("AtlasTexture_ntoun")
-HSlider/styles/grabber_area = SubResource("StyleBoxEmpty_gvwfc")
-HSlider/styles/grabber_area_highlight = SubResource("StyleBoxEmpty_gvwfc")
-HSlider/styles/slider = SubResource("StyleBoxTexture_fwoxq")
-ItemList/styles/focus = SubResource("StyleBoxEmpty_nho6u")
-ItemList/styles/panel = ExtResource("4_leyh6")
-Label/font_sizes/font_size = 20
-Label/fonts/font = ExtResource("1_wmloe")
-LineEdit/font_sizes/font_size = 18
-LineEdit/fonts/font = ExtResource("1_wmloe")
-LineEdit/icons/clear = SubResource("AtlasTexture_bdteg")
-LineEdit/styles/focus = SubResource("StyleBoxEmpty_cc438")
-LineEdit/styles/normal = ExtResource("4_leyh6")
-LineEdit/styles/read_only = ExtResource("2_j7mdr")
-OptionButton/icons/arrow = SubResource("AtlasTexture_dc2sc")
-Panel/styles/panel = ExtResource("4_leyh6")
-PopupDialog/styles/panel = ExtResource("4_leyh6")
-PopupMenu/font_sizes/font_size = 18
-PopupMenu/fonts/font = ExtResource("1_wmloe")
-PopupMenu/icons/checked = SubResource("AtlasTexture_b8yoj")
-PopupMenu/icons/checked_disabled = SubResource("AtlasTexture_tvn0t")
-PopupMenu/icons/radio_checked = SubResource("AtlasTexture_b8yoj")
-PopupMenu/icons/radio_checked_disabled = SubResource("AtlasTexture_tvn0t")
-PopupMenu/icons/radio_unchecked = SubResource("AtlasTexture_fqrd3")
-PopupMenu/icons/radio_unchecked_disabled = SubResource("AtlasTexture_oja6o")
-PopupMenu/icons/submenu = SubResource("AtlasTexture_8ojwr")
-PopupMenu/icons/submenu_mirrored = SubResource("AtlasTexture_6a0kp")
-PopupMenu/icons/unchecked = SubResource("AtlasTexture_fqrd3")
-PopupMenu/icons/unchecked_disabled = SubResource("AtlasTexture_oja6o")
-PopupMenu/styles/hover = ExtResource("4_leyh6")
-PopupMenu/styles/panel = ExtResource("4_leyh6")
-PopupPanel/styles/panel = ExtResource("4_leyh6")
-ProgressBar/colors/font_color = Color(0.5, 0.5, 0.5, 1)
-ProgressBar/font_sizes/font_size = 18
-ProgressBar/fonts/font = ExtResource("1_wmloe")
-ProgressBar/styles/background = ExtResource("4_leyh6")
-ProgressBar/styles/fill = SubResource("StyleBoxFlat_joo18")
-SpinBox/icons/updown = SubResource("AtlasTexture_x8hg4")
-TabContainer/colors/font_disabled_color = Color(0.7, 0.7, 0.7, 1)
-TabContainer/colors/font_selected_color = Color(0, 0, 0, 1)
-TabContainer/colors/font_unselected_color = Color(1, 1, 1, 1)
-TabContainer/constants/side_margin = 0
-TabContainer/font_sizes/font_size = 18
-TabContainer/fonts/font = ExtResource("1_wmloe")
-TabContainer/styles/panel = ExtResource("4_leyh6")
-TabContainer/styles/tab_disabled = ExtResource("2_j7mdr")
-TabContainer/styles/tab_focus = SubResource("StyleBoxEmpty_l5rhh")
-TabContainer/styles/tab_hovered = ExtResource("3_7kwh3")
-TabContainer/styles/tab_selected = SubResource("StyleBoxFlat_gkooy")
-TabContainer/styles/tab_unselected = ExtResource("4_leyh6")
-TextEdit/colors/caret_color = Color(1, 1, 1, 1)
-TextEdit/colors/font_color = Color(1, 1, 1, 1)
-TextEdit/font_sizes/font_size = 18
-TextEdit/fonts/font = ExtResource("1_wmloe")
-TextEdit/styles/focus = SubResource("StyleBoxEmpty_u40rn")
-TextEdit/styles/normal = ExtResource("4_leyh6")
-TextEdit/styles/read_only = ExtResource("2_j7mdr")
-Tree/colors/font_color = Color(1, 1, 1, 1)
-Tree/font_sizes/font_size = 18
-Tree/fonts/font = ExtResource("1_wmloe")
-Tree/icons/arrow = SubResource("AtlasTexture_6fqls")
-Tree/icons/arrow_collapsed = SubResource("AtlasTexture_g5ic1")
-Tree/icons/arrow_collapsed_mirrored = SubResource("AtlasTexture_nfdrp")
-Tree/icons/checked = SubResource("AtlasTexture_7ukwe")
-Tree/icons/indeterminate = SubResource("AtlasTexture_7ukwe")
-Tree/icons/select_arrow = SubResource("AtlasTexture_6fqls")
-Tree/icons/unchecked = SubResource("AtlasTexture_xym7f")
-Tree/icons/updown = SubResource("AtlasTexture_0r1qp")
-Tree/styles/focus = SubResource("StyleBoxEmpty_avuqr")
-Tree/styles/panel = ExtResource("4_leyh6")
-Tree/styles/selected = ExtResource("4_leyh6")
-Tree/styles/selected_focus = ExtResource("4_leyh6")
-VScrollBar/styles/grabber = SubResource("StyleBoxFlat_tlbcv")
-VScrollBar/styles/grabber_highlight = SubResource("StyleBoxFlat_tlbcv")
-VScrollBar/styles/grabber_pressed = SubResource("StyleBoxFlat_tlbcv")
-VScrollBar/styles/scroll = SubResource("StyleBoxTexture_uolog")
-VScrollBar/styles/scroll_focus = SubResource("StyleBoxTexture_uolog")
-VSlider/icons/grabber = SubResource("AtlasTexture_3be3h")
-VSlider/icons/grabber_disabled = SubResource("AtlasTexture_3be3h")
-VSlider/icons/grabber_highlight = SubResource("AtlasTexture_3be3h")
-VSlider/styles/grabber_area = SubResource("StyleBoxEmpty_ejtt1")
-VSlider/styles/grabber_area_highlight = SubResource("StyleBoxEmpty_ejtt1")
-VSlider/styles/slider = SubResource("StyleBoxTexture_k158q")
+default_font = SubResource( 1 )
+Button/colors/font_color = Color( 1, 1, 1, 1 )
+Button/styles/disabled = ExtResource( 10 )
+Button/styles/focus = ExtResource( 8 )
+Button/styles/hover = ExtResource( 9 )
+Button/styles/normal = ExtResource( 1 )
+Button/styles/pressed = ExtResource( 9 )
+CheckBox/icons/checked = ExtResource( 5 )
+CheckBox/icons/checked_disabled = ExtResource( 4 )
+CheckBox/icons/radio_checked = ExtResource( 5 )
+CheckBox/icons/radio_checked_disabled = ExtResource( 4 )
+CheckBox/icons/radio_unchecked = ExtResource( 7 )
+CheckBox/icons/radio_unchecked_disabled = ExtResource( 6 )
+CheckBox/icons/unchecked = ExtResource( 7 )
+CheckBox/icons/unchecked_disabled = ExtResource( 6 )
+CheckButton/icons/off = ExtResource( 7 )
+CheckButton/icons/off_disabled = ExtResource( 6 )
+CheckButton/icons/on = ExtResource( 5 )
+CheckButton/icons/on_disabled = ExtResource( 4 )
+HScrollBar/styles/grabber = ExtResource( 12 )
+HScrollBar/styles/grabber_highlight = ExtResource( 12 )
+HScrollBar/styles/grabber_pressed = ExtResource( 12 )
+HScrollBar/styles/scroll = ExtResource( 11 )
+HSlider/icons/grabber = SubResource( 6 )
+HSlider/icons/grabber_disabled = SubResource( 6 )
+HSlider/icons/grabber_highlight = SubResource( 6 )
+HSlider/styles/grabber_area = SubResource( 7 )
+HSlider/styles/grabber_area_highlight = SubResource( 8 )
+HSlider/styles/slider = ExtResource( 11 )
+LineEdit/colors/font_color = Color( 1, 1, 1, 1 )
+LineEdit/icons/clear = SubResource( 3 )
+LineEdit/styles/focus = ExtResource( 8 )
+LineEdit/styles/normal = ExtResource( 1 )
+LineEdit/styles/read_only = ExtResource( 10 )
+OptionButton/icons/arrow = SubResource( 10 )
+Panel/styles/panel = ExtResource( 1 )
+PopupMenu/icons/checked = ExtResource( 5 )
+PopupMenu/icons/radio_checked = ExtResource( 5 )
+PopupMenu/icons/radio_unchecked = ExtResource( 7 )
+PopupMenu/icons/submenu = SubResource( 2 )
+PopupMenu/icons/unchecked = ExtResource( 7 )
+PopupMenu/styles/hover = ExtResource( 1 )
+PopupMenu/styles/panel = ExtResource( 1 )
+PopupPanel/styles/panel = ExtResource( 1 )
+ProgressBar/colors/font_color = Color( 0.498039, 0.498039, 0.498039, 1 )
+ProgressBar/styles/bg = ExtResource( 1 )
+ProgressBar/styles/fg = SubResource( 9 )
+SpinBox/icons/updown = ExtResource( 14 )
+TabContainer/colors/font_color_bg = Color( 1, 1, 1, 1 )
+TabContainer/colors/font_color_disabled = Color( 1, 1, 1, 0.27451 )
+TabContainer/colors/font_color_fg = Color( 0, 0, 0, 1 )
+TabContainer/styles/panel = ExtResource( 1 )
+TabContainer/styles/tab_bg = ExtResource( 1 )
+TabContainer/styles/tab_disabled = ExtResource( 10 )
+TabContainer/styles/tab_fg = SubResource( 11 )
+TextEdit/colors/caret_color = Color( 1, 1, 1, 1 )
+TextEdit/colors/font_color = Color( 1, 1, 1, 1 )
+TextEdit/styles/focus = ExtResource( 8 )
+TextEdit/styles/normal = ExtResource( 1 )
+TextEdit/styles/read_only = ExtResource( 10 )
+Tree/colors/font_color = Color( 1, 1, 1, 1 )
+Tree/icons/arrow = SubResource( 14 )
+Tree/icons/arrow_collapsed = SubResource( 2 )
+Tree/icons/checked = ExtResource( 5 )
+Tree/icons/select_arrow = SubResource( 14 )
+Tree/icons/unchecked = ExtResource( 7 )
+Tree/icons/updown = ExtResource( 14 )
+Tree/styles/bg = ExtResource( 1 )
+Tree/styles/bg_focus = ExtResource( 8 )
+Tree/styles/selected = ExtResource( 1 )
+Tree/styles/selected_focus = ExtResource( 8 )
+VScrollBar/styles/grabber = ExtResource( 12 )
+VScrollBar/styles/grabber_highlight = ExtResource( 12 )
+VScrollBar/styles/grabber_pressed = ExtResource( 12 )
+VScrollBar/styles/scroll = ExtResource( 13 )
+VSlider/icons/grabber = SubResource( 12 )
+VSlider/icons/grabber_disabled = SubResource( 12 )
+VSlider/icons/grabber_highlight = SubResource( 12 )
+VSlider/styles/grabber_area = SubResource( 13 )
+VSlider/styles/grabber_area_highlight = SubResource( 13 )
+VSlider/styles/slider = ExtResource( 13 )
