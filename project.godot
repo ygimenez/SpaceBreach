@@ -10,9 +10,9 @@ config_version=5
 
 [application]
 
-config/name="SpaceBreach"
+config/name="Space Breach"
 run/main_scene="res://src/scene/Main.tscn"
-config/features=PackedStringArray("4.2", "GL Compatibility")
+config/features=PackedStringArray("4.2", "C#", "GL Compatibility")
 boot_splash/bg_color=Color(0, 0, 0, 1)
 config/icon="res://icon.svg"
 
@@ -21,6 +21,7 @@ config/icon="res://icon.svg"
 window/size/viewport_width=800
 window/size/viewport_height=600
 window/size/resizable=false
+mouse_cursor/custom_image="res://assets/icons/cursor.png"
 
 [dotnet]
 
@@ -30,4 +31,5 @@ project/assembly_name="SpaceBreach"
 
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true
 environment/defaults/default_clear_color=Color(0, 0, 0, 1)
