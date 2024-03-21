@@ -1,5 +1,5 @@
-﻿namespace SpaceBreach.enums;
-
-public enum WindowMode {
-	WINDOWED, BORDERLESS, FULLSCREEN
+﻿namespace SpaceBreach.enums {
+	public enum WindowMode {
+		WINDOWED, BORDERLESS, FULLSCREEN
+	}
 }

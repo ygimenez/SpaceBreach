@@ -1,15 +1,98 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://assets/themes/ui.tres" type="Theme" id=1]
+[ext_resource path="res://assets/fonts/SpaceMono.ttf" type="DynamicFontData" id=3]
+
+[sub_resource type="CSharpScript" id=3]
+resource_name = "Main"
+script/source = "using Godot;
+using System;
+
+public class Main : Control
+{
+	// Declare member variables here. Examples:
+	// private int a = 2;
+	// private string b = \"text\";
+
+	// Called when the node enters the scene tree for the first time.
+	public override void _Ready()
+	{
+		
+	}
+
+//  // Called every frame. 'delta' is the elapsed time since the previous frame.
+//  public override void _Process(float delta)
+//  {
+//      
+//  }
+}
+"
+
+[sub_resource type="DynamicFontData" id=4]
+font_path = "res://assets/fonts/VT323.ttf"
+
+[sub_resource type="DynamicFont" id=5]
+size = 100
+font_data = SubResource( 4 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 15
+font_data = ExtResource( 3 )
 
 [node name="Control" type="Control"]
-margin_right = 40.0
-margin_bottom = 40.0
+margin_right = 800.0
+margin_bottom = 600.0
 theme = ExtResource( 1 )
+script = SubResource( 3 )
+__meta__ = {
+"_edit_horizontal_guides_": [ 300.0 ],
+"_edit_vertical_guides_": [ 400.0 ]
+}
 
 [node name="Label" type="Label" parent="."]
-margin_left = 296.0
-margin_top = 90.0
-margin_right = 536.0
-margin_bottom = 186.0
+margin_left = 160.0
+margin_top = 48.0
+margin_right = 640.0
+margin_bottom = 148.0
+custom_fonts/font = SubResource( 5 )
 text = "SPACE BREACH"
+align = 1
+valign = 1
+
+[node name="Play" type="Button" parent="."]
+margin_left = 312.0
+margin_top = 276.0
+margin_right = 488.0
+margin_bottom = 324.0
+text = "PLAY"
+
+[node name="Training" type="Button" parent="."]
+margin_left = 312.0
+margin_top = 336.0
+margin_right = 488.0
+margin_bottom = 384.0
+text = "TRAINING"
+
+[node name="Settings" type="Button" parent="."]
+margin_left = 312.0
+margin_top = 396.0
+margin_right = 488.0
+margin_bottom = 444.0
+text = "SETTINGS"
+
+[node name="Exit" type="Button" parent="."]
+margin_left = 312.0
+margin_top = 456.0
+margin_right = 488.0
+margin_bottom = 504.0
+text = "EXIT"
+
+[node name="Version" type="Label" parent="."]
+margin_left = 632.0
+margin_top = 570.0
+margin_right = 792.0
+margin_bottom = 593.0
+rect_pivot_offset = Vector2( 160, 23 )
+custom_fonts/font = SubResource( 2 )
+align = 2
+valign = 2

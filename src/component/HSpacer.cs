@@ -1,9 +1,9 @@
 ﻿using Godot;
 
-namespace SpaceBreach.component;
-
-public partial class HSpacer : Control {
-	public HSpacer() {
-		SizeFlagsHorizontal = SizeFlags.ExpandFill;
+namespace SpaceBreach.component {
+	public class HSpacer : Control {
+		public HSpacer() {
+			SizeFlagsHorizontal = (int) SizeFlags.ExpandFill;
+		}
 	}
 }
