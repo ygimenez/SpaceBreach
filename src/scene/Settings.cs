@@ -138,14 +138,14 @@ namespace SpaceBreach.scene {
 			});
 		}
 
-		private void _SliderDragEnded(string key, Range slider) {
+		private void _SliderDragEnded(bool _, string key, Range slider) {
 			var field = Fields[key];
 			Global.Cfg.SetV(field.Key, (int) slider.Value);
 		}
 
-		private void _SliderValueChanged(string key, Range slider) {
+		private void _SliderValueChanged(float _, string key, Range slider) {
 			var field = Fields[key];
-			GetNode<Label>($"SliderCaption_{field.Key}").Text = ((int) slider.Value).ToString();
+			slider.GetParent().GetNode<Label>($"SliderCaption_{key}").Text = ((int) slider.Value).ToString();
 			field.OnChange?.Invoke((int) slider.Value);
 		}
 
@@ -156,7 +156,7 @@ namespace SpaceBreach.scene {
 			var next = (Enum) values.GetValue((value + 1) % values.Length);
 
 			button.Text = next.GetDescription();
-			Global.Cfg.SetV(field.Key, System.Array.IndexOf(values, next));
+			Global.Cfg.SetV(field.Key, Array.IndexOf(values, next));
 
 			field.OnChange?.Invoke(next);
 		}
@@ -181,7 +181,7 @@ namespace SpaceBreach.scene {
 			OnChange = onChange;
 		}
 
-		public System.Array Values() {
+		public Array Values() {
 			return DefaultValue.GetType().IsEnum ? Enum.GetValues(DefaultValue.GetType()) : default;
 		}
 	}

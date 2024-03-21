@@ -29,7 +29,3 @@ margin_bottom = 576.0
 [node name="CfgFields" type="VBoxContainer" parent="ScrollContainer"]
 margin_right = 416.0
 size_flags_horizontal = 3
-
-[node name="HSlider" type="HSlider" parent="."]
-margin_right = 32.0
-margin_bottom = 32.0
