@@ -2,7 +2,7 @@
 
 [ext_resource path="res://assets/textures/panel_normal.tres" type="StyleBox" id=1]
 [ext_resource path="res://assets/fonts/SpaceMono.tres" type="DynamicFont" id=2]
-[ext_resource path="res://assets/icons/icon_sheet.png" type="Texture" id=3]
+[ext_resource path="res://assets/sprites/icon_sheet.png" type="Texture" id=3]
 [ext_resource path="res://assets/textures/check_checked_d.tres" type="Texture" id=4]
 [ext_resource path="res://assets/textures/check_checked.tres" type="Texture" id=5]
 [ext_resource path="res://assets/textures/check_unchecked_d.tres" type="Texture" id=6]
@@ -16,7 +16,6 @@
 [ext_resource path="res://assets/textures/updown.tres" type="Texture" id=14]
 
 [sub_resource type="AtlasTexture" id=6]
-flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 48, 0, 16, 32 )
 
@@ -25,17 +24,14 @@ region = Rect2( 48, 0, 16, 32 )
 [sub_resource type="StyleBoxEmpty" id=8]
 
 [sub_resource type="AtlasTexture" id=3]
-flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 32, 32, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=10]
-flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 16, 32, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=2]
-flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 41, 19, 9, 10 )
 
@@ -60,12 +56,10 @@ border_width_bottom = 1
 border_color = Color( 1, 1, 1, 1 )
 
 [sub_resource type="AtlasTexture" id=14]
-flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 32, 11, 16, 5 )
 
 [sub_resource type="AtlasTexture" id=12]
-flags = 4
 atlas = ExtResource( 3 )
 region = Rect2( 48, 48, 32, 16 )
 
@@ -108,6 +102,7 @@ LineEdit/styles/normal = ExtResource( 1 )
 LineEdit/styles/read_only = ExtResource( 10 )
 OptionButton/icons/arrow = SubResource( 10 )
 Panel/styles/panel = ExtResource( 1 )
+PanelContainer/styles/panel = ExtResource( 1 )
 PopupMenu/icons/checked = ExtResource( 5 )
 PopupMenu/icons/radio_checked = ExtResource( 5 )
 PopupMenu/icons/radio_unchecked = ExtResource( 7 )

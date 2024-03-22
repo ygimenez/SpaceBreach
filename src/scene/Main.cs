@@ -3,7 +3,8 @@ using SpaceBreach.manager;
 using SpaceBreach.util;
 
 namespace SpaceBreach.scene {
-	public class Main : Control {
+	public abstract class Main : Control {
+
 		public override void _Ready() {
 			new ConfigFile().With(ed => {
 				ed.Load("res://export_presets.cfg");
@@ -12,8 +13,19 @@ namespace SpaceBreach.scene {
 				GetNode<Label>("Version").Text = version.ToString();
 			});
 
+			GetNode<Button>("Play").Connect("pressed", this, nameof(_PlayPressed));
 			GetNode<Button>("Settings").Connect("pressed", this, nameof(_SettingsPressed));
-			GetNode<Button>("Exit").Connect("pressed", this, nameof(_ExitPressed));
+			GetNode<Button>("Exit").With(b => {
+				b.Connect("pressed", this, nameof(_ExitPressed));
+
+				if (OS.HasFeature("web")) {
+					b.Visible = false;
+				}
+			});
+		}
+
+		private void _PlayPressed() {
+			GetTree().Append("res://src/scene/Game.tscn");
 		}
 
 		private void _SettingsPressed() {

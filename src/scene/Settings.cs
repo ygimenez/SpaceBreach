@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Godot;
 using SpaceBreach.component;
 using SpaceBreach.enums;
@@ -7,11 +8,12 @@ using SpaceBreach.manager;
 using SpaceBreach.util;
 
 namespace SpaceBreach.scene {
-	public class Settings : Control {
-		private static readonly Dictionary<string, ConfigField> Fields = new Dictionary<string, ConfigField> {
+	public abstract class Settings : BaseMenu {
+		public static readonly Dictionary<string, ConfigField> Fields = new Dictionary<string, ConfigField> {
 			{ "vol_master", new ConfigField("vol_master", "Master", CfgType.PERCENT, 50) },
 			{ "vol_music", new ConfigField("vol_music", "Music", CfgType.PERCENT, 50) },
-			{ "vol_effect", new ConfigField("vol_effect", "Effects", CfgType.PERCENT, 50) }, {
+			{ "vol_effect", new ConfigField("vol_effect", "Effects", CfgType.PERCENT, 50) },
+			{
 				"win_mode", new ConfigField("win_mode", "Window Mode", CfgType.CYCLE, default(WindowMode),
 					v => {
 						switch ((WindowMode) v) {
@@ -19,7 +21,7 @@ namespace SpaceBreach.scene {
 								OS.WindowBorderless = false;
 								OS.WindowFullscreen = false;
 
-								Fields["win_res"].OnChange.Invoke(Global.Cfg.GetV("win_res", 0));
+								Fields["win_res"].Action.Invoke(Global.Cfg.GetV("win_res", 0));
 								break;
 							case WindowMode.BORDERLESS:
 								OS.WindowBorderless = true;
@@ -37,43 +39,28 @@ namespace SpaceBreach.scene {
 						}
 					}
 				)
-			}, {
-				"win_res", new ConfigField("win_res", "Resolution", CfgType.CYCLE, default(ScreenSize),
+			},
+			{
+				"win_res", new ConfigField("win_res", "Resolution", CfgType.CYCLE, default(Resolution),
 					v => {
-						switch ((ScreenSize) v) {
-							case ScreenSize.R_800_600:
-								OS.WindowSize = new Vector2(800, 600);
-								break;
-							case ScreenSize.R_1024_768:
-								OS.WindowSize = new Vector2(1024, 768);
-								break;
-							case ScreenSize.R_1280_1024:
-								OS.WindowSize = new Vector2(1280, 1024);
-								break;
-							case ScreenSize.R_1366_768:
-								OS.WindowSize = new Vector2(1366, 768);
-								break;
-							case ScreenSize.R_1920_1080:
-								OS.WindowSize = new Vector2(1920, 1080);
-								break;
-							default:
-								throw new ArgumentOutOfRangeException(nameof(v), v, null);
-						}
+						var size = ((Resolution) v).GetDescription().Split("x");
+						OS.WindowSize = new Vector2(int.Parse(size[0]), int.Parse(size[1]));
 
 						var pos = OS.GetScreenSize() / 2 - OS.WindowSize / 2;
 						OS.WindowPosition = pos;
 					}
 				)
-			},
+			}
 		};
 
 		private const int LABEL_WIDTH = 150;
 		private const int VALUE_WIDTH = 50;
 
 		public override void _Ready() {
-			GetNode<Button>("Back").Connect("pressed", this, nameof(_BackPressed));
+			base._Ready();
+
 			GetNode<VBoxContainer>("ScrollContainer/CfgFields").With(box => {
-				foreach (var v in Fields.Values) {
+				foreach (var v in Fields.Values.Where(v => OS.HasFeature("pc") || !v.Key.StartsWith("win_"))) {
 					switch (v.Type) {
 						case CfgType.PERCENT: {
 							var value = Global.Cfg.GetV(v.Key, (int) v.DefaultValue);
@@ -116,10 +103,10 @@ namespace SpaceBreach.scene {
 									});
 									row.AddChild(
 										new Button {
-											Text = ((Enum) values.GetValue(value % values.Length)).GetDescription(),
+											Text = (value % values.Length).ToEnum(v.DefaultValue.GetType()).GetDescription(),
 											SizeFlagsHorizontal = (int) SizeFlags.ExpandFill,
 										}.With(b => {
-											b.Connect("pressed", this, nameof(_TogglePressed), v.Key, b);
+											b.Connect("gui_input", this, nameof(_TogglePressed), v.Key, b);
 										})
 									);
 									row.AddChild(new HSpacer());
@@ -146,39 +133,47 @@ namespace SpaceBreach.scene {
 		private void _SliderValueChanged(float _, string key, Range slider) {
 			var field = Fields[key];
 			slider.GetParent().GetNode<Label>($"SliderCaption_{key}").Text = ((int) slider.Value).ToString();
-			field.OnChange?.Invoke((int) slider.Value);
+			field.Action?.Invoke((int) slider.Value);
 		}
 
-		private void _TogglePressed(string key, Button button) {
+		private void _TogglePressed(InputEvent evt, string key, Button button) {
+			if (!evt.IsPressed()) return;
+
 			var field = Fields[key];
 			var value = Global.Cfg.GetV(field.Key, 0);
 			var values = field.Values();
-			var next = (Enum) values.GetValue((value + 1) % values.Length);
+
+			Enum next = null;
+			if (evt is InputEventMouseButton mb) {
+				if (mb.ButtonIndex == ButtonList.Right.Ordinal()) {
+					next = ((value - 1) % values.Length).ToEnum(field.DefaultValue.GetType());
+				}
+			}
+
+			if (next == null) {
+				next = ((value + 1) % values.Length).ToEnum(field.DefaultValue.GetType());
+			}
 
 			button.Text = next.GetDescription();
-			Global.Cfg.SetV(field.Key, Array.IndexOf(values, next));
+			Global.Cfg.SetV(field.Key, next.Ordinal());
 
-			field.OnChange?.Invoke(next);
-		}
-
-		private void _BackPressed() {
-			GetTree().Pop();
+			field.Action?.Invoke(next);
 		}
 	}
 
-	internal class ConfigField {
+	public class ConfigField {
 		public readonly string Key;
 		public readonly string Label;
 		public readonly CfgType Type;
 		public readonly object DefaultValue;
-		public readonly Action<object> OnChange;
+		public readonly Action<object> Action;
 
-		public ConfigField(string key, string label, CfgType type, object defaultValue = default, Action<object> onChange = default) {
+		public ConfigField(string key, string label, CfgType type, object defaultValue = default, Action<object> action = default) {
 			Key = key;
 			Label = label;
 			Type = type;
 			DefaultValue = defaultValue;
-			OnChange = onChange;
+			Action = action;
 		}
 
 		public Array Values() {

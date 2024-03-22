@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/icon_sheet.png-46cfc13d98fbd673a40b5fd646a09491.stex"
+path="res://.import/icon_sheet.png-67d886b34afa060eb9d21af1ea99ce84.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/icons/icon_sheet.png"
-dest_files=[ "res://.import/icon_sheet.png-46cfc13d98fbd673a40b5fd646a09491.stex" ]
+source_file="res://assets/sprites/icon_sheet.png"
+dest_files=[ "res://.import/icon_sheet.png-67d886b34afa060eb9d21af1ea99ce84.stex" ]
 
 [params]
 
@@ -20,7 +20,7 @@ compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
 flags/repeat=0
-flags/filter=true
+flags/filter=false
 flags/mipmaps=false
 flags/anisotropic=false
 flags/srgb=2

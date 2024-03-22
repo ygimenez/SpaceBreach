@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://src/entity/particle/Contrail.cs" type="Script" id=1]
+
+[sub_resource type="Gradient" id=1]
+offsets = PoolRealArray( 0, 0.863874, 1 )
+colors = PoolColorArray( 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0 )
+
+[node name="Position2D" type="Position2D"]
+script = ExtResource( 1 )
+Length = 25
+Velocity = Vector2( 0, 150 )
+
+[node name="Line2D" type="Line2D" parent="."]
+width = 1.0
+default_color = Color( 1, 1, 1, 1 )
+gradient = SubResource( 1 )

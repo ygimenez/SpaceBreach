@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using Godot;
 using Array = Godot.Collections.Array;
 using Object = Godot.Object;
@@ -44,6 +45,56 @@ namespace SpaceBreach.util {
 			}
 
 			return self.ToString();
+		}
+
+		public static T Cast<T>(this Type type, object obj) {
+			return (T) Convert.ChangeType(obj, type);
+		}
+
+		public static T ToEnum<T>(this int ordinal) where T : Enum {
+			return (T) Enum.GetValues(typeof(T)).GetValue(ordinal);
+		}
+
+		public static Enum ToEnum(this int ordinal, Type type) {
+			return type.Cast<Enum>(Enum.GetValues(type).GetValue(ordinal));
+		}
+
+		public static int Ordinal(this Enum val) {
+			return (int) (IConvertible) val;
+		}
+
+		public static int IntValue(this bool value) {
+			return value ? 1 : 0;
+		}
+
+		public static int Clamp(this int val, int min, int max) {
+			if (val < min) return min;
+			return val > max ? max : val;
+		}
+
+		public static float Clamp(this float val, float min, float max) {
+			if (val < min) return min;
+			return val > max ? max : val;
+		}
+
+		public static float ToRadians(this float deg) {
+			return deg * (Mathf.Pi / 180);
+		}
+
+		public static float ToDegrees(this float rad) {
+			return rad * 180 / Mathf.Pi;
+		}
+
+		public static bool IsBetween(this int val, int min, int max) {
+			return val >= min && val <= max;
+		}
+
+		public static bool IsBetween(this float val, float min, float max) {
+			return val >= min && val <= max;
+		}
+
+		public static bool EqualsAny<T>(this T self, params T[] args) {
+			return args.Any(arg => Equals(self, arg));
 		}
 	}
 }

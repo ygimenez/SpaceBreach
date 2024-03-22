@@ -8,7 +8,7 @@ namespace SpaceBreach.manager {
 		private static readonly Stack<string> Stack = new Stack<string>().With(s => s.Push("res://src/scene/Main.tscn"));
 
 		public static void Append(this SceneTree tree, string screen) {
-			tree.ChangeSceneTo(ResourceLoader.Load<PackedScene>(screen));
+			tree.ChangeSceneTo(GD.Load<PackedScene>(screen));
 			Stack.Push(screen);
 		}
 
