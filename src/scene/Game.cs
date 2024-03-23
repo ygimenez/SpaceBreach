@@ -3,7 +3,7 @@ using SpaceBreach.entity.model;
 using SpaceBreach.util;
 
 namespace SpaceBreach.scene {
-	public class Game : Control {
+	public abstract class Game : Control {
 		private Player _player;
 		public ulong Tick;
 
@@ -21,8 +21,8 @@ namespace SpaceBreach.scene {
 			Tick++;
 
 			GetNode("SafeArea").GetNode<CPUParticles2D>("Stars").With(s => {
-				s.SpeedScale = _player.Speed * 2;
-				((AtlasTexture) s.Texture).Margin = new Rect2(Vector2.Zero, new Vector2(0, -20 + 100 * (1 - _player.Speed)));
+				s.SpeedScale = _player.SpeedMult * 2;
+				((AtlasTexture) s.Texture).Margin = new Rect2(Vector2.Zero, new Vector2(0, -20 + 100 * (1 - _player.SpeedMult)));
 			});
 		}
 	}

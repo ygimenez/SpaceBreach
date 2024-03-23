@@ -11,8 +11,8 @@ namespace SpaceBreach.util {
 
 		protected Global() {
 			if (OS.HasFeature("pc")) {
-				Settings.Fields["win_mode"].Action.Invoke(Cfg.GetV<WindowMode>("win_mode"));
 				Settings.Fields["win_res"].Action.Invoke(Cfg.GetV<Resolution>("win_res"));
+				Settings.Fields["win_mode"].Action.Invoke(Cfg.GetV<WindowMode>("win_mode"));
 			} else {
 				OS.WindowFullscreen = true;
 			}

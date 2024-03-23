@@ -3,9 +3,18 @@ using SpaceBreach.scene;
 using SpaceBreach.util;
 
 namespace SpaceBreach.entity.model {
-	public class Player : Entity {
+	public abstract class Player : Entity {
 		[Export]
-		public float Speed = 1;
+		public float SpeedMult = 1;
+
+		[Export]
+		public float AttackRate = 1;
+
+		[Export]
+		public float SpecialRate = 1;
+
+		[Export]
+		public float Projectiles = 1;
 
 		[Export]
 		public Player Self;
@@ -37,8 +46,20 @@ namespace SpaceBreach.entity.model {
 		}
 
 		public override void _Process(float delta) {
-			if (Input.IsActionPressed("shoot") && _atkCd.Use()) {
+			if (Input.IsActionPressed("shoot") && _atkCd.Use((ulong) (200 / AttackRate))) {
+				var cannons = GetNode("Cannons");
+				if (cannons != null && cannons.GetChildCount() > 0) {
+					var proj = GD.Load<PackedScene>("res://src/entity/projectile/PlayerBullet.tscn");
 
+					foreach (var cannon in cannons.GetChildren()) {
+						for (var i = 0; i < Projectiles; i++) {
+							GetParent().AddChild(proj.Instance().With(p => {
+								((Area2D) p).GlobalPosition = GetParent().GetNode<Node2D>("World").ToLocal(((Position2D) cannon).GlobalPosition);
+								((Area2D) p).RotationDegrees = RotationDegrees;
+							}));
+						}
+					}
+				}
 			}
 		}
 
@@ -50,7 +71,7 @@ namespace SpaceBreach.entity.model {
 		private void Accelerate(Vector2 mov) {
 			const float friction = 0.4f;
 
-			var sway = (_velocity.x - (_velocity.x + Speed * mov.x) * friction / Engine.GetFramesPerSecond()).Clamp(-1, 1);
+			var sway = (_velocity.x - (_velocity.x + SpeedMult * mov.x) * friction / Engine.GetFramesPerSecond()).Clamp(-1, 1);
 			RotationDegrees = 30 * sway;
 
 			var safe = GetNode<Control>("/root/Control/SafeArea").GetGlobalRect();
@@ -59,13 +80,13 @@ namespace SpaceBreach.entity.model {
 			if (!(GlobalPosition - rect.Size / 2 - mov).x.IsBetween(safe.Position.x, safe.Position.x + safe.Size.x - rect.Size.x)) {
 				_velocity.x *= -1;
 			} else {
-				_velocity.x -= (_velocity.x + Speed * mov.x) * friction / Engine.GetFramesPerSecond();
+				_velocity.x -= (_velocity.x + SpeedMult * mov.x) * friction / Engine.GetFramesPerSecond();
 			}
 
 			if (!(GlobalPosition - rect.Size / 2 - mov).y.IsBetween(safe.Position.y, safe.Position.y + safe.Size.y - rect.Size.y)) {
 				_velocity.y *= -1;
 			} else {
-				_velocity.y -= (_velocity.y + Speed * mov.y) * friction / Engine.GetFramesPerSecond();
+				_velocity.y -= (_velocity.y + SpeedMult * mov.y) * friction / Engine.GetFramesPerSecond();
 			}
 		}
 	}

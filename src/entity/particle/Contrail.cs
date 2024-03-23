@@ -2,7 +2,7 @@ using Godot;
 using SpaceBreach.entity.model;
 
 namespace SpaceBreach.entity.particle {
-	public class Contrail : Position2D {
+	public abstract class Contrail : Position2D {
 		[Export]
 		public Player Ship;
 
@@ -28,7 +28,7 @@ namespace SpaceBreach.entity.particle {
 			}
 
 			for (var i = 0; i < _line.GetPointCount(); i++) {
-				_line.SetPointPosition(i, _line.GetPointPosition(i) + Velocity * Ship.Speed * delta);
+				_line.SetPointPosition(i, _line.GetPointPosition(i) + Velocity * Ship.SpeedMult * delta);
 			}
 		}
 	}
