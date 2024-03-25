@@ -21,12 +21,19 @@ namespace SpaceBreach.util {
 			}
 		}
 
-		public Cooldown(Game game) {
+		public uint Time;
+
+		public Cooldown(Game game, uint time) {
 			_game = game;
+			Time = time;
 		}
 
-		public bool Use(ulong cooldown) {
-			if (_game.Tick - _lastTick >= cooldown) {
+		public bool Ready() {
+			return _game.Tick - _lastTick >= Time;
+		}
+
+		public bool Use() {
+			if (Ready()) {
 				_lastTick = _game.Tick;
 				return true;
 			}
@@ -34,8 +41,20 @@ namespace SpaceBreach.util {
 			return false;
 		}
 
-		public ulong Remaining(ulong cooldown) {
-			return (ulong) Mathf.Max(0, cooldown - (_game.Tick - _lastTick));
+		public ulong Remaining() {
+			return (ulong) Mathf.Max(0, Time - (_game.Tick - _lastTick));
+		}
+
+		public float Charge() {
+			return (float) (Time - Remaining()) / Time;
+		}
+
+		public int IntCharge() {
+			return (int) ((Time - Remaining()) * 100 / Time);
+		}
+
+		public void Reset() {
+			_lastTick = 0;
 		}
 	}
 }

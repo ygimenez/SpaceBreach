@@ -8,22 +8,45 @@ namespace SpaceBreach.scene {
 		public ulong Tick;
 
 		public override void _Ready() {
-			GetNode<PanelContainer>("SafeArea").AddChild(
+			AddChild(
 				GD.Load<PackedScene>("res://src/entity/player/Fighter.tscn").Instance().With(p => {
-					((Area2D) p).GlobalPosition = GetNode<Control>("Spawn").RectGlobalPosition;
-					_player = (Player) p.Get("Self");
-					p.Set("Game", this);
+					_player = (Player) p;
+					_player.GlobalPosition = GetNode<Control>("Spawn").GetRect().GetCenter();
 				})
 			);
+
+			AddChild(
+				GD.Load<PackedScene>("res://src/entity/enemy/Invader.tscn").Instance().With(p => {
+					((Area2D) p).GlobalPosition = GetSafeArea().GetRect().GetCenter();
+				})
+			);
+		}
+
+		public override void _Process(float delta) {
+			GetNode<Label>("Player1Stats").Text = $@"
+			HP: {_player.Hp}/{_player.BaseHp}
+			Special: {(_player.SpCd.Ready() ? "READY!" : $"[{Utils.PrcntBar(_player.SpCd.Charge(), 8)}]")}";
 		}
 
 		public override void _PhysicsProcess(float delta) {
 			Tick++;
 
-			GetNode("SafeArea").GetNode<CPUParticles2D>("Stars").With(s => {
+			GetSafeArea().GetNode<CPUParticles2D>("Stars").With(s => {
 				s.SpeedScale = _player.SpeedMult * 2;
 				((AtlasTexture) s.Texture).Margin = new Rect2(Vector2.Zero, new Vector2(0, -20 + 100 * (1 - _player.SpeedMult)));
 			});
+		}
+
+		public uint GetScore() {
+			return 1;
+		}
+
+		public uint GetLevel() {
+			return 1;
+		}
+
+		public Control GetSafeArea() {
+			return GetNode<Control>("SafeArea");
 		}
 	}
 }

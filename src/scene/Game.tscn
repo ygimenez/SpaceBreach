@@ -6,7 +6,6 @@
 [ext_resource path="res://src/scene/Culler.cs" type="Script" id=4]
 
 [sub_resource type="AtlasTexture" id=2]
-flags = 4
 atlas = ExtResource( 2 )
 region = Rect2( 0, 0, 2, 24 )
 margin = Rect2( 0, 0, 0, -20 )
@@ -90,6 +89,52 @@ shape = SubResource( 5 )
 position = Vector2( 400, 302 )
 shape = SubResource( 6 )
 
+[node name="ReferenceRect" type="ReferenceRect" parent="."]
+margin_right = 1100.0
+margin_bottom = 900.0
+
+[node name="Player1Stats" type="Label" parent="."]
+anchor_top = 1.0
+anchor_bottom = 1.0
+margin_left = 158.0
+margin_top = -449.0
+margin_right = 550.0
+margin_bottom = -154.0
+valign = 2
+
+[node name="Player2Stats" type="Label" parent="."]
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -550.0
+margin_top = -449.0
+margin_right = -158.0
+margin_bottom = -154.0
+valign = 2
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Area2D" type="Area2D" parent="CenterContainer"]
+position = Vector2( 550, 451 )
+collision_mask = 255
+script = ExtResource( 4 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CenterContainer/Area2D"]
+shape = SubResource( 7 )
+
+[node name="EnemySpawn" type="Control" parent="."]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -400.0
+margin_top = 50.0
+margin_right = 400.0
+margin_bottom = -751.0
+
 [node name="Spawn" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -113,24 +158,4 @@ margin_top = -20.0
 margin_right = 20.0
 margin_bottom = 20.0
 rect_pivot_offset = Vector2( 20, 20 )
-
-[node name="Area2D" type="Area2D" parent="."]
-visible = false
-position = Vector2( 550, 451 )
-collision_mask = 255
-script = ExtResource( 4 )
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource( 7 )
-
-[node name="ReferenceRect" type="ReferenceRect" parent="."]
-margin_right = 1100.0
-margin_bottom = 900.0
-
-[node name="Label" type="Label" parent="."]
-anchor_top = 1.0
-anchor_bottom = 1.0
-margin_left = 150.0
-margin_top = -325.0
-margin_right = 387.0
-margin_bottom = -149.0
+editor_only = false

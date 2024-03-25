@@ -7,6 +7,8 @@ using Object = Godot.Object;
 
 namespace SpaceBreach.util {
 	public static class Utils {
+		public static readonly RandomNumberGenerator Rng = new RandomNumberGenerator();
+
 		public static void Connect(this Control ctrl, string signal, Object self, string method, params object[] args) {
 			ctrl.Connect(signal, self, method, new Array(args));
 		}
@@ -95,6 +97,35 @@ namespace SpaceBreach.util {
 
 		public static bool EqualsAny<T>(this T self, params T[] args) {
 			return args.Any(arg => Equals(self, arg));
+		}
+
+		public static T FindParent<T>(this Node node, Predicate<T> condition = null) where T : Node {
+			var curr = node;
+			while (true) {
+				curr = curr.GetParent();
+				switch (curr) {
+					case T t when (condition?.Invoke(t) ?? true):
+						return t;
+					case null:
+						return null;
+				}
+			}
+		}
+
+		public static void FindParent<T>(this Node node, ref T output, Predicate<Node> condition = null) where T : Node {
+			output = node.FindParent<T>(condition);
+		}
+
+		public static Node FindParent(this Node node, Predicate<Node> condition = null) {
+			return node.FindParent<Node>(condition);
+		}
+
+		public static void FindParent(this Node node, ref Node output, Predicate<Node> condition = null) {
+			node.FindParent<Node>(ref output, condition);
+		}
+
+		public static string PrcntBar(float prcnt, int width) {
+			return new string('|', (int) (width * prcnt)) + new string(' ', (int) (width - width * prcnt));
 		}
 	}
 }

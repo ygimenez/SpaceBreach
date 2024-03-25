@@ -5,61 +5,51 @@ using SpaceBreach.util;
 namespace SpaceBreach.entity.model {
 	public abstract class Player : Entity {
 		[Export]
-		public float SpeedMult = 1;
+		public float SpeedMult;
 
 		[Export]
-		public float AttackRate = 1;
+		public float AttackRate;
 
 		[Export]
-		public float SpecialRate = 1;
+		public float SpecialRate;
 
 		[Export]
-		public float Projectiles = 1;
+		public float Projectiles;
 
-		[Export]
-		public Player Self;
-
-		[Export]
-		public Game Game;
-
-		private Cooldown _atkCd;
+		public Cooldown AtkCd;
+		public Cooldown SpCd;
 		private Vector2 _velocity = Vector2.Zero;
 
-		public Player() {
-			Self = this;
+		protected Player(uint hp, float speedMult = 1, float attackRate = 1, float specialRate = 1, float projectiles = 1) : base(hp) {
+			SpeedMult = speedMult;
+			AttackRate = attackRate;
+			SpecialRate = specialRate;
+			Projectiles = projectiles;
 		}
 
 		public override void _Ready() {
 			base._Ready();
-			_atkCd = new Cooldown(Game);
+			var game = GetNode<Game>("/root/Control");
+			AtkCd = new Cooldown(game, (uint) (200 / AttackRate));
+			SpCd = new Cooldown(game, (uint) (1000 / SpecialRate));
 
 			var contGroup = GetNode("Contrails");
 			if (contGroup != null && contGroup.GetChildCount() > 0) {
 				var cont = GD.Load<PackedScene>("res://src/entity/particle/Contrail.tscn");
 
 				foreach (var anchor in contGroup.GetChildren()) {
-					((Node) anchor).AddChild(cont.Instance().With(n => {
-						n.Set("Ship", this);
-					}));
+					((Node) anchor).AddChild(cont.Instance());
 				}
 			}
 		}
 
 		public override void _Process(float delta) {
-			if (Input.IsActionPressed("shoot") && _atkCd.Use((ulong) (200 / AttackRate))) {
-				var cannons = GetNode("Cannons");
-				if (cannons != null && cannons.GetChildCount() > 0) {
-					var proj = GD.Load<PackedScene>("res://src/entity/projectile/PlayerBullet.tscn");
+			if (Input.IsActionPressed("shoot") && AtkCd.Ready() && Shoot()) {
+				AtkCd.Use();
+			}
 
-					foreach (var cannon in cannons.GetChildren()) {
-						for (var i = 0; i < Projectiles; i++) {
-							GetParent().AddChild(proj.Instance().With(p => {
-								((Area2D) p).GlobalPosition = GetParent().GetNode<Node2D>("World").ToLocal(((Position2D) cannon).GlobalPosition);
-								((Area2D) p).RotationDegrees = RotationDegrees;
-							}));
-						}
-					}
-				}
+			if (Input.IsActionPressed("special") && SpCd.Ready() && Special()) {
+				SpCd.Use();
 			}
 		}
 
@@ -89,5 +79,9 @@ namespace SpaceBreach.entity.model {
 				_velocity.y -= (_velocity.y + SpeedMult * mov.y) * friction / Engine.GetFramesPerSecond();
 			}
 		}
+
+		protected abstract bool Shoot();
+
+		protected abstract bool Special();
 	}
 }
