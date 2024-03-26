@@ -19,7 +19,6 @@ config/features=PoolStringArray( "4.2", "C#", "GL Compatibility" )
 [autoload]
 
 Global="*res://src/util/Global.cs"
-Audio="*res://src/manager/Audio.cs"
 
 [display]
 

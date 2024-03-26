@@ -3,12 +3,6 @@ using SpaceBreach.util;
 
 namespace SpaceBreach.manager {
 	public class Audio : Node {
-		private static Audio _instance;
-
-		public override void _Ready() {
-			_instance = GetNode<Audio>("/root/Audio");
-		}
-
 		public static void Cue(Node parent, string path) {
 			var master = Global.Cfg.GetV<int>("vol_master") / 100f;
 			var effect = Global.Cfg.GetV<int>("vol_effect") / 100f;
@@ -26,18 +20,18 @@ namespace SpaceBreach.manager {
 		public static void AttachUiAudio(Node root) {
 			foreach (var child in root.GetChildren()) {
 				if (child is Button b) {
-					b.Connect("mouse_entered", _instance, nameof(_MouseOver));
-					b.Connect("pressed", _instance, nameof(_MouseClick));
+					b.Connect("mouse_entered", Global.Instance, nameof(_MouseOver));
+					b.Connect("pressed", Global.Instance, nameof(_MouseClick));
 				}
 			}
 		}
 
 		private void _MouseOver() {
-			Cue(_instance, "res://assets/sounds/ui/ui_hover.wav");
+			Cue(Global.Instance, "res://assets/sounds/ui/ui_hover.wav");
 		}
 
 		private void _MouseClick() {
-			Cue(_instance, "res://assets/sounds/ui/ui_click.wav");
+			Cue(Global.Instance, "res://assets/sounds/ui/ui_click.wav");
 		}
 	}
 }

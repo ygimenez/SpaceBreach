@@ -4,6 +4,7 @@ using SpaceBreach.scene;
 
 namespace SpaceBreach.util {
 	public abstract class Global : Node {
+		public static Global Instance;
 		public const string CFG_PATH = "user://settings.cfg";
 		public static readonly ConfigFile Cfg = new ConfigFile().With(cfg => {
 			cfg.Load(CFG_PATH);
@@ -19,6 +20,10 @@ namespace SpaceBreach.util {
 
 			Engine.TargetFps = 60;
 			Engine.IterationsPerSecond = 200;
+		}
+
+		public override void _Ready() {
+			Instance = GetNode<Global>("/root/Global");
 		}
 	}
 }
