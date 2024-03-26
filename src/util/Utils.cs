@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Godot;
+using Godot.Collections;
 using SpaceBreach.entity.model;
 using Array = Godot.Collections.Array;
 using Object = Godot.Object;
@@ -43,7 +45,7 @@ namespace SpaceBreach.util {
 				var attrs = info[0].GetCustomAttributes(typeof(DescriptionAttribute), false);
 
 				if (attrs.Length > 0) {
-					return ((DescriptionAttribute) attrs[0]).Description;
+					return (attrs[0] as DescriptionAttribute).Description;
 				}
 			}
 
@@ -75,9 +77,18 @@ namespace SpaceBreach.util {
 			return val > max ? max : val;
 		}
 
+		public static long Clamp(this long val, long min, long max) {
+			if (val < min) return min;
+			return val > max ? max : val;
+		}
+
 		public static float Clamp(this float val, float min, float max) {
 			if (val < min) return min;
 			return val > max ? max : val;
+		}
+
+		public static Vector2 Clamp(this Vector2 pos, Vector2 min, Vector2 max) {
+			return new Vector2(pos.x.Clamp(min.x, max.x), pos.y.Clamp(min.y, max.y));
 		}
 
 		public static float ToRadians(this float deg) {
@@ -128,6 +139,46 @@ namespace SpaceBreach.util {
 		public static string PrcntBar(float prcnt, int width) {
 			var left = (int) (width * prcnt);
 			return new string('|', left) + new string(' ', width - left);
+		}
+
+		public static void AddCollision(this Area2D area, bool filled = true) {
+			var shape = area.FindParent<Control>();
+			if (filled) {
+				area.AddChild(new CollisionShape2D {
+					Name = "Collision",
+					Shape = new RectangleShape2D {
+						Extents = shape.RectSize / 2,
+					},
+					Position = shape.RectSize / 2
+				});
+			} else {
+				var sides = new List<(string, Vector2)> {
+					("Top", Vector2.Zero),
+					("Right", shape.RectSize * Vector2.Right),
+					("Bottom", shape.RectSize),
+					("Left", shape.RectSize * Vector2.Down)
+				};
+
+				for (var i = 0; i < sides.Count; i++) {
+					area.AddChild(new CollisionShape2D {
+						Name = sides[i].Item1,
+						Shape = new SegmentShape2D {
+							A = sides[i].Item2,
+							B = sides[(i + 1) % sides.Count].Item2
+						}
+					});
+				}
+			}
+		}
+
+		public static T Random<T>(this List<T> list) {
+			return list[Rng.RandiRange(0, list.Count - 1)];
+		}
+
+		public static PackedScene Load(Type type) {
+			var path = type.Namespace?.Replace("SpaceBreach.", "").Replace('.', '/');
+
+			return GD.Load<PackedScene>($"res://src/{path}/{type.Name}.tscn");
 		}
 	}
 }

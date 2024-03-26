@@ -15,7 +15,7 @@ namespace SpaceBreach.scene {
 			{
 				"win_mode", new ConfigField("win_mode", "Window Mode", CfgType.CYCLE, default(WindowMode),
 					v => {
-						switch ((WindowMode) v) {
+						switch (v) {
 							case WindowMode.WINDOWED:
 								OS.WindowBorderless = false;
 								OS.WindowFullscreen = false;
@@ -131,7 +131,7 @@ namespace SpaceBreach.scene {
 
 		private void _SliderValueChanged(float _, string key, Range slider) {
 			var field = Fields[key];
-			slider.GetParent().GetNode<Label>($"SliderCaption_{key}").Text = ((int) slider.Value).ToString();
+			slider.GetNode<Label>($"../SliderCaption_{key}").Text = ((int) slider.Value).ToString();
 			field.Action?.Invoke((int) slider.Value);
 		}
 

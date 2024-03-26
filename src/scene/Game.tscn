@@ -1,39 +1,76 @@
-[gd_scene load_steps=11 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://src/scene/Game.cs" type="Script" id=1]
 [ext_resource path="res://assets/textures/projectiles.tres" type="Texture" id=2]
 [ext_resource path="res://assets/themes/ui.tres" type="Theme" id=3]
 [ext_resource path="res://src/scene/Culler.cs" type="Script" id=4]
+[ext_resource path="res://src/scene/Activator.cs" type="Script" id=5]
+[ext_resource path="res://assets/fonts/SpaceMono.ttf" type="DynamicFontData" id=6]
+[ext_resource path="res://src/scene/PauseMenu.cs" type="Script" id=7]
 
 [sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 2 )
 region = Rect2( 0, 0, 2, 24 )
 margin = Rect2( 0, 0, 0, -20 )
 
-[sub_resource type="SegmentShape2D" id=3]
-a = Vector2( -400, -302 )
-b = Vector2( 400, -302 )
+[sub_resource type="DynamicFont" id=3]
+size = 40
+font_data = ExtResource( 6 )
 
-[sub_resource type="SegmentShape2D" id=4]
-a = Vector2( 400, 300 )
-b = Vector2( 400, -302 )
+[sub_resource type="DynamicFont" id=4]
+size = 100
+font_data = ExtResource( 6 )
 
-[sub_resource type="SegmentShape2D" id=5]
-a = Vector2( 400, 300 )
-b = Vector2( -400, 300 )
+[sub_resource type="Animation" id=5]
+resource_name = "Countdown"
+length = 2.25
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:text")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.7, 1.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ "3", "2", "1" ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath("../PauseMenu")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 2.2 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "_Unpause"
+} ]
+}
 
-[sub_resource type="SegmentShape2D" id=6]
-a = Vector2( -400, -302 )
-b = Vector2( -400, 300 )
-
-[sub_resource type="RectangleShape2D" id=7]
-extents = Vector2( 400, 300 )
+[sub_resource type="Animation" id=6]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:text")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ "3" ]
+}
 
 [node name="Control" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -150.0
-margin_top = -150.0
+margin_top = -300.0
 margin_right = 150.0
 margin_bottom = 150.0
 theme = ExtResource( 3 )
@@ -42,58 +79,6 @@ __meta__ = {
 "_edit_horizontal_guides_": [ 301.0 ],
 "_edit_vertical_guides_": [ 400.0 ]
 }
-
-[node name="SafeArea" type="PanelContainer" parent="."]
-anchor_left = 0.5
-anchor_right = 0.5
-anchor_bottom = 1.0
-margin_left = -400.0
-margin_top = 149.0
-margin_right = 400.0
-margin_bottom = -149.0
-rect_clip_content = true
-theme = ExtResource( 3 )
-
-[node name="Stars" type="CPUParticles2D" parent="SafeArea"]
-position = Vector2( 0, -99 )
-amount = 50
-lifetime = 10.0
-preprocess = 100.0
-texture = SubResource( 2 )
-emission_shape = 2
-emission_rect_extents = Vector2( 800, 0 )
-direction = Vector2( 0, 1 )
-spread = 0.0
-gravity = Vector2( 0, 0 )
-initial_velocity = 200.0
-initial_velocity_random = 0.5
-color = Color( 1, 1, 1, 0.196078 )
-
-[node name="Boundaries" type="Area2D" parent="SafeArea"]
-collision_mask = 16
-
-[node name="Top" type="CollisionShape2D" parent="SafeArea/Boundaries"]
-position = Vector2( 400, 302 )
-shape = SubResource( 3 )
-one_way_collision_margin = 5.0
-
-[node name="Right" type="CollisionShape2D" parent="SafeArea/Boundaries"]
-position = Vector2( 400, 302 )
-shape = SubResource( 4 )
-
-[node name="Bottom" type="CollisionShape2D" parent="SafeArea/Boundaries"]
-position = Vector2( 400, 302 )
-shape = SubResource( 5 )
-
-[node name="Left" type="CollisionShape2D" parent="SafeArea/Boundaries"]
-position = Vector2( 400, 302 )
-shape = SubResource( 6 )
-
-[node name="World" type="Node2D" parent="SafeArea"]
-
-[node name="ReferenceRect" type="ReferenceRect" parent="."]
-margin_right = 1100.0
-margin_bottom = 900.0
 
 [node name="Player1Stats" type="Label" parent="."]
 anchor_top = 1.0
@@ -115,35 +100,69 @@ margin_right = -158.0
 margin_bottom = -154.0
 valign = 2
 
-[node name="CenterContainer" type="CenterContainer" parent="."]
-visible = false
+[node name="GameArea" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="Area2D" type="Area2D" parent="CenterContainer"]
-position = Vector2( 550, 451 )
+[node name="Area2D" type="Area2D" parent="GameArea"]
 collision_mask = 255
 script = ExtResource( 4 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CenterContainer/Area2D"]
-shape = SubResource( 7 )
+[node name="ReferenceRect" type="ReferenceRect" parent="GameArea"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 
-[node name="EnemySpawn" type="Control" parent="."]
+[node name="SafeArea" type="PanelContainer" parent="GameArea"]
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
 margin_left = -400.0
-margin_top = 50.0
+margin_top = 299.0
 margin_right = 400.0
+margin_bottom = -149.0
+rect_clip_content = true
+theme = ExtResource( 3 )
+
+[node name="Stars" type="CPUParticles2D" parent="GameArea/SafeArea"]
+position = Vector2( 0, -99 )
+amount = 50
+lifetime = 10.0
+preprocess = 100.0
+texture = SubResource( 2 )
+emission_shape = 2
+emission_rect_extents = Vector2( 800, 0 )
+direction = Vector2( 0, 1 )
+spread = 0.0
+gravity = Vector2( 0, 0 )
+initial_velocity = 200.0
+initial_velocity_random = 0.5
+color = Color( 1, 1, 1, 0.196078 )
+
+[node name="Area2D" type="Area2D" parent="GameArea/SafeArea"]
+collision_mask = 2
+script = ExtResource( 5 )
+
+[node name="World" type="Node2D" parent="GameArea/SafeArea"]
+
+[node name="EnemySpawn" type="Control" parent="."]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -336.0
+margin_top = -951.0
+margin_right = 336.0
 margin_bottom = -751.0
 
 [node name="Spawn" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 530.0
-margin_top = 639.0
+margin_top = 776.0
 margin_right = -530.0
-margin_bottom = -221.0
+margin_bottom = -234.0
 grow_horizontal = 2
 grow_vertical = 2
 __meta__ = {
@@ -160,4 +179,57 @@ margin_top = -20.0
 margin_right = 20.0
 margin_bottom = 20.0
 rect_pivot_offset = Vector2( 20, 20 )
-editor_only = false
+
+[node name="PauseMenu" type="Control" parent="."]
+pause_mode = 2
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 150.0
+margin_top = 300.0
+margin_right = -150.0
+margin_bottom = -150.0
+script = ExtResource( 7 )
+
+[node name="Label" type="Label" parent="PauseMenu"]
+anchor_left = 0.5
+anchor_top = 0.502
+anchor_right = 0.5
+anchor_bottom = 0.502
+margin_left = -112.0
+margin_top = -73.2
+margin_right = 112.0
+margin_bottom = -13.2
+custom_fonts/font = SubResource( 3 )
+text = "PAUSED"
+align = 1
+
+[node name="Back" type="Button" parent="PauseMenu"]
+anchor_left = 0.5
+anchor_top = 0.502
+anchor_right = 0.5
+anchor_bottom = 0.502
+margin_left = -64.0
+margin_top = -0.200012
+margin_right = 64.0
+margin_bottom = 47.8
+text = "MAIN MENU"
+
+[node name="Countdown" type="Label" parent="."]
+pause_mode = 2
+visible = false
+anchor_left = 0.5
+anchor_top = 0.572
+anchor_right = 0.5
+anchor_bottom = 0.572
+margin_left = -32.0
+margin_top = -77.6
+margin_right = 32.0
+margin_bottom = 78.4
+custom_fonts/font = SubResource( 4 )
+text = "3"
+align = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Countdown"]
+anims/Countdown = SubResource( 5 )
+anims/RESET = SubResource( 6 )

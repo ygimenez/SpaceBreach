@@ -1,10 +1,11 @@
+// #define DEBUG_MODE
+
 using Godot;
 using SpaceBreach.manager;
 using SpaceBreach.util;
 
 namespace SpaceBreach.scene {
 	public abstract class Main : Control {
-
 		public override void _Ready() {
 			new ConfigFile().With(ed => {
 				ed.Load("res://export_presets.cfg");
@@ -24,6 +25,11 @@ namespace SpaceBreach.scene {
 			});
 
 			Audio.AttachUiAudio(this);
+
+			#if DEBUG_MODE
+			GetTree().DebugCollisionsHint = true;
+			GetTree().DebugNavigationHint = true;
+			#endif
 		}
 
 		private void _PlayPressed() {

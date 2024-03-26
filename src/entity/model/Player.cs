@@ -21,7 +21,7 @@ namespace SpaceBreach.entity.model {
 		public Cooldown SpCd;
 		private Vector2 _velocity = Vector2.Zero;
 
-		protected Player(uint hp, float speedMult = 1, float attackRate = 1, float specialRate = 1, float projectiles = 1) : base(hp) {
+		protected Player(uint hp, float speedMult = 1, float attackRate = 1, float specialRate = 1, float projectiles = 1, float speed = 1) : base(hp, speed) {
 			SpeedMult = speedMult;
 			AttackRate = attackRate;
 			SpecialRate = specialRate;
@@ -39,45 +39,45 @@ namespace SpaceBreach.entity.model {
 				var cont = GD.Load<PackedScene>("res://src/entity/particle/Contrail.tscn");
 
 				foreach (var anchor in contGroup.GetChildren()) {
-					((Node) anchor).AddChild(cont.Instance());
+					(anchor as Node)?.AddChild(cont.Instance());
 				}
 			}
 		}
 
-		public override void _Process(float delta) {
-			if (Input.IsActionPressed("shoot") && AtkCd.Ready() && Shoot()) {
+		public override void _UnhandledInput(InputEvent @event) {
+			if (@event.IsActionPressed("shoot") && AtkCd.Ready() && Shoot()) {
 				AtkCd.Use();
 			}
 
-			if (Input.IsActionPressed("special") && SpCd.Ready() && Special()) {
+			if (@event.IsActionPressed("special") && SpCd.Ready() && Special()) {
 				SpCd.Use();
 			}
 		}
 
 		public override void _PhysicsProcess(float delta) {
-			Accelerate(Input.GetVector("move_right", "move_left", "move_down", "move_up"));
+			Accelerate(Input.GetVector("move_right", "move_left", "move_down", "move_up") * (Speed * SpeedMult));
 			Translate(_velocity);
 		}
 
 		private void Accelerate(Vector2 mov) {
 			const float friction = 0.4f;
 
-			var sway = (_velocity.x - (_velocity.x + SpeedMult * mov.x) * friction / Engine.GetFramesPerSecond()).Clamp(-1, 1);
+			var sway = (_velocity.x - (_velocity.x + Speed * SpeedMult * mov.x) * friction / Engine.GetFramesPerSecond()).Clamp(-1, 1);
 			RotationDegrees = 30 * sway;
 
-			var safe = GetNode<Control>("/root/Control/SafeArea").GetGlobalRect();
+			var safe = GetNode<Control>("/root/Control/GameArea/SafeArea").GetGlobalRect();
 			var rect = GetNode<Sprite>("Sprite").GetRect();
 
 			if (!(GlobalPosition - rect.Size / 2 - mov).x.IsBetween(safe.Position.x, safe.Position.x + safe.Size.x - rect.Size.x)) {
 				_velocity.x *= -1;
 			} else {
-				_velocity.x -= (_velocity.x + SpeedMult * mov.x) * friction / Engine.GetFramesPerSecond();
+				_velocity.x -= (_velocity.x + Speed * SpeedMult * mov.x) * friction / Engine.GetFramesPerSecond();
 			}
 
 			if (!(GlobalPosition - rect.Size / 2 - mov).y.IsBetween(safe.Position.y, safe.Position.y + safe.Size.y - rect.Size.y)) {
 				_velocity.y *= -1;
 			} else {
-				_velocity.y -= (_velocity.y + SpeedMult * mov.y) * friction / Engine.GetFramesPerSecond();
+				_velocity.y -= (_velocity.y + Speed * SpeedMult * mov.y) * friction / Engine.GetFramesPerSecond();
 			}
 		}
 

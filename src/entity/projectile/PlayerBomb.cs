@@ -4,7 +4,7 @@ using SpaceBreach.util;
 
 namespace SpaceBreach.entity.projectile {
 	public abstract class PlayerBomb : Projectile {
-		protected PlayerBomb() : base(1, 0) {
+		protected PlayerBomb() : base(speed: 1, damage: 0) {
 
 		}
 

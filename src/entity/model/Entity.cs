@@ -1,10 +1,14 @@
 ﻿using Godot;
 using SpaceBreach.scene;
+using SpaceBreach.util;
 
 namespace SpaceBreach.entity.model {
 	public abstract class Entity : Area2D {
 		[Export]
 		public uint BaseHp;
+
+		[Export]
+		public float Speed;
 
 		private uint _hp;
 		protected uint Hp {
@@ -18,11 +22,14 @@ namespace SpaceBreach.entity.model {
 			}
 		}
 
-		protected Entity(uint baseHp) {
+		public new bool Visible;
+
+		protected Entity(uint baseHp, float speed = 1) {
 			BaseHp = _hp = baseHp;
+			Speed = speed;
 		}
 
-		public Game GetGame() {
+		protected Game GetGame() {
 			return GetNode<Game>("/root/Control");
 		}
 
@@ -35,7 +42,7 @@ namespace SpaceBreach.entity.model {
 				OnDamaged(source);
 			}
 
-			_hp = (uint) Mathf.Max(0, _hp + value);
+			_hp = (uint) (_hp + value).Clamp(0, BaseHp);
 			if (_hp == 0) {
 				QueueFree();
 				OnDestroy();

@@ -1,21 +1,28 @@
-﻿using Godot;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Godot;
 using SpaceBreach.entity.interfaces;
 using SpaceBreach.scene;
 using SpaceBreach.util;
 
 namespace SpaceBreach.entity.model {
 	public abstract class Enemy : Entity, ITracked {
+		private readonly bool _drop;
+		private readonly List<Type> _drops = typeof(Pickup).Assembly
+			.GetTypes()
+			.Where(t => t.IsSubclassOf(typeof(Pickup)))
+			.ToList();
+
 		[Export]
 		public float AttackRate;
 
-		public Cooldown Cooldown;
+		protected Cooldown Cooldown;
 
-		private readonly bool _drop;
-
-		protected Enemy(uint hp, float attackRate = 1) : base(hp) {
+		protected Enemy(uint hp, float attackRate = 1, float speed = 1) : base(hp, speed) {
 			AttackRate = attackRate;
 
-			_drop = Utils.Rng.Randfn() > 1 - Mathf.Min(GetCost() * 0.001f, 0.2f) ;
+			_drop = Utils.Rng.Randfn() > 0.9;
 			if (_drop) {
 				Modulate = Colors.Yellow;
 			}
@@ -25,12 +32,12 @@ namespace SpaceBreach.entity.model {
 			base._Ready();
 			var game = GetNode<Game>("/root/Control");
 
-			BaseHp = Hp = (BaseHp + game.GetScore() / 2) * game.GetLevel();
-			Cooldown = new Cooldown(game, (uint) (500 / (AttackRate + 0.2f * game.GetLevel())));
+			BaseHp = Hp = (uint) (BaseHp * game.Level * (_drop ? 1.5f : 1));
+			Cooldown = new Cooldown(game, (uint) (500 / (AttackRate + 0.2f * game.Level)));
 		}
 
 		public override void _Process(float delta) {
-			if (Cooldown.Ready() && Shoot()) {
+			if (Visible && Cooldown.Ready() && Shoot()) {
 				Cooldown.Use();
 			}
 		}
@@ -40,11 +47,22 @@ namespace SpaceBreach.entity.model {
 		}
 
 		public uint GetCost() {
-			return (uint) (GetHp() * AttackRate);
+			return (uint) (BaseHp * AttackRate);
 		}
 
 		protected abstract bool Shoot();
 
 		protected abstract void Move();
+
+		protected override void OnDestroy() {
+			GetGame().Score += GetCost();
+			if (_drop) {
+				var world = GetGame().GetSafeArea().GetNode<Node2D>("World");
+
+				world.AddChild(Utils.Load(_drops.Random()).Instance<Pickup>().With(p => {
+					p.GlobalPosition = world.ToLocal(GlobalPosition);
+				}));
+			}
+		}
 	}
 }

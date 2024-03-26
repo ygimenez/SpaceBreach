@@ -7,7 +7,7 @@ namespace SpaceBreach.scene {
 			GetNode<Button>("Back").Connect("pressed", this, nameof(_BackPressed));
 		}
 
-		protected void _BackPressed() {
+		public void _BackPressed() {
 			GetTree().Pop();
 		}
 	}
