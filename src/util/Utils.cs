@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using Godot;
+using SpaceBreach.entity.model;
 using Array = Godot.Collections.Array;
 using Object = Godot.Object;
 
@@ -9,8 +10,8 @@ namespace SpaceBreach.util {
 	public static class Utils {
 		public static readonly RandomNumberGenerator Rng = new RandomNumberGenerator();
 
-		public static void Connect(this Control ctrl, string signal, Object self, string method, params object[] args) {
-			ctrl.Connect(signal, self, method, new Array(args));
+		public static void Connect(this Node node, string signal, Object self, string method, params object[] args) {
+			node.Connect(signal, self, method, new Array(args));
 		}
 
 		public static T With<T>(this T self, Action<T> action) {
@@ -125,7 +126,8 @@ namespace SpaceBreach.util {
 		}
 
 		public static string PrcntBar(float prcnt, int width) {
-			return new string('|', (int) (width * prcnt)) + new string(' ', (int) (width - width * prcnt));
+			var left = (int) (width * prcnt);
+			return new string('|', left) + new string(' ', width - left);
 		}
 	}
 }

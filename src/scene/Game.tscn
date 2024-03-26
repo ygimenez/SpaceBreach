@@ -69,25 +69,27 @@ initial_velocity = 200.0
 initial_velocity_random = 0.5
 color = Color( 1, 1, 1, 0.196078 )
 
-[node name="World" type="Area2D" parent="SafeArea"]
+[node name="Boundaries" type="Area2D" parent="SafeArea"]
 collision_mask = 16
 
-[node name="Top" type="CollisionShape2D" parent="SafeArea/World"]
+[node name="Top" type="CollisionShape2D" parent="SafeArea/Boundaries"]
 position = Vector2( 400, 302 )
 shape = SubResource( 3 )
 one_way_collision_margin = 5.0
 
-[node name="Right" type="CollisionShape2D" parent="SafeArea/World"]
+[node name="Right" type="CollisionShape2D" parent="SafeArea/Boundaries"]
 position = Vector2( 400, 302 )
 shape = SubResource( 4 )
 
-[node name="Bottom" type="CollisionShape2D" parent="SafeArea/World"]
+[node name="Bottom" type="CollisionShape2D" parent="SafeArea/Boundaries"]
 position = Vector2( 400, 302 )
 shape = SubResource( 5 )
 
-[node name="Left" type="CollisionShape2D" parent="SafeArea/World"]
+[node name="Left" type="CollisionShape2D" parent="SafeArea/Boundaries"]
 position = Vector2( 400, 302 )
 shape = SubResource( 6 )
+
+[node name="World" type="Node2D" parent="SafeArea"]
 
 [node name="ReferenceRect" type="ReferenceRect" parent="."]
 margin_right = 1100.0

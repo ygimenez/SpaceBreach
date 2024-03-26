@@ -1,4 +1,5 @@
 using Godot;
+using SpaceBreach.entity.enemy;
 using SpaceBreach.entity.model;
 using SpaceBreach.util;
 
@@ -16,15 +17,15 @@ namespace SpaceBreach.scene {
 			);
 
 			AddChild(
-				GD.Load<PackedScene>("res://src/entity/enemy/Invader.tscn").Instance().With(p => {
-					((Area2D) p).GlobalPosition = GetSafeArea().GetRect().GetCenter();
+				GD.Load<PackedScene>("res://src/entity/enemy/Invader.tscn").Instance<Invader>().With(p => {
+					p.GlobalPosition = GetSafeArea().GetRect().GetCenter();
 				})
 			);
 		}
 
 		public override void _Process(float delta) {
 			GetNode<Label>("Player1Stats").Text = $@"
-			HP: {_player.Hp}/{_player.BaseHp}
+			HP: {_player.GetHp()}/{_player.BaseHp}
 			Special: {(_player.SpCd.Ready() ? "READY!" : $"[{Utils.PrcntBar(_player.SpCd.Charge(), 8)}]")}";
 		}
 
@@ -47,6 +48,10 @@ namespace SpaceBreach.scene {
 
 		public Control GetSafeArea() {
 			return GetNode<Control>("SafeArea");
+		}
+
+		public bool IsGameOver() {
+			return !IsInstanceValid(_player);
 		}
 	}
 }

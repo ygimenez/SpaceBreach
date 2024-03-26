@@ -3,28 +3,36 @@
 namespace SpaceBreach.entity.model {
 	public abstract class Projectile : Area2D {
 		[Export]
-		public float Speed = 2;
+		public float Speed;
 
 		[Export]
-		public float Damage = 50;
+		public uint Damage;
 
-		protected Projectile(float speed, float damage) {
+		public Entity Source;
+
+		protected Projectile(float speed, uint damage) {
 			Speed = speed;
 			Damage = damage;
 		}
 
-		public override void _Ready() {
-			Connect("area_shape_entered", this, nameof(_Hit));
-		}
-
 		public override void _PhysicsProcess(float delta) {
-			GlobalTranslate(Vector2.Up.Rotated(Rotation) * Speed);
+			if (Speed != 0) {
+				GlobalTranslate(Vector2.Up.Rotated(Rotation) * Speed);
+			}
+
+			foreach (var area in GetOverlappingAreas()) {
+				if (area is Entity e) {
+					OnHit(e);
+				}
+			}
 		}
 
-		protected virtual void _Hit(RID areaRid, Area2D area, int areaShapeIdx, int localShapeIdx) {
-			if (area is Entity e) {
-
+		protected virtual void OnHit(Entity entity) {
+			if (Damage > 0) {
+				entity.AddHp(Source, -Damage);
 			}
+
+			QueueFree();
 		}
 	}
 }

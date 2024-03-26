@@ -1,4 +1,5 @@
 ﻿using Godot;
+using SpaceBreach.manager;
 using SpaceBreach.scene;
 using SpaceBreach.util;
 
@@ -78,6 +79,10 @@ namespace SpaceBreach.entity.model {
 			} else {
 				_velocity.y -= (_velocity.y + SpeedMult * mov.y) * friction / Engine.GetFramesPerSecond();
 			}
+		}
+
+		protected override void OnDamaged(Entity by) {
+			Audio.Cue(this, "res://assets/sounds/hit.wav");
 		}
 
 		protected abstract bool Shoot();

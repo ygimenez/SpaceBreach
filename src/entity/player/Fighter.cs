@@ -1,5 +1,6 @@
 ﻿using Godot;
 using SpaceBreach.entity.model;
+using SpaceBreach.manager;
 using SpaceBreach.util;
 
 namespace SpaceBreach.entity.player {
@@ -11,36 +12,42 @@ namespace SpaceBreach.entity.player {
 			var cannons = GetNode("Cannons");
 			if (cannons != null && cannons.GetChildCount() > 0) {
 				var proj = GD.Load<PackedScene>("res://src/entity/projectile/PlayerBullet.tscn");
+				var world = GetGame().GetNode<Node2D>("SafeArea/World");
 
 				foreach (var cannon in cannons.GetChildren()) {
 					for (var i = 0; i < Projectiles; i++) {
-						GetParent().AddChild(proj.Instance().With(p => {
-							((Area2D) p).GlobalPosition = GetGame().GetSafeArea().ToLocal(((Position2D) cannon).GlobalPosition);
-							((Area2D) p).RotationDegrees = RotationDegrees;
+						world.AddChild(proj.Instance<Projectile>().With(p => {
+							p.Source = this;
+							p.GlobalPosition = world.ToLocal(((Position2D) cannon).GlobalPosition);
+							p.RotationDegrees = RotationDegrees;
 						}));
 					}
 				}
+
+				Audio.Cue(this, "res://assets/sounds/player_shoot.wav");
 			}
 
-            return true;
+			return true;
 		}
 
 		protected override bool Special() {
 			var cannons = GetNode("Cannons");
 			if (cannons != null && cannons.GetChildCount() > 0) {
-				var proj = GD.Load<PackedScene>("res://src/entity/projectile/PlayerBullet.tscn");
+				var proj = GD.Load<PackedScene>("res://src/entity/projectile/PlayerBomb.tscn");
+				var world = GetGame().GetNode<Node2D>("SafeArea/World");
 
 				foreach (var cannon in cannons.GetChildren()) {
 					for (var i = 0; i < Projectiles; i++) {
-						GetParent().AddChild(proj.Instance().With(p => {
-							((Area2D) p).GlobalPosition = GetParent().ToLocal(((Position2D) cannon).GlobalPosition);
-							((Area2D) p).RotationDegrees = RotationDegrees;
+						world.AddChild(proj.Instance<Projectile>().With(p => {
+							p.Source = this;
+							p.GlobalPosition = world.ToLocal(((Position2D) cannon).GlobalPosition);
+							p.RotationDegrees = RotationDegrees;
 						}));
 					}
 				}
 			}
 
-            return true;
+			return true;
 		}
 	}
 }

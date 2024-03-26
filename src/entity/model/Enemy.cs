@@ -1,9 +1,10 @@
 ﻿using Godot;
+using SpaceBreach.entity.interfaces;
 using SpaceBreach.scene;
 using SpaceBreach.util;
 
 namespace SpaceBreach.entity.model {
-	public abstract class Enemy : Entity {
+	public abstract class Enemy : Entity, ITracked {
 		[Export]
 		public float AttackRate;
 
@@ -14,8 +15,8 @@ namespace SpaceBreach.entity.model {
 		protected Enemy(uint hp, float attackRate = 1) : base(hp) {
 			AttackRate = attackRate;
 
-			_drop = Utils.Rng.Randfn() > 1 - Mathf.Min(GetCost() * 0.001f, 0.2f);
-			if (_drop || true) {
+			_drop = Utils.Rng.Randfn() > 1 - Mathf.Min(GetCost() * 0.001f, 0.2f) ;
+			if (_drop) {
 				Modulate = Colors.Yellow;
 			}
 		}
@@ -39,7 +40,7 @@ namespace SpaceBreach.entity.model {
 		}
 
 		public uint GetCost() {
-			return (uint) (Hp * AttackRate);
+			return (uint) (GetHp() * AttackRate);
 		}
 
 		protected abstract bool Shoot();

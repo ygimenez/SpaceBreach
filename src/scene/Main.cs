@@ -22,6 +22,8 @@ namespace SpaceBreach.scene {
 					b.Visible = false;
 				}
 			});
+
+			Audio.AttachUiAudio(this);
 		}
 
 		private void _PlayPressed() {

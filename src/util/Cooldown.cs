@@ -29,16 +29,15 @@ namespace SpaceBreach.util {
 		}
 
 		public bool Ready() {
+			if (_game.IsGameOver()) return false;
+
 			return _game.Tick - _lastTick >= Time;
 		}
 
-		public bool Use() {
+		public void Use() {
 			if (Ready()) {
 				_lastTick = _game.Tick;
-				return true;
 			}
-
-			return false;
 		}
 
 		public ulong Remaining() {

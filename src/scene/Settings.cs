@@ -4,7 +4,6 @@ using System.Linq;
 using Godot;
 using SpaceBreach.component;
 using SpaceBreach.enums;
-using SpaceBreach.manager;
 using SpaceBreach.util;
 
 namespace SpaceBreach.scene {

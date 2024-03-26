@@ -8,11 +8,11 @@ rect_pivot_offset = Vector2( 136, -162 )
 script = ExtResource( 2 )
 
 [node name="ScrollContainer" type="ScrollContainer" parent="." index="1"]
-anchor_right = 1.0
+anchor_left = 0.24
+anchor_right = 0.76
 anchor_bottom = 1.0
-margin_left = 192.0
 margin_top = 48.0
-margin_right = -192.0
+margin_right = -6.10352e-05
 margin_bottom = -24.0
 
 [node name="CfgFields" type="VBoxContainer" parent="ScrollContainer" index="0"]
