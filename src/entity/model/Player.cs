@@ -6,9 +6,6 @@ using SpaceBreach.util;
 namespace SpaceBreach.entity.model {
 	public abstract class Player : Entity {
 		[Export]
-		public float SpeedMult;
-
-		[Export]
 		public float AttackRate;
 
 		[Export]
@@ -21,8 +18,7 @@ namespace SpaceBreach.entity.model {
 		public Cooldown SpCd;
 		private Vector2 _velocity = Vector2.Zero;
 
-		protected Player(uint hp, float speedMult = 1, float attackRate = 1, float specialRate = 1, float projectiles = 1, float speed = 1) : base(hp, speed) {
-			SpeedMult = speedMult;
+		protected Player(uint hp, float attackRate = 1, float specialRate = 1, float projectiles = 1, float speed = 1) : base(hp, speed) {
 			AttackRate = attackRate;
 			SpecialRate = specialRate;
 			Projectiles = projectiles;
@@ -31,8 +27,8 @@ namespace SpaceBreach.entity.model {
 		public override void _Ready() {
 			base._Ready();
 			var game = GetNode<Game>("/root/Control");
-			AtkCd = new Cooldown(game, (uint) (200 / AttackRate));
-			SpCd = new Cooldown(game, (uint) (1000 / SpecialRate));
+			AtkCd = new Cooldown(game, (uint) (200 / AttackRate / ActionSpeed));
+			SpCd = new Cooldown(game, (uint) (2000 / SpecialRate / ActionSpeed));
 
 			var contGroup = GetNode("Contrails");
 			if (contGroup != null && contGroup.GetChildCount() > 0) {
@@ -55,15 +51,19 @@ namespace SpaceBreach.entity.model {
 		}
 
 		public override void _PhysicsProcess(float delta) {
-			Accelerate(Input.GetVector("move_right", "move_left", "move_down", "move_up") * (Speed * SpeedMult));
+			Accelerate(new Vector2(
+				Input.GetActionStrength("move_left") - Input.GetActionStrength("move_right"),
+				Input.GetActionStrength("move_up") - Input.GetActionStrength("move_down")
+			).Normalized() * Speed);
+
 			Translate(_velocity);
 		}
 
 		private void Accelerate(Vector2 mov) {
 			const float friction = 0.4f;
 
-			var sway = (_velocity.x - (_velocity.x + Speed * SpeedMult * mov.x) * friction / Engine.GetFramesPerSecond()).Clamp(-1, 1);
-			RotationDegrees = 30 * sway;
+			var sway = Mathf.Abs(_velocity.x - (_velocity.x + Speed * mov.x) * friction / Engine.TargetFps);
+			RotationDegrees = 30 * (sway / (sway + 3)) * 2 * Mathf.Sign(_velocity.x);
 
 			var safe = GetNode<Control>("/root/Control/GameArea/SafeArea").GetGlobalRect();
 			var rect = GetNode<Sprite>("Sprite").GetRect();
@@ -71,13 +71,13 @@ namespace SpaceBreach.entity.model {
 			if (!(GlobalPosition - rect.Size / 2 - mov).x.IsBetween(safe.Position.x, safe.Position.x + safe.Size.x - rect.Size.x)) {
 				_velocity.x *= -1;
 			} else {
-				_velocity.x -= (_velocity.x + Speed * SpeedMult * mov.x) * friction / Engine.GetFramesPerSecond();
+				_velocity.x -= (_velocity.x + Speed * mov.x) * friction / Engine.TargetFps;
 			}
 
 			if (!(GlobalPosition - rect.Size / 2 - mov).y.IsBetween(safe.Position.y, safe.Position.y + safe.Size.y - rect.Size.y)) {
 				_velocity.y *= -1;
 			} else {
-				_velocity.y -= (_velocity.y + Speed * SpeedMult * mov.y) * friction / Engine.GetFramesPerSecond();
+				_velocity.y -= (_velocity.y + Speed * mov.y) * friction / Engine.TargetFps;
 			}
 		}
 

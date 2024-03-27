@@ -11,8 +11,7 @@ namespace SpaceBreach.scene {
 		public static readonly Dictionary<string, ConfigField> Fields = new Dictionary<string, ConfigField> {
 			{ "vol_master", new ConfigField("vol_master", "Master", CfgType.PERCENT, 50) },
 			{ "vol_music", new ConfigField("vol_music", "Music", CfgType.PERCENT, 50) },
-			{ "vol_effect", new ConfigField("vol_effect", "Effects", CfgType.PERCENT, 50) },
-			{
+			{ "vol_effect", new ConfigField("vol_effect", "Effects", CfgType.PERCENT, 50) }, {
 				"win_mode", new ConfigField("win_mode", "Window Mode", CfgType.CYCLE, default(WindowMode),
 					v => {
 						switch (v) {
@@ -38,8 +37,7 @@ namespace SpaceBreach.scene {
 						}
 					}
 				)
-			},
-			{
+			}, {
 				"win_res", new ConfigField("win_res", "Resolution", CfgType.CYCLE, default(Resolution),
 					v => {
 						var size = ((Resolution) v).GetDescription().Split("x");
@@ -52,65 +50,51 @@ namespace SpaceBreach.scene {
 			}
 		};
 
-		private const int LABEL_WIDTH = 150;
-		private const int VALUE_WIDTH = 50;
-
 		public override void _Ready() {
 			base._Ready();
 
-			GetNode<VBoxContainer>("ScrollContainer/CfgFields").With(box => {
+			GetNode<GridContainer>("ScrollContainer/CfgFields").With(box => {
 				foreach (var v in Fields.Values.Where(v => OS.HasFeature("pc") || !v.Key.StartsWith("win_"))) {
 					switch (v.Type) {
 						case CfgType.PERCENT: {
 							var value = Global.Cfg.GetV(v.Key, (int) v.DefaultValue);
 
+							box.AddChild(new Label {
+								Text = v.Label,
+							});
 							box.AddChild(
-								new HBoxContainer().With(row => {
-									row.AddChild(new Label {
-										Text = v.Label,
-										RectMinSize = new Vector2(LABEL_WIDTH, 0)
-									});
-									row.AddChild(
-										new HSlider {
-											MinValue = 0,
-											MaxValue = 100,
-											Value = value,
-											SizeFlagsHorizontal = (int) SizeFlags.ExpandFill
-										}.With(s => {
-											s.Connect("drag_ended", this, nameof(_SliderDragEnded), v.Key, s);
-											s.Connect("value_changed", this, nameof(_SliderValueChanged), v.Key, s);
-										})
-									);
-									row.AddChild(new Label {
-										Name = $"SliderCaption_{v.Key}",
-										Text = value.ToString(),
-										RectMinSize = new Vector2(VALUE_WIDTH, 0)
-									});
+								new HSlider {
+									MinValue = 0,
+									MaxValue = 100,
+									Value = value,
+									SizeFlagsHorizontal = (int) SizeFlags.ExpandFill
+								}.With(s => {
+									s.Connect("drag_ended", this, nameof(_SliderDragEnded), v.Key, s);
+									s.Connect("value_changed", this, nameof(_SliderValueChanged), v.Key, s);
 								})
 							);
+							box.AddChild(new Label {
+								Name = $"SliderCaption_{v.Key}",
+								Text = value.ToString(),
+							});
 						}
 							break;
 						case CfgType.CYCLE: {
 							var value = Global.Cfg.GetV(v.Key, 0);
 							var values = v.Values();
 
+							box.AddChild(new Label {
+								Text = v.Label,
+							});
 							box.AddChild(
-								new HBoxContainer().With(row => {
-									row.AddChild(new Label {
-										Text = v.Label,
-										RectMinSize = new Vector2(LABEL_WIDTH, 0)
-									});
-									row.AddChild(
-										new Button {
-											Text = (value % values.Length).ToEnum(v.DefaultValue.GetType()).GetDescription(),
-											SizeFlagsHorizontal = (int) SizeFlags.ExpandFill,
-										}.With(b => {
-											b.Connect("gui_input", this, nameof(_TogglePressed), v.Key, b);
-										})
-									);
-									row.AddChild(new HSpacer());
+								new Button {
+									Text = (value % values.Length).ToEnum(v.DefaultValue.GetType()).GetDescription(),
+									SizeFlagsHorizontal = (int) SizeFlags.ExpandFill
+								}.With(b => {
+									b.Connect("gui_input", this, nameof(_TogglePressed), v.Key, b);
 								})
 							);
+							box.AddChild(new Control());
 						}
 							break;
 						case CfgType.TOGGLE:

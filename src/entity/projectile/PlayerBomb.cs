@@ -5,8 +5,17 @@ using SpaceBreach.util;
 
 namespace SpaceBreach.entity.projectile {
 	public abstract class PlayerBomb : Projectile {
-		protected PlayerBomb() : base(speed: 1, damage: 0) {
+		private uint _fuse = 150;
 
+		protected PlayerBomb() : base(speed: 1, damage: 0) {
+		}
+
+		public override void _PhysicsProcess(float delta) {
+			base._PhysicsProcess(delta);
+
+			if (--_fuse == 0) {
+				OnHit(null);
+			}
 		}
 
 		protected override void OnHit(Entity entity) {
@@ -15,6 +24,7 @@ namespace SpaceBreach.entity.projectile {
 			GetParent().CallDeferred("add_child", explode.Instance<Projectile>().With(p => {
 				p.Source = Source;
 				p.Position = Position;
+				p.Damage += (uint) (p.Damage * (1 - _fuse / 150f));
 			}));
 			QueueFree();
 			Audio.Cue("res://assets/sounds/explode.wav");

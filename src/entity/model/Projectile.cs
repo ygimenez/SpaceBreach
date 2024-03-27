@@ -1,4 +1,5 @@
 ﻿using Godot;
+using SpaceBreach.util;
 
 namespace SpaceBreach.entity.model {
 	public abstract class Projectile : Area2D {
@@ -17,7 +18,7 @@ namespace SpaceBreach.entity.model {
 
 		public override void _PhysicsProcess(float delta) {
 			if (Speed != 0) {
-				GlobalTranslate(Vector2.Up.Rotated(Rotation) * Speed);
+				GlobalTranslate(Vector2.Up.Rotated(Rotation) * Speed * Global.ACTION_SPEED);
 			}
 
 			foreach (var area in GetOverlappingAreas()) {
@@ -28,7 +29,7 @@ namespace SpaceBreach.entity.model {
 		}
 
 		protected virtual void OnHit(Entity entity) {
-			if (Damage > 0) {
+			if (entity != null && Damage > 0) {
 				entity.AddHp(Source, -Damage);
 			}
 

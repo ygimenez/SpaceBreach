@@ -61,6 +61,13 @@ namespace SpaceBreach.entity.model {
 			Audio.Cue("res://assets/sounds/enemy_hit.wav");
 		}
 
+		public override void _ExitTree() {
+			GetGame().SpawnPool++;
+			if (this is IBoss) {
+				GetGame().Boss = null;
+			}
+		}
+
 		protected override void OnDestroy() {
 			base.OnDestroy();
 			GetGame().Score += GetCost();
@@ -70,10 +77,6 @@ namespace SpaceBreach.entity.model {
 				world.AddChild(Utils.Load(_drops.Random()).Instance<Pickup>().With(p => {
 					p.GlobalPosition = world.ToLocal(GlobalPosition);
 				}));
-			}
-
-			if (this is IBoss) {
-				GetGame().Boss = null;
 			}
 		}
 	}

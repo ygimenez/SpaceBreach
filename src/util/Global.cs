@@ -6,6 +6,7 @@ namespace SpaceBreach.util {
 	public abstract class Global : Node {
 		public static Global Instance;
 		public const string CFG_PATH = "user://settings.cfg";
+		public const float ACTION_SPEED = 2;
 
 		public static readonly ConfigFile Cfg = new ConfigFile().With(cfg => {
 			cfg.Load(CFG_PATH);
@@ -20,7 +21,7 @@ namespace SpaceBreach.util {
 			#endif
 
 			Engine.TargetFps = 60;
-			Engine.IterationsPerSecond = 200;
+			Engine.IterationsPerSecond = 100;
 		}
 
 		public override void _Ready() {

@@ -28,7 +28,7 @@ namespace SpaceBreach.entity.particle {
 			}
 
 			for (var i = 0; i < _line.GetPointCount(); i++) {
-				_line.SetPointPosition(i, _line.GetPointPosition(i) + Velocity * _ship.SpeedMult * delta);
+				_line.SetPointPosition(i, _line.GetPointPosition(i) + Velocity * _ship.Speed / 2 * delta);
 			}
 		}
 	}

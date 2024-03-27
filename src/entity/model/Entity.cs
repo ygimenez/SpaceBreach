@@ -8,11 +8,22 @@ namespace SpaceBreach.entity.model {
 		public uint BaseHp;
 
 		[Export]
-		public float Speed;
+		public float Speed {
+			get => _speed * ActionSpeed;
+			set => _speed = value;
+		}
+
+		[Export]
+		public float ActionSpeed {
+			get => _actionSpeed * Global.ACTION_SPEED;
+			set => _actionSpeed = value;
+		}
 
 		[Signal]
 		public delegate void Death(Entity entity);
 
+		private float _speed;
+		private float _actionSpeed = 1;
 		private uint _hp;
 		protected uint Hp {
 			get => _hp;

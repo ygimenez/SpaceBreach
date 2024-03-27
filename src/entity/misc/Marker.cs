@@ -21,9 +21,9 @@ namespace SpaceBreach.entity.misc {
 				QueueFree();
 			} else {
 				var sprite = GetNode<Sprite>("Sprite");
-				var reference = this.FindParent<Control>().GetGlobalRect();
+				var reference = this.FindParent<Control>().GetRect();
 
-				sprite.Rotation = GlobalPosition.AngleTo(Tracked.GlobalPosition);
+				sprite.Rotation = reference.GetCenter().AngleTo(Tracked.Position);
 				GlobalPosition = Tracked.GlobalPosition.Clamp(reference.Position, reference.End);
 
 				var skull = sprite.GetNode<Sprite>("Skull");

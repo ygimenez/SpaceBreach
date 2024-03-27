@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://assets/themes/ui.tres" type="Theme" id=1]
+[ext_resource path="res://src/util/AutoFont.cs" type="Script" id=2]
 [ext_resource path="res://assets/fonts/SpaceMono.ttf" type="DynamicFontData" id=3]
 
 [sub_resource type="CSharpScript" id=3]
@@ -53,14 +54,16 @@ __meta__ = {
 [node name="Label" type="Label" parent="."]
 anchor_left = 0.5
 anchor_right = 0.5
-margin_left = -240.0
-margin_top = 48.0
-margin_right = 240.0
-margin_bottom = 148.0
+margin_left = -300.0
+margin_top = 54.0
+margin_right = 300.0
+margin_bottom = 154.0
+rect_pivot_offset = Vector2( 300, 50 )
 custom_fonts/font = SubResource( 5 )
 text = "SPACE BREACH"
 align = 1
 valign = 1
+script = ExtResource( 2 )
 
 [node name="Play" type="Button" parent="."]
 anchor_left = 0.5

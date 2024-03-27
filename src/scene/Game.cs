@@ -10,8 +10,6 @@ using SpaceBreach.util;
 
 namespace SpaceBreach.scene {
 	public abstract class Game : Control {
-		private readonly Semaphore _spawnPool = new Semaphore();
-
 		private readonly List<Type> _enemies = typeof(Enemy).Assembly
 			.GetTypes()
 			.Where(t => t.IsSubclassOf(typeof(Enemy)))
@@ -26,6 +24,7 @@ namespace SpaceBreach.scene {
 			set => _score = (uint) Mathf.Max(0, value);
 		}
 
+		public uint SpawnPool;
 		public uint Level = 1;
 		public Enemy Boss;
 
@@ -47,12 +46,12 @@ namespace SpaceBreach.scene {
 			Special: {(_player.SpCd.Ready() ? "READY!" : $"[{Utils.PrcntBar(_player.SpCd.Charge(), 8)}]")}
 			Score: {Score}";
 
-			if (!IsGameOver() && Boss == null && Utils.Rng.Randfn() > 0.995 && _spawnPool.TryWait() == Error.Ok) {
+			if (!IsGameOver() && Boss == null && Utils.Rng.Randfn() > 0.995 && SpawnPool > 0) {
 				var world = GetSafeArea().GetNode<Node2D>("World");
 
 				world.AddChild(Utils.Load(_enemies.Random()).Instance<Enemy>().With(p => {
 					var spawn = GetNode<Control>("EnemySpawn").GetGlobalRect();
-					p.GlobalPosition = world.ToLocal(spawn.Position + spawn.Size * new Vector2(Utils.Rng.Randf(), 0));
+					p.GlobalPosition = world.ToLocal(spawn.GetCenter() + spawn.Size * new Vector2(Utils.Rng.Randf() - 0.5f, 0));
 
 					world.AddChild(GD.Load<PackedScene>("res://src/entity/misc/Marker.tscn").Instance<Marker>().With(m => {
 						m.Tracked = p;
@@ -63,6 +62,8 @@ namespace SpaceBreach.scene {
 						GetNode<AnimationPlayer>("Warning/AnimationPlayer").Play("Flash");
 						Audio.Cue("res://assets/sounds/warning.wav");
 					}
+
+					SpawnPool--;
 				}));
 			}
 		}
@@ -70,12 +71,12 @@ namespace SpaceBreach.scene {
 		public override void _PhysicsProcess(float delta) {
 			Tick++;
 			if (Tick % 1000 == 0) {
-				_spawnPool.Post();
+				SpawnPool++;
 			}
 
 			GetSafeArea().GetNode<CPUParticles2D>("Stars").With(s => {
-				s.SpeedScale = _player.SpeedMult * 2;
-				(s.Texture as AtlasTexture).Margin = new Rect2(Vector2.Zero, new Vector2(0, -20 + 100 * (1 - _player.SpeedMult)));
+				s.SpeedScale = _player.Speed;
+				(s.Texture as AtlasTexture).Margin = new Rect2(Vector2.Zero, new Vector2(0, -20 + 100 * (1 - _player.Speed / 2)));
 			});
 		}
 

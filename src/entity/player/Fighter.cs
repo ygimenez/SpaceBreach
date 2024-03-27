@@ -5,7 +5,7 @@ using SpaceBreach.util;
 
 namespace SpaceBreach.entity.player {
 	public abstract class Fighter : Player {
-		protected Fighter() : base(hp: 200, speed: 0.9f) {
+		protected Fighter() : base(hp: 200, speed: 1) {
 		}
 
 		protected override bool Shoot() {
@@ -22,7 +22,7 @@ namespace SpaceBreach.entity.player {
 							p.Source = this;
 							p.GlobalPosition = world.ToLocal(cannon.GlobalPosition);
 							p.RotationDegrees = RotationDegrees + (15 - offset);
-							p.Damage = (uint) (p.Damage / Projectiles);
+							p.Damage -= (uint) ((Projectiles - 1) * p.Damage / 4);
 						}));
 					}
 				}

@@ -29,6 +29,13 @@ namespace SpaceBreach.entity.enemy {
 		}
 
 		protected override void Move() {
+			var safe = GetGame().GetSafeArea().GetGlobalRect();
+			if (GlobalPosition.x < safe.Position.x) {
+				_drift = 1;
+			} else if (GlobalPosition.x > safe.End.x) {
+				_drift = -1;
+			}
+
 			if (_drift != 0) {
 				Translate(new Vector2(1, 0) * Speed * Mathf.Sign(_drift));
 				_drift -= Mathf.Sign(_drift);
@@ -41,7 +48,8 @@ namespace SpaceBreach.entity.enemy {
 		}
 
 		public void _AreaShapeEntered(RID _, Area2D entity, int index, int __) {
-			if (entity.GetChild(index).Name.EqualsAny("Left", "Right")) {
+			var col = entity.GetChild(index).Name;
+			if (col == "Left" && _drift < 0 || col == "Right" && _drift > 0) {
 				_drift = -_drift;
 			}
 		}

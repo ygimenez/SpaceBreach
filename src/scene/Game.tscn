@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://src/scene/Game.cs" type="Script" id=1]
 [ext_resource path="res://assets/textures/projectiles.tres" type="Texture" id=2]
@@ -8,6 +8,8 @@
 [ext_resource path="res://assets/fonts/SpaceMono.ttf" type="DynamicFontData" id=6]
 [ext_resource path="res://src/scene/PauseMenu.cs" type="Script" id=7]
 [ext_resource path="res://assets/sprites/warning.png" type="Texture" id=8]
+[ext_resource path="res://src/util/AutoFont.cs" type="Script" id=9]
+[ext_resource path="res://src/scene/Player2Stats.cs" type="Script" id=10]
 
 [sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 2 )
@@ -118,7 +120,7 @@ tracks/0/keys = {
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -150.0
-margin_top = -300.0
+margin_top = -150.0
 margin_right = 150.0
 margin_bottom = 150.0
 theme = ExtResource( 3 )
@@ -132,25 +134,31 @@ __meta__ = {
 anchor_top = 1.0
 anchor_bottom = 1.0
 margin_left = 158.0
-margin_top = -449.0
-margin_right = 550.0
-margin_bottom = -154.0
+margin_top = -450.0
+margin_right = 942.0
+margin_bottom = -156.0
 valign = 2
+script = ExtResource( 9 )
 
 [node name="Player2Stats" type="Label" parent="."]
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -550.0
-margin_top = -449.0
+margin_left = -942.0
+margin_top = -450.0
 margin_right = -158.0
-margin_bottom = -154.0
+margin_bottom = -156.0
 valign = 2
+script = ExtResource( 10 )
 
 [node name="GameArea" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = 150.0
+margin_top = 150.0
+margin_right = -150.0
+margin_bottom = -150.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
@@ -158,18 +166,9 @@ size_flags_vertical = 3
 collision_mask = 255
 script = ExtResource( 4 )
 
-[node name="ReferenceRect" type="ReferenceRect" parent="GameArea"]
+[node name="SafeArea" type="PanelContainer" parent="GameArea"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-
-[node name="SafeArea" type="PanelContainer" parent="GameArea"]
-anchor_left = 0.5
-anchor_right = 0.5
-anchor_bottom = 1.0
-margin_left = -400.0
-margin_top = 299.0
-margin_right = 400.0
-margin_bottom = -149.0
 rect_clip_content = true
 theme = ExtResource( 3 )
 
@@ -196,21 +195,20 @@ script = ExtResource( 5 )
 
 [node name="EnemySpawn" type="Control" parent="."]
 anchor_left = 0.5
-anchor_top = 1.0
 anchor_right = 0.5
-anchor_bottom = 1.0
-margin_left = -336.0
-margin_top = -951.0
-margin_right = 336.0
-margin_bottom = -751.0
+margin_left = -250.0
+margin_right = 250.0
+margin_bottom = 150.0
 
 [node name="Spawn" type="Control" parent="."]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 530.0
-margin_top = 776.0
-margin_right = -530.0
-margin_bottom = -234.0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -20.0
+margin_top = -20.0
+margin_right = 20.0
+margin_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 __meta__ = {
@@ -231,12 +229,10 @@ rect_pivot_offset = Vector2( 20, 20 )
 [node name="PauseMenu" type="Control" parent="."]
 pause_mode = 2
 visible = false
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 150.0
-margin_top = 300.0
-margin_right = -150.0
-margin_bottom = -150.0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
 script = ExtResource( 7 )
 
 [node name="Label" type="Label" parent="PauseMenu"]
@@ -270,10 +266,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -32.0
-margin_top = -78.0
-margin_right = 32.0
-margin_bottom = 78.0
+margin_left = -30.5
+margin_top = -74.5
+margin_right = 30.5
+margin_bottom = 74.5
 custom_fonts/font = SubResource( 4 )
 text = "3"
 align = 1
@@ -290,9 +286,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -129.5
+margin_left = -129.0
 margin_top = -45.0
-margin_right = 129.5
+margin_right = 130.0
 margin_bottom = 45.0
 custom_fonts/font = SubResource( 7 )
 text = "WARNING"
@@ -302,15 +298,21 @@ __meta__ = {
 }
 
 [node name="Sprite" type="Sprite" parent="Warning"]
-position = Vector2( -32, 45 )
+position = Vector2( 0.5, 46 )
 scale = Vector2( 2, 2 )
 texture = ExtResource( 8 )
+offset = Vector2( -16, 0 )
 
 [node name="Sprite2" type="Sprite" parent="Warning"]
-position = Vector2( 291, 45 )
+position = Vector2( 259.5, 46 )
 scale = Vector2( 2, 2 )
 texture = ExtResource( 8 )
+offset = Vector2( 16, 0 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Warning"]
 anims/Flash = SubResource( 8 )
 anims/RESET = SubResource( 9 )
+
+[node name="ReferenceRect" type="ReferenceRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
