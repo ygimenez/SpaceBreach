@@ -38,6 +38,8 @@ namespace SpaceBreach.scene {
 				_player = p;
 				_player.GlobalPosition = world.ToLocal(GetNode<Control>("Spawn").GetGlobalRect().GetCenter());
 			}));
+
+
 		}
 
 		public override void _Process(float delta) {

@@ -52,15 +52,15 @@ namespace SpaceBreach.entity.model {
 
 		public override void _PhysicsProcess(float delta) {
 			Accelerate(new Vector2(
-				Input.GetActionStrength("move_left") - Input.GetActionStrength("move_right"),
-				Input.GetActionStrength("move_up") - Input.GetActionStrength("move_down")
-			).Normalized() * Speed);
+				Input.GetAxis("move_right", "move_left"),
+				Input.GetAxis("move_down", "move_up")
+			).LimitLength() * Speed);
 
 			Translate(_velocity);
 		}
 
 		private void Accelerate(Vector2 mov) {
-			const float friction = 0.4f;
+			const float friction = 0.8f;
 
 			var sway = Mathf.Abs(_velocity.x - (_velocity.x + Speed * mov.x) * friction / Engine.TargetFps);
 			RotationDegrees = 30 * (sway / (sway + 3)) * 2 * Mathf.Sign(_velocity.x);

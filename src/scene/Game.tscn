@@ -9,16 +9,12 @@
 [ext_resource path="res://src/scene/PauseMenu.cs" type="Script" id=7]
 [ext_resource path="res://assets/sprites/warning.png" type="Texture" id=8]
 [ext_resource path="res://src/util/AutoFont.cs" type="Script" id=9]
-[ext_resource path="res://src/scene/Player2Stats.cs" type="Script" id=10]
+[ext_resource path="res://joystick/virtual_joystick.tscn" type="PackedScene" id=10]
 
 [sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 2 )
 region = Rect2( 0, 0, 2, 24 )
 margin = Rect2( 0, 0, 0, -20 )
-
-[sub_resource type="DynamicFont" id=3]
-size = 40
-font_data = ExtResource( 6 )
 
 [sub_resource type="DynamicFont" id=4]
 size = 100
@@ -116,6 +112,10 @@ tracks/0/keys = {
 "values": [ Color( 1, 0, 0, 1 ) ]
 }
 
+[sub_resource type="DynamicFont" id=3]
+size = 40
+font_data = ExtResource( 6 )
+
 [node name="Control" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -150,7 +150,7 @@ margin_top = -450.0
 margin_right = -158.0
 margin_bottom = -156.0
 valign = 2
-script = ExtResource( 10 )
+script = ExtResource( 9 )
 
 [node name="GameArea" type="Control" parent="."]
 anchor_right = 1.0
@@ -163,12 +163,20 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Area2D" type="Area2D" parent="GameArea"]
+position = Vector2( 0, -1 )
 collision_mask = 255
 script = ExtResource( 4 )
 
 [node name="SafeArea" type="PanelContainer" parent="GameArea"]
-anchor_right = 1.0
+anchor_left = 0.5
+anchor_top = -0.002
+anchor_right = 0.5
 anchor_bottom = 1.0
+margin_left = -400.0
+margin_top = 0.2
+margin_right = 400.0
+margin_bottom = 1.0
+rect_pivot_offset = Vector2( 400, 303 )
 rect_clip_content = true
 theme = ExtResource( 3 )
 
@@ -188,10 +196,23 @@ initial_velocity_random = 0.5
 color = Color( 1, 1, 1, 0.196078 )
 
 [node name="Area2D" type="Area2D" parent="GameArea/SafeArea"]
+position = Vector2( 0, 1 )
 collision_mask = 2
 script = ExtResource( 5 )
 
 [node name="World" type="Node2D" parent="GameArea/SafeArea"]
+position = Vector2( 400, 300 )
+
+[node name="ReferenceRect" type="ReferenceRect" parent="GameArea/SafeArea/World"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -20.0
+margin_top = -20.0
+margin_right = 20.0
+margin_bottom = 20.0
+editor_only = false
 
 [node name="EnemySpawn" type="Control" parent="."]
 anchor_left = 0.5
@@ -202,13 +223,13 @@ margin_bottom = 150.0
 
 [node name="Spawn" type="Control" parent="."]
 anchor_left = 0.5
-anchor_top = 0.5
+anchor_top = 1.0
 anchor_right = 0.5
-anchor_bottom = 0.5
+anchor_bottom = 1.0
 margin_left = -20.0
-margin_top = -20.0
+margin_top = -264.0
 margin_right = 20.0
-margin_bottom = 20.0
+margin_bottom = -224.0
 grow_horizontal = 2
 grow_vertical = 2
 __meta__ = {
@@ -225,39 +246,6 @@ margin_top = -20.0
 margin_right = 20.0
 margin_bottom = 20.0
 rect_pivot_offset = Vector2( 20, 20 )
-
-[node name="PauseMenu" type="Control" parent="."]
-pause_mode = 2
-visible = false
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-script = ExtResource( 7 )
-
-[node name="Label" type="Label" parent="PauseMenu"]
-anchor_left = 0.5
-anchor_top = 0.502
-anchor_right = 0.5
-anchor_bottom = 0.502
-margin_left = -112.0
-margin_top = -73.2
-margin_right = 112.0
-margin_bottom = -13.2
-custom_fonts/font = SubResource( 3 )
-text = "PAUSED"
-align = 1
-
-[node name="Back" type="Button" parent="PauseMenu"]
-anchor_left = 0.5
-anchor_top = 0.502
-anchor_right = 0.5
-anchor_bottom = 0.502
-margin_left = -64.0
-margin_top = -0.200012
-margin_right = 64.0
-margin_bottom = 47.8
-text = "MAIN MENU"
 
 [node name="Countdown" type="Label" parent="."]
 pause_mode = 2
@@ -313,6 +301,55 @@ offset = Vector2( 16, 0 )
 anims/Flash = SubResource( 8 )
 anims/RESET = SubResource( 9 )
 
+[node name="PauseMenu" type="Control" parent="."]
+pause_mode = 2
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 7 )
+
+[node name="Label" type="Label" parent="PauseMenu"]
+anchor_left = 0.5
+anchor_top = 0.502
+anchor_right = 0.5
+anchor_bottom = 0.502
+margin_left = -112.0
+margin_top = -73.2
+margin_right = 112.0
+margin_bottom = -13.2
+custom_fonts/font = SubResource( 3 )
+text = "PAUSED"
+align = 1
+
+[node name="Back" type="Button" parent="PauseMenu"]
+anchor_left = 0.5
+anchor_top = 0.502
+anchor_right = 0.5
+anchor_bottom = 0.502
+margin_left = -64.0
+margin_top = -0.200012
+margin_right = 64.0
+margin_bottom = 47.8
+text = "MAIN MENU"
+
 [node name="ReferenceRect" type="ReferenceRect" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+
+[node name="Stick" parent="." instance=ExtResource( 10 )]
+modulate = Color( 1, 1, 1, 0.294118 )
+anchor_top = 0.0
+anchor_right = 1.0
+margin_left = 0.0
+margin_top = 0.0
+margin_right = 0.0
+margin_bottom = 900.0
+rect_scale = Vector2( 0.5, 0.5 )
+pressed_color = Color( 1, 1, 1, 0.294118 )
+clampzone_size = 50.0
+joystick_mode = 1
+visibility_mode = 1
+action_left = "move_left"
+action_right = "move_right"
+action_up = "move_up"
+action_down = "move_down"

@@ -7,7 +7,9 @@ namespace SpaceBreach.manager {
 
 		public static void PlayMusic(string path) {
 			var master = Global.Cfg.GetV<int>("vol_master") / 100f;
-			var effect = Global.Cfg.GetV<int>("vol_music") / 100f;
+			var music = Global.Cfg.GetV<int>("vol_music") / 100f;
+			var volume = music * master;
+			if (volume == 0) return;
 
 			AudioStreamPlayer player;
 			if (Global.Instance.HasNode("Music")) {
@@ -19,7 +21,7 @@ namespace SpaceBreach.manager {
 			}
 
 			player.Stream = GD.Load<AudioStreamSample>(path);
-			player.VolumeDb = GD.Linear2Db(effect * master);
+			player.VolumeDb = GD.Linear2Db(music * master);
 
 			player.Play();
 		}
@@ -35,6 +37,8 @@ namespace SpaceBreach.manager {
 		public static void Cue(string path) {
 			var master = Global.Cfg.GetV<int>("vol_master") / 100f;
 			var effect = Global.Cfg.GetV<int>("vol_effect") / 100f;
+			var volume = effect * master;
+			if (volume == 0) return;
 
 			var cue = new AudioStreamPlayer {
 				Stream = GD.Load<AudioStreamSample>(path),

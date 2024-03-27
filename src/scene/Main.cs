@@ -1,5 +1,3 @@
-// #define DEBUG_MODE
-
 using Godot;
 using SpaceBreach.manager;
 using SpaceBreach.util;
@@ -25,11 +23,6 @@ namespace SpaceBreach.scene {
 			});
 
 			Audio.AttachUiAudio(this);
-
-			#if DEBUG_MODE
-			GetTree().DebugCollisionsHint = true;
-			GetTree().DebugNavigationHint = true;
-			#endif
 		}
 
 		private void _PlayPressed() {

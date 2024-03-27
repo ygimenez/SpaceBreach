@@ -8,7 +8,7 @@ namespace SpaceBreach.scene {
 		}
 
 		public override void _Process(float delta) {
-			Input.MouseMode = Visible ? Input.MouseModeEnum.Visible : Input.MouseModeEnum.Captured;
+			// Input.MouseMode = Visible ? Input.MouseModeEnum.Visible : Input.MouseModeEnum.Captured;
 			GetNode<Label>("Label").Text = GetParent<Game>().IsGameOver() ? "GAME OVER" : "PAUSED";
 		}
 
