@@ -22,11 +22,12 @@ namespace SpaceBreach.entity.player {
 							p.Source = this;
 							p.GlobalPosition = world.ToLocal(cannon.GlobalPosition);
 							p.RotationDegrees = RotationDegrees + (15 - offset);
+							p.Damage = (uint) (p.Damage / Projectiles);
 						}));
 					}
 				}
 
-				Audio.Cue(this, "res://assets/sounds/player_shoot.wav");
+				Audio.Cue("res://assets/sounds/player_shoot.wav");
 			}
 
 			return true;

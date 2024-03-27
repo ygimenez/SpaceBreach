@@ -11,7 +11,7 @@ dest_files=[ "res://.import/boss_theme.wav-55fc0737b87b75430f1ba90bc6b7ee0f.samp
 
 [params]
 
-force/8_bit=true
+force/8_bit=false
 force/mono=false
 force/max_rate=false
 force/max_rate_hz=44100

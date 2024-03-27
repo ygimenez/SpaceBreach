@@ -5,7 +5,34 @@ namespace SpaceBreach.manager {
 	public class Audio : Node {
 		private static readonly Audio Instance = new Audio();
 
-		public static void Cue(Node parent, string path) {
+		public static void PlayMusic(string path) {
+			var master = Global.Cfg.GetV<int>("vol_master") / 100f;
+			var effect = Global.Cfg.GetV<int>("vol_music") / 100f;
+
+			AudioStreamPlayer player;
+			if (Global.Instance.HasNode("Music")) {
+				player = Global.Instance.GetNode<AudioStreamPlayer>("Music");
+				player.Stop();
+			} else {
+				player = new AudioStreamPlayer { Name = "Music" };
+				Global.Instance.AddChild(player);
+			}
+
+			player.Stream = GD.Load<AudioStreamSample>(path);
+			player.VolumeDb = GD.Linear2Db(effect * master);
+
+			player.Play();
+		}
+
+		public static void StopMusic() {
+			if (Global.Instance.HasNode("Music")) {
+				var player = Global.Instance.GetNode<AudioStreamPlayer>("Music");
+				player.Stop();
+				player.QueueFree();
+			}
+		}
+
+		public static void Cue(string path) {
 			var master = Global.Cfg.GetV<int>("vol_master") / 100f;
 			var effect = Global.Cfg.GetV<int>("vol_effect") / 100f;
 
@@ -14,7 +41,7 @@ namespace SpaceBreach.manager {
 				VolumeDb = GD.Linear2Db(effect * master)
 			};
 
-			parent.AddChild(cue);
+			Global.Instance.AddChild(cue);
 			cue.Play();
 			cue.Connect("finished", cue, "queue_free");
 		}
@@ -29,11 +56,11 @@ namespace SpaceBreach.manager {
 		}
 
 		private void _MouseOver() {
-			Cue(Global.Instance, "res://assets/sounds/ui/ui_hover.wav");
+			Cue("res://assets/sounds/ui/ui_hover.wav");
 		}
 
 		private void _MouseClick() {
-			Cue(Global.Instance, "res://assets/sounds/ui/ui_click.wav");
+			Cue("res://assets/sounds/ui/ui_click.wav");
 		}
 	}
 }

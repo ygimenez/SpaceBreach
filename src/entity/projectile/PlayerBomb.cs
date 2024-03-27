@@ -1,5 +1,6 @@
 using Godot;
 using SpaceBreach.entity.model;
+using SpaceBreach.manager;
 using SpaceBreach.util;
 
 namespace SpaceBreach.entity.projectile {
@@ -16,6 +17,7 @@ namespace SpaceBreach.entity.projectile {
 				p.Position = Position;
 			}));
 			QueueFree();
+			Audio.Cue("res://assets/sounds/explode.wav");
 		}
 	}
 }

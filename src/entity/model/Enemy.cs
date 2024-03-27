@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using SpaceBreach.entity.interfaces;
+using SpaceBreach.manager;
 using SpaceBreach.scene;
 using SpaceBreach.util;
 
@@ -39,6 +40,7 @@ namespace SpaceBreach.entity.model {
 		public override void _Process(float delta) {
 			if (Visible && Cooldown.Ready() && Shoot()) {
 				Cooldown.Use();
+				Audio.Cue("res://assets/sounds/enemy_fire.wav");
 			}
 		}
 
@@ -54,7 +56,13 @@ namespace SpaceBreach.entity.model {
 
 		protected abstract void Move();
 
+		protected override void OnDamaged(Entity by) {
+			base.OnDamaged(by);
+			Audio.Cue("res://assets/sounds/enemy_hit.wav");
+		}
+
 		protected override void OnDestroy() {
+			base.OnDestroy();
 			GetGame().Score += GetCost();
 			if (_drop) {
 				var world = GetGame().GetSafeArea().GetNode<Node2D>("World");
@@ -62,6 +70,10 @@ namespace SpaceBreach.entity.model {
 				world.AddChild(Utils.Load(_drops.Random()).Instance<Pickup>().With(p => {
 					p.GlobalPosition = world.ToLocal(GlobalPosition);
 				}));
+			}
+
+			if (this is IBoss) {
+				GetGame().Boss = null;
 			}
 		}
 	}

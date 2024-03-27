@@ -27,7 +27,7 @@ namespace SpaceBreach.entity.misc {
 				GlobalPosition = Tracked.GlobalPosition.Clamp(reference.Position, reference.End);
 
 				var skull = sprite.GetNode<Sprite>("Skull");
-				skull.Visible = true;
+				skull.Visible = Tracked is IBoss;
 				skull.Rotation = -sprite.Rotation;
 				Visible = true;
 			}

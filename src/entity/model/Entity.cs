@@ -10,6 +10,9 @@ namespace SpaceBreach.entity.model {
 		[Export]
 		public float Speed;
 
+		[Signal]
+		public delegate void Death(Entity entity);
+
 		private uint _hp;
 		protected uint Hp {
 			get => _hp;

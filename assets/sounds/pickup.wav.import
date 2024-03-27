@@ -11,7 +11,7 @@ dest_files=[ "res://.import/pickup.wav-3b75f72f152acde0eb387e9a39656c4e.sample" 
 
 [params]
 
-force/8_bit=true
+force/8_bit=false
 force/mono=false
 force/max_rate=false
 force/max_rate_hz=44100

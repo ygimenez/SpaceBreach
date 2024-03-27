@@ -11,7 +11,7 @@ dest_files=[ "res://.import/player_explode.wav-e1c3bb89922df4590777456b9ce4c86b.
 
 [params]
 
-force/8_bit=true
+force/8_bit=false
 force/mono=false
 force/max_rate=false
 force/max_rate_hz=44100

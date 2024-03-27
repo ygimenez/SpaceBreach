@@ -44,12 +44,12 @@ namespace SpaceBreach.entity.model {
 			}
 		}
 
-		public override void _UnhandledInput(InputEvent @event) {
-			if (@event.IsActionPressed("shoot") && AtkCd.Ready() && Shoot()) {
+		public override void _Process(float delta) {
+			if (Input.IsActionPressed("shoot") && AtkCd.Ready() && Shoot()) {
 				AtkCd.Use();
 			}
 
-			if (@event.IsActionPressed("special") && SpCd.Ready() && Special()) {
+			if (Input.IsActionPressed("special") && SpCd.Ready() && Special()) {
 				SpCd.Use();
 			}
 		}
@@ -82,7 +82,14 @@ namespace SpaceBreach.entity.model {
 		}
 
 		protected override void OnDamaged(Entity by) {
-			Audio.Cue(this, "res://assets/sounds/hit.wav");
+			base.OnDamaged(by);
+			Audio.Cue("res://assets/sounds/player_hit.wav");
+		}
+
+		protected override void OnDestroy() {
+			base.OnDestroy();
+			GetGame().PlayerDeath(this);
+			Audio.Cue("res://assets/sounds/player_explode.wav");
 		}
 
 		protected abstract bool Shoot();

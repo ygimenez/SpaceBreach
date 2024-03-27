@@ -74,16 +74,19 @@ namespace SpaceBreach.util {
 
 		public static int Clamp(this int val, int min, int max) {
 			if (val < min) return min;
+
 			return val > max ? max : val;
 		}
 
 		public static long Clamp(this long val, long min, long max) {
 			if (val < min) return min;
+
 			return val > max ? max : val;
 		}
 
 		public static float Clamp(this float val, float min, float max) {
 			if (val < min) return min;
+
 			return val > max ? max : val;
 		}
 
@@ -134,6 +137,28 @@ namespace SpaceBreach.util {
 
 		public static void FindParent(this Node node, ref Node output, Predicate<Node> condition = null) {
 			node.FindParent<Node>(ref output, condition);
+		}
+
+		public static T FindChild<T>(this Node node, Predicate<T> condition = null) where T : Node {
+			foreach (var child in node.GetChildren()) {
+				if (child is T t && (condition?.Invoke(t) ?? true)) {
+					return t;
+				}
+			}
+
+			return null;
+		}
+
+		public static void FindChild<T>(this Node node, ref T output, Predicate<Node> condition = null) where T : Node {
+			output = node.FindChild<T>(condition);
+		}
+
+		public static Node FindChild(this Node node, Predicate<Node> condition = null) {
+			return node.FindChild<Node>(condition);
+		}
+
+		public static void FindChild(this Node node, ref Node output, Predicate<Node> condition = null) {
+			node.FindChild<Node>(ref output, condition);
 		}
 
 		public static string PrcntBar(float prcnt, int width) {

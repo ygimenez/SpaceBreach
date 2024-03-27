@@ -1,4 +1,5 @@
 ﻿using Godot;
+using SpaceBreach.manager;
 
 namespace SpaceBreach.entity.model {
 	public abstract class Pickup : Area2D {
@@ -14,6 +15,7 @@ namespace SpaceBreach.entity.model {
 			if (entity is Player p) {
 				OnPickup(p);
 				QueueFree();
+				Audio.Cue("res://assets/sounds/pickup.wav");
 			}
 		}
 

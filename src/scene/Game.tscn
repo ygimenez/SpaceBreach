@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://src/scene/Game.cs" type="Script" id=1]
 [ext_resource path="res://assets/textures/projectiles.tres" type="Texture" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://src/scene/Activator.cs" type="Script" id=5]
 [ext_resource path="res://assets/fonts/SpaceMono.ttf" type="DynamicFontData" id=6]
 [ext_resource path="res://src/scene/PauseMenu.cs" type="Script" id=7]
+[ext_resource path="res://assets/sprites/warning.png" type="Texture" id=8]
 
 [sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 2 )
@@ -64,6 +65,53 @@ tracks/0/keys = {
 "transitions": PoolRealArray( 1 ),
 "update": 0,
 "values": [ "3" ]
+}
+
+[sub_resource type="DynamicFont" id=7]
+size = 60
+font_data = ExtResource( 6 )
+
+[sub_resource type="Animation" id=8]
+resource_name = "Flash"
+length = 2.5
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.63, 1.25, 1.88, 2.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 0, 0, 0 ), Color( 1, 0, 0, 1 ), Color( 1, 0, 0, 0 ), Color( 1, 0, 0, 1 ), Color( 1, 0, 0, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 2.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 1,
+"values": [ true, false ]
+}
+
+[sub_resource type="Animation" id=9]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 0, 0, 1 ) ]
 }
 
 [node name="Control" type="Control"]
@@ -219,13 +267,13 @@ text = "MAIN MENU"
 pause_mode = 2
 visible = false
 anchor_left = 0.5
-anchor_top = 0.572
+anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 0.572
+anchor_bottom = 0.5
 margin_left = -32.0
-margin_top = -77.6
+margin_top = -78.0
 margin_right = 32.0
-margin_bottom = 78.4
+margin_bottom = 78.0
 custom_fonts/font = SubResource( 4 )
 text = "3"
 align = 1
@@ -233,3 +281,36 @@ align = 1
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Countdown"]
 anims/Countdown = SubResource( 5 )
 anims/RESET = SubResource( 6 )
+
+[node name="Warning" type="Label" parent="."]
+pause_mode = 2
+visible = false
+modulate = Color( 1, 0, 0, 1 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -129.5
+margin_top = -45.0
+margin_right = 129.5
+margin_bottom = 45.0
+custom_fonts/font = SubResource( 7 )
+text = "WARNING"
+align = 1
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Sprite" type="Sprite" parent="Warning"]
+position = Vector2( -32, 45 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 8 )
+
+[node name="Sprite2" type="Sprite" parent="Warning"]
+position = Vector2( 291, 45 )
+scale = Vector2( 2, 2 )
+texture = ExtResource( 8 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Warning"]
+anims/Flash = SubResource( 8 )
+anims/RESET = SubResource( 9 )

@@ -11,7 +11,7 @@ dest_files=[ "res://.import/player_shoot.wav-41ac95d563897cbe21c005d88e22653a.sa
 
 [params]
 
-force/8_bit=true
+force/8_bit=false
 force/mono=false
 force/max_rate=false
 force/max_rate_hz=44100
