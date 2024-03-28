@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://assets/themes/ui.tres" type="Theme" id=1]
 [ext_resource path="res://src/util/AutoFont.cs" type="Script" id=2]
 [ext_resource path="res://assets/fonts/SpaceMono.ttf" type="DynamicFontData" id=3]
+[ext_resource path="res://assets/sprites/icons.png" type="Texture" id=4]
 
 [sub_resource type="CSharpScript" id=3]
 resource_name = "Main"
@@ -40,6 +41,10 @@ font_data = SubResource( 4 )
 size = 15
 font_data = ExtResource( 3 )
 
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 4 )
+region = Rect2( 0, 32, 16, 16 )
+
 [node name="Control" type="Control"]
 pause_mode = 2
 anchor_right = 1.0
@@ -64,6 +69,7 @@ text = "SPACE BREACH"
 align = 1
 valign = 1
 script = ExtResource( 2 )
+PercentOfParent = 0.75
 
 [node name="Play" type="Button" parent="."]
 anchor_left = 0.5
@@ -122,3 +128,14 @@ rect_pivot_offset = Vector2( 160, 23 )
 custom_fonts/font = SubResource( 2 )
 align = 2
 valign = 2
+
+[node name="Fullscreen" type="Button" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -48.0
+margin_top = 6.0
+margin_right = -8.0
+margin_bottom = 47.0
+icon = SubResource( 6 )
+flat = true
+expand_icon = true

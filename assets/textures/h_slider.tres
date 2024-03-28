@@ -1,7 +1,7 @@
 [gd_resource type="StyleBoxTexture" load_steps=2 format=2]
 
 [sub_resource type="StreamTexture" id=1]
-load_path = "res://.import/icon_sheet.png-67d886b34afa060eb9d21af1ea99ce84.stex"
+load_path = "res://.import/icons.png-a48a139c0599139f1c5a2b259449f81f.stex"
 
 [resource]
 texture = SubResource( 1 )

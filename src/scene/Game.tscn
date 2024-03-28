@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=24 format=2]
 
 [ext_resource path="res://src/scene/Game.cs" type="Script" id=1]
 [ext_resource path="res://assets/textures/projectiles.tres" type="Texture" id=2]
@@ -11,12 +11,10 @@
 [ext_resource path="res://src/util/AutoFont.cs" type="Script" id=9]
 [ext_resource path="res://joystick/virtual_joystick.tscn" type="PackedScene" id=10]
 [ext_resource path="res://src/component/Controller.cs" type="Script" id=11]
+[ext_resource path="res://assets/sprites/icons.png" type="Texture" id=12]
+[ext_resource path="res://addons/MaxSizeContainer/max_size_container.gd" type="Script" id=13]
 
-[sub_resource type="StyleBoxFlat" id=10]
-content_margin_left = 5.0
-content_margin_right = 5.0
-content_margin_top = 5.0
-content_margin_bottom = 5.0
+[sub_resource type="StyleBoxFlat" id=12]
 bg_color = Color( 0, 0, 0, 1 )
 border_width_left = 1
 border_width_right = 1
@@ -127,6 +125,10 @@ tracks/0/keys = {
 "values": [ Color( 1, 0, 0, 1 ) ]
 }
 
+[sub_resource type="AtlasTexture" id=11]
+atlas = ExtResource( 12 )
+region = Rect2( 13, 3, 3, 3 )
+
 [node name="Control" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -140,28 +142,6 @@ __meta__ = {
 "_edit_horizontal_guides_": [ 301.0 ],
 "_edit_vertical_guides_": [ 400.0 ]
 }
-
-[node name="Player1Stats" type="Label" parent="."]
-anchor_top = 1.0
-anchor_bottom = 1.0
-margin_left = 158.0
-margin_top = -450.0
-margin_right = 942.0
-margin_bottom = -156.0
-valign = 2
-script = ExtResource( 9 )
-
-[node name="Player2Stats" type="Label" parent="."]
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = -942.0
-margin_top = -450.0
-margin_right = -158.0
-margin_bottom = -156.0
-valign = 2
-script = ExtResource( 9 )
 
 [node name="GameArea" type="Control" parent="."]
 anchor_right = 1.0
@@ -177,21 +157,28 @@ script = ExtResource( 4 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 
-[node name="SafeArea" type="PanelContainer" parent="GameArea"]
-anchor_left = 0.5
-anchor_top = -0.002
-anchor_right = 0.5
+[node name="MaxSizeContainer" type="MarginContainer" parent="GameArea"]
+anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -400.0
-margin_top = 151.8
-margin_right = 400.0
+margin_left = 150.0
+margin_top = 150.0
+margin_right = -150.0
 margin_bottom = -150.0
-rect_pivot_offset = Vector2( 400, 303 )
-rect_clip_content = true
-theme = ExtResource( 3 )
-custom_styles/panel = SubResource( 10 )
+custom_constants/margin_right = 0
+custom_constants/margin_top = 0
+custom_constants/margin_left = 0
+custom_constants/margin_bottom = 0
+script = ExtResource( 13 )
+max_size = Vector2( 800, -1 )
 
-[node name="Stars" type="CPUParticles2D" parent="GameArea/SafeArea"]
+[node name="SafeArea" type="PanelContainer" parent="GameArea/MaxSizeContainer"]
+margin_right = 800.0
+margin_bottom = 600.0
+rect_pivot_offset = Vector2( 400, 301 )
+rect_clip_content = true
+custom_styles/panel = SubResource( 12 )
+
+[node name="Stars" type="CPUParticles2D" parent="GameArea/MaxSizeContainer/SafeArea"]
 position = Vector2( 0, -99 )
 amount = 50
 lifetime = 10.0
@@ -206,20 +193,31 @@ initial_velocity = 200.0
 initial_velocity_random = 0.5
 color = Color( 1, 1, 1, 0.196078 )
 
-[node name="Area2D" type="Area2D" parent="GameArea/SafeArea"]
+[node name="Area2D" type="Area2D" parent="GameArea/MaxSizeContainer/SafeArea"]
 collision_mask = 2
 script = ExtResource( 5 )
 
-[node name="World" type="Node2D" parent="GameArea/SafeArea"]
+[node name="World" type="Node2D" parent="GameArea/MaxSizeContainer/SafeArea"]
 
-[node name="EnemySpawn" type="Control" parent="."]
-anchor_left = 0.5
-anchor_right = 0.5
-margin_left = -250.0
-margin_right = 250.0
+[node name="PlayerStats" type="Label" parent="GameArea"]
+anchor_top = 0.501
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 158.0
+margin_top = 0.0999451
+margin_right = -158.0
+margin_bottom = -156.0
+valign = 2
+script = ExtResource( 9 )
+PercentOfParent = 0.5
+
+[node name="EnemySpawn" type="Control" parent="GameArea"]
+anchor_right = 1.0
+margin_left = 300.0
+margin_right = -300.0
 margin_bottom = 150.0
 
-[node name="Spawn" type="Control" parent="."]
+[node name="Spawn" type="Control" parent="GameArea"]
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
@@ -234,7 +232,7 @@ __meta__ = {
 "_edit_group_": true
 }
 
-[node name="ReferenceRect" type="ReferenceRect" parent="Spawn"]
+[node name="ReferenceRect" type="ReferenceRect" parent="GameArea/Spawn"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -252,9 +250,9 @@ anchor_bottom = 1.0
 [node name="Stick" parent="Mobile" instance=ExtResource( 10 )]
 modulate = Color( 1, 1, 1, 0.294118 )
 anchor_top = 0.0
-anchor_right = 1.0
+anchor_right = 0.5
 margin_top = 0.0
-margin_right = 0.0
+margin_right = 550.0
 margin_bottom = 900.0
 rect_scale = Vector2( 0.5, 0.5 )
 __meta__ = {
@@ -268,10 +266,11 @@ action_right = "move_right"
 action_up = "move_up"
 action_down = "move_down"
 
-[node name="Controller" type="Control" parent="Mobile"]
+[node name="Controller" type="Button" parent="Mobile"]
+anchor_left = 0.5
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 550.0
+flat = true
 script = ExtResource( 11 )
 
 [node name="PauseMenu" type="Control" parent="."]
@@ -284,6 +283,11 @@ margin_top = 150.0
 margin_right = -150.0
 margin_bottom = -150.0
 script = ExtResource( 7 )
+
+[node name="ColorRect" type="ColorRect" parent="PauseMenu"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.392157 )
 
 [node name="Label" type="Label" parent="PauseMenu"]
 anchor_left = 0.5
@@ -362,3 +366,15 @@ offset = Vector2( 16, 0 )
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Warning"]
 anims/Flash = SubResource( 8 )
 anims/RESET = SubResource( 9 )
+
+[node name="Pause" type="Button" parent="."]
+pause_mode = 2
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -198.0
+margin_top = 156.0
+margin_right = -158.0
+margin_bottom = 197.0
+icon = SubResource( 11 )
+flat = true
+expand_icon = true

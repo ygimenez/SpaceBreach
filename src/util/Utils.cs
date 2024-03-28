@@ -5,6 +5,7 @@ using System.Linq;
 using Godot;
 using Godot.Collections;
 using SpaceBreach.entity.model;
+using SpaceBreach.scene;
 using Array = Godot.Collections.Array;
 using Object = Godot.Object;
 
@@ -24,6 +25,7 @@ namespace SpaceBreach.util {
 		public static void SetV(this ConfigFile cfg, string key, object value) {
 			cfg.SetValue("CONFIG", key, value);
 			cfg.Save(Global.CFG_PATH);
+			Settings.Apply();
 		}
 
 		public static T GetV<T>(this ConfigFile cfg, string key, T defaultValue = default) {
@@ -94,14 +96,6 @@ namespace SpaceBreach.util {
 			return new Vector2(pos.x.Clamp(min.x, max.x), pos.y.Clamp(min.y, max.y));
 		}
 
-		public static float ToRadians(this float deg) {
-			return deg * (Mathf.Pi / 180);
-		}
-
-		public static float ToDegrees(this float rad) {
-			return rad * 180 / Mathf.Pi;
-		}
-
 		public static bool IsBetween(this int val, int min, int max) {
 			return val >= min && val <= max;
 		}
@@ -115,11 +109,10 @@ namespace SpaceBreach.util {
 		}
 
 		public static T FindParent<T>(this Node node, Predicate<T> condition = null) where T : Node {
-			var curr = node;
 			while (true) {
-				curr = curr.GetParent();
-				switch (curr) {
-					case T t when (condition?.Invoke(t) ?? true):
+				node = node.GetParent();
+				switch (node) {
+					case T t when condition?.Invoke(t) ?? true:
 						return t;
 					case null:
 						return null;
@@ -168,14 +161,17 @@ namespace SpaceBreach.util {
 
 		public static void AddCollision(this Area2D area, bool filled = true) {
 			var shape = area.FindParent<Control>();
+
 			if (filled) {
-				area.AddChild(new CollisionShape2D {
-					Name = "Collision",
-					Shape = new RectangleShape2D {
-						Extents = shape.RectSize / 2,
-					},
-					Position = shape.RectSize / 2
-				});
+				if (!area.HasNode("Collision")) {
+					area.AddChild(new CollisionShape2D {
+						Name = "Collision",
+						Shape = new RectangleShape2D {
+							Extents = shape.RectSize / 2,
+						},
+						Position = shape.RectSize / 2
+					});
+				}
 			} else {
 				var sides = new List<(string, Vector2)> {
 					("Top", Vector2.Zero),
@@ -185,13 +181,15 @@ namespace SpaceBreach.util {
 				};
 
 				for (var i = 0; i < sides.Count; i++) {
-					area.AddChild(new CollisionShape2D {
-						Name = sides[i].Item1,
-						Shape = new SegmentShape2D {
-							A = sides[i].Item2,
-							B = sides[(i + 1) % sides.Count].Item2
-						}
-					});
+					if (!area.HasNode(sides[i].Item1)) {
+						area.AddChild(new CollisionShape2D {
+							Name = sides[i].Item1,
+							Shape = new SegmentShape2D {
+								A = sides[i].Item2,
+								B = sides[(i + 1) % sides.Count].Item2
+							}
+						});
+					}
 				}
 			}
 		}

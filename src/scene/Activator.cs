@@ -15,8 +15,8 @@ namespace SpaceBreach.scene {
 		}
 
 		public void _AreaShapeExited(RID _, Area2D entity, int __, int index) {
-			if (entity is Enemy e && GetChild(index).Name == "Bottom") {
-				GetNode<Game>("/root/Control").Score -= e.GetCost() / 2;
+			if (entity is Enemy e && e.Visible && GetChild(index).Name == "Bottom") {
+				GetNode<Game>("/root/Control").Streak = 0;
 			}
 		}
 	}

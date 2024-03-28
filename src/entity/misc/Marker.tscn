@@ -7,15 +7,14 @@
 script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]
-position = Vector2( 0, 12 )
 texture = ExtResource( 1 )
-offset = Vector2( 0, 10 )
+offset = Vector2( -25, 0 )
 region_enabled = true
 region_rect = Rect2( 0, 0, 20, 20 )
 
 [node name="Skull" type="Sprite" parent="Sprite"]
 visible = false
-position = Vector2( 0, 22 )
+position = Vector2( -35, 0 )
 texture = ExtResource( 1 )
 region_enabled = true
 region_rect = Rect2( 23, 2, 15, 16 )

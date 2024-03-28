@@ -10,6 +10,7 @@ using SpaceBreach.util;
 namespace SpaceBreach.entity.model {
 	public abstract class Enemy : Entity, ITracked {
 		private readonly bool _drop;
+
 		private readonly List<Type> _drops = typeof(Pickup).Assembly
 			.GetTypes()
 			.Where(t => t.IsSubclassOf(typeof(Pickup)))
@@ -70,12 +71,15 @@ namespace SpaceBreach.entity.model {
 
 		protected override void OnDestroy() {
 			base.OnDestroy();
-			GetGame().Score += GetCost();
+			var game = GetGame();
+			game.Score += (uint) (GetCost() * (1 + game.Streak / 10f));
+			game.Streak++;
+
 			if (_drop) {
 				var world = GetGame().GetSafeArea().GetNode<Node2D>("World");
 
 				world.AddChild(Utils.Load(_drops.Random()).Instance<Pickup>().With(p => {
-					p.GlobalPosition = world.ToLocal(GlobalPosition);
+					p.Position = Position;
 				}));
 			}
 

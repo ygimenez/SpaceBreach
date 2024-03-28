@@ -1,34 +1,35 @@
 using Godot;
 
 namespace SpaceBreach.component {
-	public abstract class Controller : Control {
+	public abstract class Controller : Button {
 		private SceneTreeTimer _dtTimer;
-		private bool _pressed, _mustRelease;
+		private bool _mustRelease;
 
-		public override void _Input(InputEvent @event) {
-			if (@event is InputEventScreenTouch) {
-				_pressed = @event.IsPressed();
+		public override void _Ready() {
+			Connect("button_down", this, nameof(_ButtonDown));
+			Connect("button_up", this, nameof(_ButtonUp));
+		}
 
-				if (_pressed) {
-					if (_dtTimer != null) {
-						_dtTimer = null;
-						Input.ActionPress("special");
-						_mustRelease = true;
-						return;
-					}
-
-					_dtTimer = GetTree().CreateTimer(0.15f);
-					_dtTimer.Connect("timeout", this, nameof(_SingleTap));
-				} else {
-					Input.ActionRelease("shoot");
-					Input.ActionRelease("special");
-					_mustRelease = false;
-				}
+		public void _ButtonDown() {
+			if (_dtTimer != null) {
+				_dtTimer = null;
+				Input.ActionPress("special");
+				_mustRelease = true;
+				return;
 			}
+
+			_dtTimer = GetTree().CreateTimer(0.15f);
+			_dtTimer.Connect("timeout", this, nameof(_SingleTap));
+		}
+
+		public void _ButtonUp() {
+			Input.ActionRelease("shoot");
+			Input.ActionRelease("special");
+			_mustRelease = false;
 		}
 
 		public override void _Process(float delta) {
-			if (Input.IsActionPressed("shoot") && !_pressed && _mustRelease) {
+			if (Input.IsActionPressed("shoot") && !Pressed && _mustRelease) {
 				Input.ActionRelease("shoot");
 				_mustRelease = false;
 			}

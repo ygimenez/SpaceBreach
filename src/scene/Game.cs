@@ -27,38 +27,49 @@ namespace SpaceBreach.scene {
 		public uint SpawnPool;
 		public uint Level = 1;
 		public uint TextLeft;
+		public uint Streak;
 		public Enemy Boss;
 
 		public override void _Ready() {
+			CallDeferred(nameof(_Initialize));
+		}
+
+		public void _Initialize() {
 			GetNode<Area2D>("GameArea/Area2D").AddCollision();
-			GetNode<Area2D>("GameArea/SafeArea/Area2D").AddCollision(false);
+			GetNode<Area2D>("GameArea/MaxSizeContainer/SafeArea/Area2D").AddCollision(false);
 			Audio.PlayMusic("res://assets/sounds/music/main.tres");
 
-			if (!OS.HasFeature("mobile")) {
+			if (Global.Mobile) {
+				GetNode<Button>("Pause").Connect("pressed", this, nameof(_PausePressed));
+			} else {
 				GetNode<Control>("Mobile").QueueFree();
+				GetNode<Control>("Pause").QueueFree();
 			}
 
 			var world = GetSafeArea().GetNode<Node2D>("World");
 			world.AddChild(GD.Load<PackedScene>("res://src/entity/player/Fighter.tscn").Instance<Player>().With(p => {
 				_player = p;
-				_player.GlobalPosition = world.ToLocal(GetNode<Control>("Spawn").GetGlobalRect().GetCenter());
+				_player.GlobalPosition = world.ToLocal(GetNode<Control>("GameArea/Spawn").GetGlobalRect().GetCenter());
 			}));
 
 			world.AddChild(GD.Load<PackedScene>("res://src/entity/misc/FallingText.tscn").Instance<FallingText>().With(t => {
-				t.Position = world.GetParent<Control>().RectSize * new Vector2(0.3f, 0);
+				t.Position = new Vector2(10, 0);
+                t.GetNode<AutoFont>("Label").TestString = "Press SPACE to shoot";
 
-				if (OS.HasFeature("mobile")) {
-					t.Text = $"<- Slide to move";
+				if (Global.Mobile) {
+					t.Text = "<- Slide to move";
 				} else {
 					t.Text = $"Press {((InputEvent) InputMap.GetActionList("shoot")[0]).AsText().ToUpper()} to shoot";
 				}
 			}));
 
 			world.AddChild(GD.Load<PackedScene>("res://src/entity/misc/FallingText.tscn").Instance<FallingText>().With(t => {
-				t.Position = world.GetParent<Control>().RectSize * new Vector2(0.7f, -0.5f);
+				t.Position = world.GetParent<Control>().RectSize * new Vector2(1, -0.5f) + new Vector2(-10, 0);
+				t.Origin = Vector2.Right;
+                t.GetNode<AutoFont>("Label").TestString = "Press SPACE to shoot";
 
-				if (OS.HasFeature("mobile")) {
-					t.Text = $@"
+				if (Global.Mobile) {
+					t.Text = @"
 					Single Tap to shoot    ->
 					Double tap for special ->";
 				} else {
@@ -68,29 +79,31 @@ namespace SpaceBreach.scene {
 
 			world.AddChild(GD.Load<PackedScene>("res://src/entity/misc/FallingText.tscn").Instance<FallingText>().With(t => {
 				t.Position = world.GetParent<Control>().RectSize * new Vector2(0.5f, -1.1f);
+				t.Origin = new Vector2(0.5f, 0);
+
 				t.Text = "Good luck!";
 			}));
 		}
 
 		public override void _Process(float delta) {
-			GetNode<Label>("Player1Stats").Text = $@"
+			GetNode<Label>("GameArea/PlayerStats").Text = $@"
 			HP: {_player.GetHp()}/{_player.BaseHp}
 			Special: {(_player.SpCd.Ready() ? "READY!" : $"[{Utils.PrcntBar(_player.SpCd.Charge(), 8)}]")}
-			Score: {Score}";
+			Score (x{decimal.Round((decimal) (1 + Streak / 10f), 1)}): {Score}".Trim();
 
 			if (!IsGameOver() && Boss == null && Utils.Rng.Randfn() > 0.995 && SpawnPool > 0) {
 				var world = GetSafeArea().GetNode<Node2D>("World");
 
-				world.AddChild(Utils.Load(_enemies.Random()).Instance<Enemy>().With(p => {
-					var spawn = GetNode<Control>("EnemySpawn").GetGlobalRect();
-					p.GlobalPosition = world.ToLocal(spawn.GetCenter() + spawn.Size * new Vector2(Utils.Rng.Randf() - 0.5f, 0));
+				world.AddChild(Utils.Load(_enemies.Random()).Instance<Enemy>().With(e => {
+					var spawn = GetNode<Control>("GameArea/EnemySpawn").GetGlobalRect();
+					e.GlobalPosition = spawn.Position + spawn.Size * new Vector2(Utils.Rng.Randf(), 0.5f);
 
 					world.AddChild(GD.Load<PackedScene>("res://src/entity/misc/Marker.tscn").Instance<Marker>().With(m => {
-						m.Tracked = p;
+						m.Tracked = e;
 					}));
 
-					if (p is IBoss) {
-						Boss = p;
+					if (e is IBoss) {
+						Boss = e;
 						GetNode<AnimationPlayer>("Warning/AnimationPlayer").Play("Flash");
 						Audio.Cue("res://assets/sounds/warning.wav");
 					}
@@ -102,14 +115,14 @@ namespace SpaceBreach.scene {
 
 		public override void _PhysicsProcess(float delta) {
 			if (TextLeft == 0) {
-				if (Tick++ % 1000 == 0) {
+				if (Tick++ % 2000 == 0) {
 					SpawnPool++;
 				}
 			}
 
 			GetSafeArea().GetNode<CPUParticles2D>("Stars").With(s => {
 				s.SpeedScale = _player.Speed;
-				(s.Texture as AtlasTexture).Margin = new Rect2(Vector2.Zero, new Vector2(0, -20 + 100 * _player.Speed / 20));
+				(s.Texture as AtlasTexture).Margin = new Rect2(Vector2.Zero, new Vector2(0, -20 + 100 * _player.Speed / 10));
 			});
 		}
 
@@ -118,7 +131,6 @@ namespace SpaceBreach.scene {
 		}
 
 		public void PlayerDeath(Player p) {
-			GD.Print("sus");
 			if (IsGameOver()) {
 				Audio.StopMusic();
 				Audio.Cue("res://assets/sounds/gameover_ramp.wav");
@@ -127,12 +139,18 @@ namespace SpaceBreach.scene {
 		}
 
 		public void _ShowGameOver() {
+			GetTree().Paused = true;
 			GetNode<Control>("PauseMenu").Visible = true;
 			Audio.Cue("res://assets/sounds/gameover.wav");
 		}
 
+		public void _PausePressed() {
+			var menu = GetNode<PauseMenu>("PauseMenu");
+			menu.Visible = !menu.Visible;
+		}
+
 		public Control GetSafeArea() {
-			return GetNode<Control>("GameArea/SafeArea");
+			return GetNode<Control>("GameArea/MaxSizeContainer/SafeArea");
 		}
 
 		public bool IsGameOver() {

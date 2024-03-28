@@ -65,7 +65,7 @@ namespace SpaceBreach.entity.model {
 			var sway = Mathf.Abs(_velocity.x - (_velocity.x + Speed * mov.x) * friction / Engine.TargetFps);
 			RotationDegrees = 30 * (sway / (sway + 3)) * 2 * Mathf.Sign(_velocity.x);
 
-			var safe = GetNode<Control>("/root/Control/GameArea/SafeArea").GetGlobalRect();
+			var safe = GetNode<Control>("/root/Control/GameArea/MaxSizeContainer/SafeArea").GetGlobalRect();
 			var rect = GetNode<Sprite>("Sprite").GetRect();
 
 			if (!(GlobalPosition - rect.Size / 2 - mov).x.IsBetween(safe.Position.x, safe.Position.x + safe.Size.x - rect.Size.x)) {

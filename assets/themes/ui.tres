@@ -2,7 +2,7 @@
 
 [ext_resource path="res://assets/textures/panel_normal.tres" type="StyleBox" id=1]
 [ext_resource path="res://assets/fonts/SpaceMono.tres" type="DynamicFont" id=2]
-[ext_resource path="res://assets/sprites/icon_sheet.png" type="Texture" id=3]
+[ext_resource path="res://assets/sprites/icons.png" type="Texture" id=3]
 [ext_resource path="res://assets/textures/check_checked_d.tres" type="Texture" id=4]
 [ext_resource path="res://assets/textures/check_checked.tres" type="Texture" id=5]
 [ext_resource path="res://assets/textures/check_unchecked_d.tres" type="Texture" id=6]

@@ -6,8 +6,8 @@ namespace SpaceBreach.manager {
 		private static readonly Audio Instance = new Audio();
 
 		public static void PlayMusic(string path) {
-			var master = Global.Cfg.GetV<int>("vol_master") / 100f;
-			var music = Global.Cfg.GetV<int>("vol_music") / 100f;
+			var master = Global.Cfg.GetV("vol_master", 100) / 100f;
+			var music = Global.Cfg.GetV("vol_music", 50) / 100f;
 			var volume = music * master;
 			if (volume == 0) return;
 
@@ -35,8 +35,8 @@ namespace SpaceBreach.manager {
 		}
 
 		public static void Cue(string path) {
-			var master = Global.Cfg.GetV<int>("vol_master") / 100f;
-			var effect = Global.Cfg.GetV<int>("vol_effect") / 100f;
+			var master = Global.Cfg.GetV("vol_master", 100) / 100f;
+			var effect = Global.Cfg.GetV("vol_effect", 75) / 100f;
 			var volume = effect * master;
 			if (volume == 0) return;
 

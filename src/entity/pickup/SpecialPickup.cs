@@ -1,9 +1,9 @@
-﻿using SpaceBreach.entity.model;
+using SpaceBreach.entity.model;
 
 namespace SpaceBreach.entity.pickup {
-	public class SpeedPickup : Pickup {
+	public class SpecialPickup : Pickup {
 		protected override void OnPickup(Player p) {
-			p.RawSpeed += 0.2f;
+			p.SpCd.Reset();
 		}
 	}
 }

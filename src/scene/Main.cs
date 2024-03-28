@@ -12,6 +12,12 @@ namespace SpaceBreach.scene {
 				GetNode<Label>("Version").Text = version.ToString();
 			});
 
+			if (Global.Mobile) {
+				GetNode<Button>("Fullscreen").Connect("pressed", this, nameof(_FullscreenPressed));
+			} else {
+				GetNode<Button>("Fullscreen").QueueFree();
+			}
+
 			GetNode<Button>("Play").Connect("pressed", this, nameof(_PlayPressed));
 			GetNode<Button>("Settings").Connect("pressed", this, nameof(_SettingsPressed));
 			GetNode<Button>("Exit").With(b => {
@@ -23,6 +29,10 @@ namespace SpaceBreach.scene {
 			});
 
 			Audio.AttachUiAudio(this);
+		}
+
+		private void _FullscreenPressed() {
+			OS.WindowFullscreen = !OS.WindowFullscreen;
 		}
 
 		private void _PlayPressed() {

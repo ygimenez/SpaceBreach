@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
-using SpaceBreach.component;
 using SpaceBreach.enums;
 using SpaceBreach.util;
 
@@ -18,15 +17,13 @@ namespace SpaceBreach.scene {
 							case WindowMode.WINDOWED:
 								OS.WindowBorderless = false;
 								OS.WindowFullscreen = false;
-
-								Fields["win_res"].Action.Invoke(Global.Cfg.GetV("win_res", 0));
 								break;
 							case WindowMode.BORDERLESS:
 								OS.WindowBorderless = true;
 								OS.WindowFullscreen = false;
 
 								OS.WindowPosition = new Vector2();
-								OS.WindowSize = OS.GetScreenSize();
+								OS.WindowSize = OS.GetScreenSize() - new Vector2(0, 1);
 								break;
 							case WindowMode.FULLSCREEN:
 								OS.WindowBorderless = false;
@@ -40,11 +37,17 @@ namespace SpaceBreach.scene {
 			}, {
 				"win_res", new ConfigField("win_res", "Resolution", CfgType.CYCLE, default(Resolution),
 					v => {
-						var size = ((Resolution) v).GetDescription().Split("x");
-						OS.WindowSize = new Vector2(int.Parse(size[0]), int.Parse(size[1]));
+						var mode = Global.Cfg.GetV("win_mode", 0).ToEnum<WindowMode>();
+						Global.Instance.GetViewport().SetSizeOverride(false);
 
-						var pos = OS.GetScreenSize() / 2 - OS.WindowSize / 2;
-						OS.WindowPosition = pos;
+						var dims = ((Resolution) v).GetDescription().Split("x");
+						var size = new Vector2(int.Parse(dims[0]), int.Parse(dims[1]));
+						if (mode == WindowMode.WINDOWED) {
+							OS.WindowSize = size;
+
+							var pos = OS.GetScreenSize() / 2 - OS.WindowSize / 2;
+							OS.WindowPosition = pos;
+						}
 					}
 				)
 			}
@@ -53,7 +56,7 @@ namespace SpaceBreach.scene {
 		public override void _Ready() {
 			base._Ready();
 
-			GetNode<GridContainer>("ScrollContainer/CfgFields").With(box => {
+			GetNode<GridContainer>("MaxSizeContainer/ScrollContainer/CfgFields").With(box => {
 				foreach (var v in Fields.Values.Where(v => OS.HasFeature("pc") || !v.Key.StartsWith("win_"))) {
 					switch (v.Type) {
 						case CfgType.PERCENT: {
@@ -64,6 +67,7 @@ namespace SpaceBreach.scene {
 							});
 							box.AddChild(
 								new HSlider {
+									Name = v.Key,
 									MinValue = 0,
 									MaxValue = 100,
 									Value = value,
@@ -75,7 +79,7 @@ namespace SpaceBreach.scene {
 							);
 							box.AddChild(new Label {
 								Name = $"SliderCaption_{v.Key}",
-								Text = value.ToString(),
+								Text = value.ToString().PadRight(3)
 							});
 						}
 							break;
@@ -84,10 +88,11 @@ namespace SpaceBreach.scene {
 							var values = v.Values();
 
 							box.AddChild(new Label {
-								Text = v.Label,
+								Text = v.Label
 							});
 							box.AddChild(
 								new Button {
+									Name = v.Key,
 									Text = (value % values.Length).ToEnum(v.DefaultValue.GetType()).GetDescription(),
 									SizeFlagsHorizontal = (int) SizeFlags.ExpandFill
 								}.With(b => {
@@ -108,19 +113,29 @@ namespace SpaceBreach.scene {
 			});
 		}
 
-		private void _SliderDragEnded(bool _, string key, Range slider) {
+		public override void _Process(float delta) {
+			GetNode<GridContainer>("MaxSizeContainer/ScrollContainer/CfgFields").With(box => {
+				box.GetNode<Button>("win_res").Disabled = Global.Cfg.GetV("win_mode", 0) != WindowMode.WINDOWED.Ordinal();
+			});
+		}
+
+		private void _SliderDragEnded(bool _, string key, Slider slider) {
+			if (!slider.Editable) return;
+
 			var field = Fields[key];
 			Global.Cfg.SetV(field.Key, (int) slider.Value);
 		}
 
-		private void _SliderValueChanged(float _, string key, Range slider) {
+		private void _SliderValueChanged(float _, string key, Slider slider) {
+			if (!slider.Editable) return;
+
 			var field = Fields[key];
 			slider.GetNode<Label>($"../SliderCaption_{key}").Text = ((int) slider.Value).ToString();
 			field.Action?.Invoke((int) slider.Value);
 		}
 
 		private void _TogglePressed(InputEvent evt, string key, Button button) {
-			if (!evt.IsPressed()) return;
+			if (!evt.IsPressed() || button.Disabled) return;
 
 			var field = Fields[key];
 			var value = Global.Cfg.GetV(field.Key, 0);
@@ -129,7 +144,12 @@ namespace SpaceBreach.scene {
 			Enum next = null;
 			if (evt is InputEventMouseButton mb) {
 				if (mb.ButtonIndex == ButtonList.Right.Ordinal()) {
-					next = ((value - 1) % values.Length).ToEnum(field.DefaultValue.GetType());
+					var idx = value - 1;
+					if (idx < 0) {
+						idx = idx % values.Length + values.Length;
+					}
+
+					next = (idx % values.Length).ToEnum(field.DefaultValue.GetType());
 				}
 			}
 
@@ -141,6 +161,11 @@ namespace SpaceBreach.scene {
 			Global.Cfg.SetV(field.Key, next.Ordinal());
 
 			field.Action?.Invoke(next);
+		}
+
+		public static void Apply() {
+			Fields["win_mode"].Action.Invoke(Global.Cfg.GetV<WindowMode>("win_mode"));
+			Fields["win_res"].Action.Invoke(Global.Cfg.GetV<Resolution>("win_res"));
 		}
 	}
 

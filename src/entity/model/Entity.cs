@@ -9,25 +9,25 @@ namespace SpaceBreach.entity.model {
 
 		[Export]
 		public float Speed {
-			get => _speed * ActionSpeed;
-			set => _speed = value;
+			get => RawSpeed * ActionSpeed;
+			set => RawSpeed = value;
 		}
 
 		[Export]
 		public float ActionSpeed {
-			get => _actionSpeed * Global.ACTION_SPEED;
-			set => _actionSpeed = value;
+			get => RawActionSpeed * Global.ACTION_SPEED;
+			set => RawActionSpeed = value;
 		}
 
 		[Signal]
 		public delegate void Death(Entity entity);
 
-		private float _speed;
-		private float _actionSpeed = 1;
 		private uint _hp;
 		protected uint Hp {
 			get => _hp;
 			set {
+				if (!Visible) return;
+
 				_hp = (uint) Mathf.Max(0, value);
 				if (_hp == 0) {
 					QueueFree();
@@ -36,6 +36,8 @@ namespace SpaceBreach.entity.model {
 			}
 		}
 
+		public float RawSpeed;
+		public float RawActionSpeed = 1;
 		public new bool Visible;
 
 		protected Entity(uint baseHp, float speed = 1) {
