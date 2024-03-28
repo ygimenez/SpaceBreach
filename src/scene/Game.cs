@@ -34,6 +34,10 @@ namespace SpaceBreach.scene {
 			GetNode<Area2D>("GameArea/SafeArea/Area2D").AddCollision(false);
 			Audio.PlayMusic("res://assets/sounds/music/main.tres");
 
+			if (!OS.HasFeature("mobile")) {
+				GetNode<Control>("Mobile").QueueFree();
+			}
+
 			var world = GetSafeArea().GetNode<Node2D>("World");
 			world.AddChild(GD.Load<PackedScene>("res://src/entity/player/Fighter.tscn").Instance<Player>().With(p => {
 				_player = p;
@@ -43,7 +47,7 @@ namespace SpaceBreach.scene {
 			world.AddChild(GD.Load<PackedScene>("res://src/entity/misc/FallingText.tscn").Instance<FallingText>().With(t => {
 				t.Position = world.GetParent<Control>().RectSize * new Vector2(0.3f, 0);
 
-				if (!OS.HasFeature("mobile")) {
+				if (OS.HasFeature("mobile")) {
 					t.Text = $"<- Slide to move";
 				} else {
 					t.Text = $"Press {((InputEvent) InputMap.GetActionList("shoot")[0]).AsText().ToUpper()} to shoot";
@@ -53,7 +57,7 @@ namespace SpaceBreach.scene {
 			world.AddChild(GD.Load<PackedScene>("res://src/entity/misc/FallingText.tscn").Instance<FallingText>().With(t => {
 				t.Position = world.GetParent<Control>().RectSize * new Vector2(0.7f, -0.5f);
 
-				if (!OS.HasFeature("mobile")) {
+				if (OS.HasFeature("mobile")) {
 					t.Text = $@"
 					Single Tap to shoot    ->
 					Double tap for special ->";
