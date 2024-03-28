@@ -114,9 +114,11 @@ namespace SpaceBreach.scene {
 		}
 
 		public override void _Process(float delta) {
-			GetNode<GridContainer>("MaxSizeContainer/ScrollContainer/CfgFields").With(box => {
-				box.GetNode<Button>("win_res").Disabled = Global.Cfg.GetV("win_mode", 0) != WindowMode.WINDOWED.Ordinal();
-			});
+			if (OS.HasFeature("pc")) {
+				GetNode<GridContainer>("MaxSizeContainer/ScrollContainer/CfgFields").With(box => {
+					box.GetNode<Button>("win_res").Disabled = Global.Cfg.GetV("win_mode", 0) != WindowMode.WINDOWED.Ordinal();
+				});
+			}
 		}
 
 		private void _SliderDragEnded(bool _, string key, Slider slider) {
