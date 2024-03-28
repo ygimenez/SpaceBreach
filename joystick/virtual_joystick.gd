@@ -67,6 +67,8 @@ onready var _default_color : Color = _tip.modulate
 #### FUNCTIONS ####
 
 func _ready() -> void:
+	_base.rect_position = _base_default_position
+	_tip.rect_position = _tip_default_position
 	if not OS.has_touchscreen_ui_hint() and visibility_mode == VisibilityMode.TOUCHSCREEN_ONLY:
 		hide()
 

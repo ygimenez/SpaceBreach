@@ -11,11 +11,11 @@ dest_files=[ "res://.import/theme.wav-d9a3f870d070bc5dadd1333390a35912.sample" ]
 
 [params]
 
-force/8_bit=false
+force/8_bit=true
 force/mono=false
 force/max_rate=false
 force/max_rate_hz=44100
-edit/trim=false
+edit/trim=true
 edit/normalize=false
 edit/loop_mode=0
 edit/loop_begin=0

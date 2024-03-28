@@ -26,6 +26,7 @@ namespace SpaceBreach.scene {
 
 		public uint SpawnPool;
 		public uint Level = 1;
+		public uint TextLeft;
 		public Enemy Boss;
 
 		public override void _Ready() {
@@ -39,7 +40,32 @@ namespace SpaceBreach.scene {
 				_player.GlobalPosition = world.ToLocal(GetNode<Control>("Spawn").GetGlobalRect().GetCenter());
 			}));
 
+			world.AddChild(GD.Load<PackedScene>("res://src/entity/misc/FallingText.tscn").Instance<FallingText>().With(t => {
+				t.Position = world.GetParent<Control>().RectSize * new Vector2(0.3f, 0);
 
+				if (!OS.HasFeature("mobile")) {
+					t.Text = $"<- Slide to move";
+				} else {
+					t.Text = $"Press {((InputEvent) InputMap.GetActionList("shoot")[0]).AsText().ToUpper()} to shoot";
+				}
+			}));
+
+			world.AddChild(GD.Load<PackedScene>("res://src/entity/misc/FallingText.tscn").Instance<FallingText>().With(t => {
+				t.Position = world.GetParent<Control>().RectSize * new Vector2(0.7f, -0.5f);
+
+				if (!OS.HasFeature("mobile")) {
+					t.Text = $@"
+					Single Tap to shoot    ->
+					Double tap for special ->";
+				} else {
+					t.Text = $"Press {((InputEvent) InputMap.GetActionList("special")[0]).AsText().ToUpper()} for special";
+				}
+			}));
+
+			world.AddChild(GD.Load<PackedScene>("res://src/entity/misc/FallingText.tscn").Instance<FallingText>().With(t => {
+				t.Position = world.GetParent<Control>().RectSize * new Vector2(0.5f, -1.1f);
+				t.Text = "Good luck!";
+			}));
 		}
 
 		public override void _Process(float delta) {
@@ -71,15 +97,20 @@ namespace SpaceBreach.scene {
 		}
 
 		public override void _PhysicsProcess(float delta) {
-			Tick++;
-			if (Tick % 1000 == 0) {
-				SpawnPool++;
+			if (TextLeft == 0) {
+				if (Tick++ % 1000 == 0) {
+					SpawnPool++;
+				}
 			}
 
 			GetSafeArea().GetNode<CPUParticles2D>("Stars").With(s => {
 				s.SpeedScale = _player.Speed;
-				(s.Texture as AtlasTexture).Margin = new Rect2(Vector2.Zero, new Vector2(0, -20 + 100 * (1 - _player.Speed / 2)));
+				(s.Texture as AtlasTexture).Margin = new Rect2(Vector2.Zero, new Vector2(0, -20 + 100 * _player.Speed / 20));
 			});
+		}
+
+		public override void _ExitTree() {
+			Audio.StopMusic();
 		}
 
 		public void PlayerDeath(Player p) {

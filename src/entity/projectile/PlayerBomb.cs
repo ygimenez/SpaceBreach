@@ -27,7 +27,7 @@ namespace SpaceBreach.entity.projectile {
 				p.Damage += (uint) (p.Damage * (1 - _fuse / 150f));
 			}));
 			QueueFree();
-			Audio.Cue("res://assets/sounds/explode.wav");
+			Audio.Cue("res://assets/sounds/bomb_explode.wav");
 		}
 	}
 }

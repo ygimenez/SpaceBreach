@@ -78,6 +78,8 @@ namespace SpaceBreach.entity.model {
 					p.GlobalPosition = world.ToLocal(GlobalPosition);
 				}));
 			}
+
+			Audio.Cue("res://assets/sounds/enemy_explode.wav");
 		}
 	}
 }

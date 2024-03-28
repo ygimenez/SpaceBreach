@@ -1,4 +1,4 @@
-#define DEBUG_MODE
+// #define DEBUG_MODE
 
 using Godot;
 using SpaceBreach.enums;
@@ -28,7 +28,7 @@ namespace SpaceBreach.util {
 			#endif
 
 			Engine.TargetFps = 60;
-			Engine.IterationsPerSecond = 100;
+			Engine.IterationsPerSecond = 120;
 
 			#if DEBUG_MODE
 			GetTree().DebugCollisionsHint = true;

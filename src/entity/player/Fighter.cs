@@ -5,7 +5,7 @@ using SpaceBreach.util;
 
 namespace SpaceBreach.entity.player {
 	public abstract class Fighter : Player {
-		protected Fighter() : base(hp: 200, speed: 1) {
+		protected Fighter() : base(hp: 200, speed: 0.8f) {
 		}
 
 		protected override bool Shoot() {
@@ -48,6 +48,8 @@ namespace SpaceBreach.entity.player {
 						}));
 					}
 				}
+
+				Audio.Cue("res://assets/sounds/player_bomb.wav");
 			}
 
 			return true;

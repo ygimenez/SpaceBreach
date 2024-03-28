@@ -34,7 +34,6 @@ Global="*res://src/util/Global.cs"
 
 window/size/width=800
 window/size/resizable=false
-window/handheld/orientation="sensor_landscape"
 mouse_cursor/custom_image="res://assets/sprites/cursor.png"
 window/size/viewport_width=800
 window/size/viewport_height=600
@@ -97,6 +96,7 @@ pointing/emulate_touch_from_mouse=true
 2d_physics/layer_5="Player"
 2d_physics/layer_6="Enemy"
 2d_physics/layer_7="Pickup"
+2d_physics/layer_8="Misc"
 
 [mono]
 

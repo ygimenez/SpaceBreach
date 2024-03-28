@@ -5,10 +5,11 @@ namespace SpaceBreach.scene {
 	public abstract class PauseMenu : Control {
 		public override void _Ready() {
 			GetNode<Button>("Back").Connect("pressed", this, nameof(_BackPressed));
+			Audio.AttachUiAudio(this);
 		}
 
 		public override void _Process(float delta) {
-			// Input.MouseMode = Visible ? Input.MouseModeEnum.Visible : Input.MouseModeEnum.Captured;
+			Input.MouseMode = Visible ? Input.MouseModeEnum.Visible : Input.MouseModeEnum.Captured;
 			GetNode<Label>("Label").Text = GetParent<Game>().IsGameOver() ? "GAME OVER" : "PAUSED";
 		}
 

@@ -5,7 +5,7 @@ namespace SpaceBreach.util {
 	public class Cooldown {
 		private readonly Game _game;
 		private ulong _lastTick;
-
+		private bool _first = true;
 		private ulong _pauseTick;
 		private bool Paused {
 			get => _pauseTick > 0;
@@ -31,12 +31,13 @@ namespace SpaceBreach.util {
 		public bool Ready() {
 			if (_game.IsGameOver()) return false;
 
-			return _game.Tick - _lastTick >= Time;
+			return _first || _game.Tick - _lastTick >= Time;
 		}
 
 		public void Use() {
 			if (Ready()) {
 				_lastTick = _game.Tick;
+				_first = false;
 			}
 		}
 
@@ -54,6 +55,7 @@ namespace SpaceBreach.util {
 
 		public void Reset() {
 			_lastTick = 0;
+			_first = true;
 		}
 	}
 }
