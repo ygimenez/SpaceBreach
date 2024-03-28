@@ -23,7 +23,7 @@ namespace SpaceBreach.util {
 			#else
 			OS.WindowFullscreen = true;
 			if (OS.HasFeature("mobile")) {
-				OS.ScreenOrientation = OS.ScreenOrientationEnum.SensorLandscape
+				OS.ScreenOrientation = OS.ScreenOrientationEnum.SensorLandscape;
 			}
 			#endif
 
