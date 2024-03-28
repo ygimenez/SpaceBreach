@@ -21,10 +21,10 @@ namespace SpaceBreach.entity.misc {
 				QueueFree();
 			} else {
 				var sprite = GetNode<Sprite>("Sprite");
-				var reference = this.FindParent<Control>().GetRect();
+				var reference = this.FindParent<Control>().GetGlobalRect();
 
-				sprite.Rotation = reference.GetCenter().AngleTo(Tracked.Position);
 				GlobalPosition = Tracked.GlobalPosition.Clamp(reference.Position, reference.End);
+				sprite.Rotation = GlobalPosition.AngleTo(Tracked.GlobalPosition);
 
 				var skull = sprite.GetNode<Sprite>("Skull");
 				skull.Visible = Tracked is IBoss;
