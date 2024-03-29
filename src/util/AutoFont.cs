@@ -3,18 +3,22 @@
 namespace SpaceBreach.util {
 	public class AutoFont : Label {
 		[Export]
-		public float PercentOfParent;
+		public float PercentOfParent = 1;
 
 		[Export]
 		public string TestString;
 
+		[Export]
+		public int FontSize;
+
 		private DynamicFont _original, _font;
-		private int _fontSize;
 
 		public override void _Ready() {
 			_original = (DynamicFont) GetFont("font");
 			AddFontOverride("font", _font = (DynamicFont) _original.Duplicate());
-			_fontSize = _font.Size;
+			if (FontSize == 0) {
+				FontSize = _font.Size;
+			}
 		}
 
 		public override void _Process(float delta) {
@@ -24,9 +28,7 @@ namespace SpaceBreach.util {
 				box *= PercentOfParent;
 			}
 
-			if (width > box) {
-				_font.Size = (int) (box * _fontSize / width).Clamp(0, _fontSize);
-			}
+			_font.Size = (int) (box * FontSize / width).Clamp(0, FontSize);
 		}
 	}
 }

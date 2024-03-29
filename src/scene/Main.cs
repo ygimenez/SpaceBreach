@@ -4,7 +4,7 @@ using SpaceBreach.util;
 
 namespace SpaceBreach.scene {
 	public abstract class Main : Control {
-		public override void _Ready() {
+		public override async void _Ready() {
 			new ConfigFile().With(ed => {
 				ed.Load("res://export_presets.cfg");
 
@@ -28,7 +28,14 @@ namespace SpaceBreach.scene {
 				}
 			});
 
+			GetNode<Button>("Leaderboard").Connect("pressed", this, nameof(_LeaderboardPressed));
+
 			Audio.AttachUiAudio(this);
+			await Global.LoadLeaderboard();
+		}
+
+		public override void _Process(float delta) {
+			GetNode<Button>("Leaderboard").Disabled = !Global.Online;
 		}
 
 		private void _FullscreenPressed() {
@@ -37,6 +44,10 @@ namespace SpaceBreach.scene {
 
 		private void _PlayPressed() {
 			GetTree().Append("res://src/scene/Game.tscn");
+		}
+
+		private void _LeaderboardPressed() {
+			GetTree().Append("res://src/scene/Leaderboard.tscn");
 		}
 
 		private void _SettingsPressed() {

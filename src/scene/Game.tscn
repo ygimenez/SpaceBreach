@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=26 format=2]
 
 [ext_resource path="res://src/scene/Game.cs" type="Script" id=1]
 [ext_resource path="res://assets/textures/projectiles.tres" type="Texture" id=2]
@@ -7,7 +7,6 @@
 [ext_resource path="res://src/scene/Activator.cs" type="Script" id=5]
 [ext_resource path="res://assets/fonts/SpaceMono.ttf" type="DynamicFontData" id=6]
 [ext_resource path="res://src/scene/PauseMenu.cs" type="Script" id=7]
-[ext_resource path="res://assets/sprites/warning.png" type="Texture" id=8]
 [ext_resource path="res://src/util/AutoFont.cs" type="Script" id=9]
 [ext_resource path="res://joystick/virtual_joystick.tscn" type="PackedScene" id=10]
 [ext_resource path="res://src/component/Controller.cs" type="Script" id=11]
@@ -28,6 +27,15 @@ margin = Rect2( 0, 0, 0, -20 )
 [sub_resource type="DynamicFont" id=3]
 size = 40
 font_data = ExtResource( 6 )
+
+[sub_resource type="DynamicFont" id=13]
+size = 30
+extra_spacing_char = 10
+font_data = ExtResource( 6 )
+
+[sub_resource type="AtlasTexture" id=15]
+atlas = ExtResource( 12 )
+region = Rect2( 1, 52, 14, 10 )
 
 [sub_resource type="DynamicFont" id=4]
 size = 100
@@ -81,6 +89,10 @@ tracks/0/keys = {
 [sub_resource type="DynamicFont" id=7]
 size = 60
 font_data = ExtResource( 6 )
+
+[sub_resource type="AtlasTexture" id=14]
+atlas = ExtResource( 12 )
+region = Rect2( 49, 66, 30, 28 )
 
 [sub_resource type="Animation" id=8]
 resource_name = "Flash"
@@ -209,13 +221,26 @@ margin_right = -158.0
 margin_bottom = -156.0
 valign = 2
 script = ExtResource( 9 )
-PercentOfParent = 0.5
 
-[node name="EnemySpawn" type="Control" parent="GameArea"]
+[node name="MaxSizeContainer2" type="MarginContainer" parent="GameArea"]
 anchor_right = 1.0
 margin_left = 300.0
 margin_right = -300.0
 margin_bottom = 150.0
+custom_constants/margin_right = 0
+custom_constants/margin_top = 0
+custom_constants/margin_left = 0
+custom_constants/margin_bottom = 0
+script = ExtResource( 13 )
+max_size = Vector2( 500, -1 )
+
+[node name="EnemySpawn" type="Control" parent="GameArea/MaxSizeContainer2"]
+margin_right = 500.0
+margin_bottom = 150.0
+
+[node name="ReferenceRect" type="ReferenceRect" parent="GameArea/MaxSizeContainer2/EnemySpawn"]
+anchor_right = 1.0
+anchor_bottom = 1.0
 
 [node name="Spawn" type="Control" parent="GameArea"]
 anchor_left = 0.5
@@ -291,27 +316,59 @@ color = Color( 0, 0, 0, 0.392157 )
 
 [node name="Label" type="Label" parent="PauseMenu"]
 anchor_left = 0.5
-anchor_top = 0.502
+anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 0.502
+anchor_bottom = 0.5
 margin_left = -112.0
-margin_top = -73.2
+margin_top = -72.0
 margin_right = 112.0
-margin_bottom = -13.2
+margin_bottom = -12.0
+grow_vertical = 0
 custom_fonts/font = SubResource( 3 )
 text = "PAUSED"
 align = 1
 
 [node name="Back" type="Button" parent="PauseMenu"]
 anchor_left = 0.5
-anchor_top = 0.502
+anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 0.502
+anchor_bottom = 0.5
 margin_left = -64.0
-margin_top = -0.200012
+margin_top = 0.999969
 margin_right = 64.0
-margin_bottom = 47.8
+margin_bottom = 49.0
 text = "MAIN MENU"
+
+[node name="Leaderboard" type="HBoxContainer" parent="PauseMenu"]
+visible = false
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -96.0
+margin_top = 1.0
+margin_right = 98.0
+margin_bottom = 66.0
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="LBName" type="LineEdit" parent="PauseMenu/Leaderboard"]
+margin_right = 150.0
+margin_bottom = 65.0
+custom_constants/minimum_spaces = 5
+custom_fonts/font = SubResource( 13 )
+max_length = 5
+placeholder_text = "_____"
+caret_blink = true
+
+[node name="Submit" type="Button" parent="PauseMenu/Leaderboard"]
+margin_left = 154.0
+margin_right = 194.0
+margin_bottom = 65.0
+rect_min_size = Vector2( 40, 0 )
+icon = SubResource( 15 )
+expand_icon = true
 
 [node name="Countdown" type="Label" parent="."]
 pause_mode = 2
@@ -354,13 +411,13 @@ __meta__ = {
 [node name="Sprite" type="Sprite" parent="Warning"]
 position = Vector2( 0.5, 46 )
 scale = Vector2( 2, 2 )
-texture = ExtResource( 8 )
+texture = SubResource( 14 )
 offset = Vector2( -16, 0 )
 
 [node name="Sprite2" type="Sprite" parent="Warning"]
 position = Vector2( 259.5, 46 )
 scale = Vector2( 2, 2 )
-texture = ExtResource( 8 )
+texture = SubResource( 14 )
 offset = Vector2( 16, 0 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Warning"]

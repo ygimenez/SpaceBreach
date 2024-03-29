@@ -1,7 +1,13 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://assets/themes/ui.tres" type="Theme" id=1]
 [ext_resource path="res://src/scene/BaseMenu.cs" type="Script" id=2]
+[ext_resource path="res://src/util/AutoFont.cs" type="Script" id=3]
+[ext_resource path="res://assets/fonts/SpaceMono.ttf" type="DynamicFontData" id=4]
+
+[sub_resource type="DynamicFont" id=1]
+size = 30
+font_data = ExtResource( 4 )
 
 [node name="Control" type="Control"]
 pause_mode = 2
@@ -20,3 +26,17 @@ margin_top = 6.0
 margin_right = 144.0
 margin_bottom = 54.0
 text = "BACK"
+
+[node name="Label" type="Label" parent="."]
+anchor_right = 1.0
+margin_left = 152.0
+margin_top = 6.0
+margin_right = -450.0
+margin_bottom = 54.0
+grow_horizontal = 2
+grow_vertical = 2
+rect_pivot_offset = Vector2( 136, 30 )
+custom_fonts/font = SubResource( 1 )
+text = "CHANGE THIS"
+valign = 1
+script = ExtResource( 3 )

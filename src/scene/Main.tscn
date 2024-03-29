@@ -69,7 +69,6 @@ text = "SPACE BREACH"
 align = 1
 valign = 1
 script = ExtResource( 2 )
-PercentOfParent = 0.75
 
 [node name="Play" type="Button" parent="."]
 anchor_left = 0.5
@@ -82,7 +81,7 @@ margin_right = 88.0
 margin_bottom = 24.0
 text = "PLAY"
 
-[node name="Training" type="Button" parent="."]
+[node name="Leaderboard" type="Button" parent="."]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -91,7 +90,7 @@ margin_left = -88.0
 margin_top = 36.0
 margin_right = 88.0
 margin_bottom = 84.0
-text = "TRAINING"
+text = "LEADERBOARD"
 
 [node name="Settings" type="Button" parent="."]
 anchor_left = 0.5
