@@ -105,7 +105,7 @@ namespace SpaceBreach.scene {
 
 				world.AddChild(Utils.Load(_enemies.Random()).Instance<Enemy>().With(e => {
 					var spawn = GetNode<Control>("GameArea/MaxSizeContainer2/EnemySpawn").GetGlobalRect();
-					e.GlobalPosition = world.ToLocal(spawn.Position + spawn.Size * new Vector2(Utils.Rng.Randf(), 0.5f));
+					e.GlobalPosition = world.ToLocal(spawn.Position + spawn.Size * new Vector2(Utils.Rng.Randf(), 0.25f));
 
 					world.AddChild(GD.Load<PackedScene>("res://src/entity/misc/Marker.tscn").Instance<Marker>().With(m => {
 						m.Tracked = e;

@@ -22,26 +22,13 @@ namespace SpaceBreach.entity.model {
 		[Signal]
 		public delegate void Death(Entity entity);
 
-		private uint _hp;
-		protected uint Hp {
-			get => _hp;
-			set {
-				if (!Visible) return;
-
-				_hp = (uint) Mathf.Max(0, value);
-				if (_hp == 0) {
-					QueueFree();
-					OnDestroy();
-				}
-			}
-		}
-
+		protected uint Hp;
 		public float RawSpeed;
 		public float RawActionSpeed = 1;
 		public new bool Visible;
 
 		protected Entity(uint baseHp, float speed = 1) {
-			BaseHp = _hp = baseHp;
+			BaseHp = Hp = baseHp;
 			Speed = speed;
 		}
 
@@ -50,16 +37,17 @@ namespace SpaceBreach.entity.model {
 		}
 
 		public uint GetHp() {
-			return _hp;
+			return Hp;
 		}
 
 		public void AddHp(Entity source, long value) {
+			if (this is Enemy && !Visible) return;
 			if (source != this && value < 0) {
 				OnDamaged(source);
 			}
 
-			_hp = (uint) (_hp + value).Clamp(0, BaseHp);
-			if (_hp == 0) {
+			Hp = (uint) (Hp + value).Clamp(0, BaseHp);
+			if (Hp == 0) {
 				QueueFree();
 				OnDestroy();
 			}

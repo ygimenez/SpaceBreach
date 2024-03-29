@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using Godot;
 using Godot.Collections;
@@ -15,6 +16,7 @@ namespace SpaceBreach.util {
 		public const float ACTION_SPEED = 2;
 
 		public static readonly List<(string, uint)> Leaderboard = new List<(string, uint)>();
+
 		public static readonly ConfigFile Cfg = new ConfigFile().With(cfg => {
 			cfg.Load(CFG_PATH);
 		});
@@ -37,26 +39,58 @@ namespace SpaceBreach.util {
 			Engine.TargetFps = 60;
 			Engine.IterationsPerSecond = 120;
 
-			#if DEBUG_MODE
+#if DEBUG_MODE
 			GetTree().DebugCollisionsHint = true;
 			GetTree().DebugNavigationHint = true;
-			#endif
+#endif
 		}
 
 		public static async Task LoadLeaderboard() {
-			var http = new HTTPClient { BlockingModeEnabled = true };
-			var res = http.Request(HTTPClient.Method.Get, "https://api.shirojbot.site/v2/sbreach/leaderboard", System.Array.Empty<string>());
-			if (res != Error.Ok || !http.HasResponse()) return;
+			var res = await Instance.HttpGet("https://api.shirojbot.site/v2/sbreach/leaderboard");
 
 			Leaderboard.Clear();
 
-			var content = (Array) JSON.Parse(await http.Respo.ReadAsStringAsync()).Result;
+			var content = (Array) JSON.Parse(res).Result;
 			foreach (Dictionary e in content) {
 				Leaderboard.Add(((string) e["initials"], (uint) (float) e["score"]));
 			}
 
 			Leaderboard.Sort((a, b) => b.Item2.CompareTo(a.Item2));
 			Online = true;
+		}
+
+		public async Task<string> HttpGet(string url) {
+			var req = new HTTPRequest();
+			AddChild(req);
+
+			var evt = ToSignal(req, "request_completed");
+			req.Request(url, method: HTTPClient.Method.Get);
+
+			try {
+				object[] res;
+				if (evt.IsCompleted) {
+					res = evt.GetResult();
+				} else {
+					res = await evt;
+				}
+
+				if ((int) res[0] != (int) HTTPRequest.Result.Success) {
+					throw new WebException($"Server returned status {res[0]}");
+				}
+
+				return ((byte[]) res[3]).GetStringFromUTF8();
+			} finally {
+				req.QueueFree();
+			}
+		}
+
+		public void HttpPost(string url, string body, string contentType = "application/json") {
+			var req = new HTTPRequest();
+			AddChild(req);
+
+			var evt = ToSignal(req, "request_completed");
+			req.Request(url, method: HTTPClient.Method.Post, requestData: body, customHeaders: new[] { $"Content-Type: {contentType}" });
+			evt.OnCompleted(req.QueueFree);
 		}
 	}
 }

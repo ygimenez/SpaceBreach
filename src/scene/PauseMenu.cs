@@ -61,13 +61,11 @@ namespace SpaceBreach.scene {
 			var game = GetNode<Game>("/root/Control");
 			var name = GetNode<LineEdit>("Leaderboard/LBName");
 			if (!name.Text.Empty()) {
-				Global.Http.PostAsync("sbreach/leaderboard",
-					new StringContent(
-						JSON.Print(new Dictionary<string, object> {
-							{ "initials", name.Text },
-							{ "score", game.Score }
-						}), Encoding.UTF8, "application/json"
-					)
+				Global.Instance.HttpPost("https://api.shirojbot.site/v2/sbreach/leaderboard",
+					JSON.Print(new Dictionary<string, object> {
+						{ "initials", name.Text },
+						{ "score", game.Score }
+					})
 				);
 			}
 
