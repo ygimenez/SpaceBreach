@@ -1,14 +1,10 @@
 // #define DEBUG_MODE
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Godot;
 using Godot.Collections;
-using SpaceBreach.enums;
 using SpaceBreach.scene;
 using Array = Godot.Collections.Array;
 
@@ -18,9 +14,6 @@ namespace SpaceBreach.util {
 		public const string CFG_PATH = "user://settings.cfg";
 		public const float ACTION_SPEED = 2;
 
-		public static readonly HttpClient Http = new HttpClient {
-			BaseAddress = new Uri("https://api.shirojbot.site/v2/")
-		};
 		public static readonly List<(string, uint)> Leaderboard = new List<(string, uint)>();
 		public static readonly ConfigFile Cfg = new ConfigFile().With(cfg => {
 			cfg.Load(CFG_PATH);
@@ -51,12 +44,13 @@ namespace SpaceBreach.util {
 		}
 
 		public static async Task LoadLeaderboard() {
-			var res = await Http.GetAsync("sbreach/leaderboard");
-			if (!res.IsSuccessStatusCode) return;
+			var http = new HTTPClient { BlockingModeEnabled = true };
+			var res = http.Request(HTTPClient.Method.Get, "https://api.shirojbot.site/v2/sbreach/leaderboard", System.Array.Empty<string>());
+			if (res != Error.Ok || !http.HasResponse()) return;
 
 			Leaderboard.Clear();
 
-			var content = (Array) JSON.Parse(await res.Content.ReadAsStringAsync()).Result;
+			var content = (Array) JSON.Parse(await http.Respo.ReadAsStringAsync()).Result;
 			foreach (Dictionary e in content) {
 				Leaderboard.Add(((string) e["initials"], (uint) (float) e["score"]));
 			}
