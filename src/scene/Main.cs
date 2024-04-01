@@ -5,12 +5,8 @@ using SpaceBreach.util;
 namespace SpaceBreach.scene {
 	public abstract class Main : Control {
 		public override async void _Ready() {
-			new ConfigFile().With(ed => {
-				ed.Load("res://export_presets.cfg");
-
-				var version = ed.GetValue("preset.0.options", "application/product_version", "0.0.0-DEV");
-				GetNode<Label>("Version").Text = version.ToString();
-			});
+			new ConfigFile().With(ed => ed.Load("res://export_presets.cfg"));
+			GetNode<Label>("Version").Text = Global.VERSION;
 
 			if (Global.Mobile) {
 				GetNode<Button>("Fullscreen").Connect("pressed", this, nameof(_FullscreenPressed));
