@@ -9,6 +9,7 @@ region = Rect2( 37, 0, 30, 21 )
 
 [node name="Enemy" type="Area2D"]
 collision_layer = 34
+collision_mask = 3
 script = ExtResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="."]

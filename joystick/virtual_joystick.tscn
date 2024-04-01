@@ -12,8 +12,7 @@ margin_top = -200.0
 margin_right = 200.0
 script = ExtResource( 3 )
 __meta__ = {
-"_edit_group_": true,
-"_edit_use_anchors_": false
+"_edit_group_": true
 }
 
 [node name="Base" type="TextureRect" parent="."]
@@ -21,12 +20,13 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -1201.0
-margin_top = -329.0
-margin_right = -1001.0
-margin_bottom = -129.0
+margin_left = -1616.0
+margin_top = -382.0
+margin_right = -1416.0
+margin_bottom = -182.0
 grow_horizontal = 2
 grow_vertical = 2
+rect_scale = Vector2( 0.25, 0.25 )
 rect_pivot_offset = Vector2( 100, 100 )
 size_flags_horizontal = 4
 size_flags_vertical = 4

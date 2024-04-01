@@ -221,6 +221,7 @@ margin_right = -158.0
 margin_bottom = -156.0
 valign = 2
 script = ExtResource( 9 )
+PercentOfParent = 0.75
 
 [node name="MaxSizeContainer2" type="MarginContainer" parent="GameArea"]
 anchor_right = 1.0
@@ -275,15 +276,12 @@ anchor_bottom = 1.0
 [node name="Stick" parent="Mobile" instance=ExtResource( 10 )]
 modulate = Color( 1, 1, 1, 0.294118 )
 anchor_top = 0.0
-anchor_right = 0.5
+anchor_right = 1.0
 margin_top = 0.0
-margin_right = 550.0
+margin_right = 1100.0
 margin_bottom = 900.0
-rect_scale = Vector2( 0.5, 0.5 )
-__meta__ = {
-"_edit_group_": true
-}
 pressed_color = Color( 1, 1, 1, 0.294118 )
+deadzone_size = 1.0
 clampzone_size = 50.0
 joystick_mode = 1
 action_left = "move_left"
@@ -292,7 +290,6 @@ action_up = "move_up"
 action_down = "move_down"
 
 [node name="Controller" type="Button" parent="Mobile"]
-anchor_left = 0.5
 anchor_right = 1.0
 anchor_bottom = 1.0
 flat = true

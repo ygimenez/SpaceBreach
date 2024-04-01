@@ -60,7 +60,7 @@ namespace SpaceBreach.scene {
 				t.GetNode<AutoFont>("Label").TestString = "Press SPACE to shoot";
 
 				if (Global.Mobile) {
-					t.Text = "<- Slide to move";
+					t.Text = "Slide to move/shoot";
 				} else {
 					t.Text = $"Press {((InputEvent) InputMap.GetActionList("shoot")[0]).AsText().ToUpper()} to shoot";
 				}
@@ -72,9 +72,7 @@ namespace SpaceBreach.scene {
 				t.GetNode<AutoFont>("Label").TestString = "Press SPACE to shoot";
 
 				if (Global.Mobile) {
-					t.Text = @"
-					Single Tap to shoot    ->
-					Double tap for special ->";
+					t.Text = "Double Tap for special";
 				} else {
 					t.Text = $"Press {((InputEvent) InputMap.GetActionList("special")[0]).AsText().ToUpper()} for special";
 				}
@@ -159,8 +157,10 @@ namespace SpaceBreach.scene {
 		}
 
 		public void _PausePressed() {
-			var menu = GetNode<PauseMenu>("PauseMenu");
-			menu.Visible = !menu.Visible;
+			if (!IsGameOver()) {
+				var menu = GetNode<PauseMenu>("PauseMenu");
+				menu.Visible = !menu.Visible;
+			}
 		}
 
 		public Control GetSafeArea() {

@@ -36,6 +36,8 @@ namespace SpaceBreach.entity.model {
 
 			BaseHp = Hp = (uint) (BaseHp * game.Level * (_drop ? 1.5f : 1));
 			Cooldown = new Cooldown(game, (uint) (500 / (AttackRate + 0.2f * game.Level)));
+
+			Connect("area_entered", this, nameof(_AreaEntered));
 		}
 
 		public override void _Process(float delta) {
@@ -66,6 +68,13 @@ namespace SpaceBreach.entity.model {
 			GetGame().SpawnPool++;
 			if (this is IBoss) {
 				GetGame().Boss = null;
+			}
+		}
+
+		public void _AreaEntered(Area2D entity) {
+			if (entity is Player p) {
+				p.AddHp(this, -Hp);
+				AddHp(this, -p.GetHp());
 			}
 		}
 

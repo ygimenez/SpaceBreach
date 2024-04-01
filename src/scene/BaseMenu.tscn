@@ -28,10 +28,9 @@ margin_bottom = 54.0
 text = "BACK"
 
 [node name="Label" type="Label" parent="."]
-anchor_right = 1.0
 margin_left = 152.0
 margin_top = 6.0
-margin_right = -450.0
+margin_right = 350.0
 margin_bottom = 54.0
 grow_horizontal = 2
 grow_vertical = 2
