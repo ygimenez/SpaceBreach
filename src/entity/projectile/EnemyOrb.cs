@@ -3,7 +3,7 @@ using SpaceBreach.entity.model;
 
 namespace SpaceBreach.entity.projectile {
 	public abstract class EnemyOrb : Projectile {
-		private float _angle;
+		private int _angle;
 
 		protected EnemyOrb() : base(speed: 0.8f, damage: 75) {
 		}

@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Godot;
 using SpaceBreach.entity.interfaces;
 using SpaceBreach.manager;
-using SpaceBreach.scene;
 using SpaceBreach.util;
 
 namespace SpaceBreach.entity.model {
-	public abstract class Enemy : Entity, ITracked {
+	public abstract class Enemy : Entity {
 		private readonly bool _drop;
+		private bool _tweened;
 
 		private readonly List<Type> _drops = typeof(Pickup).Assembly
 			.GetTypes()
@@ -26,16 +27,17 @@ namespace SpaceBreach.entity.model {
 
 			_drop = Utils.Rng.Randfn() > 0.9;
 			if (_drop) {
-				Modulate = Colors.Yellow;
+				SelfModulate = Colors.Yellow;
 			}
 		}
 
 		public override void _Ready() {
 			base._Ready();
-			var game = GetNode<Game>("/root/Control");
+			var game = GetGame();
 
+			ActionSpeed = 1 + 0.2f * (game.Level - 1);
 			BaseHp = Hp = (uint) (BaseHp * game.Level * (_drop ? 1.5f : 1));
-			Cooldown = new Cooldown(game, (uint) (500 / (AttackRate + 0.2f * game.Level)));
+			Cooldown = new Cooldown(game, (uint) (500 / AttackRate));
 
 			Connect("area_entered", this, nameof(_AreaEntered));
 		}
@@ -44,6 +46,13 @@ namespace SpaceBreach.entity.model {
 			if (Visible && Cooldown.Ready() && Shoot()) {
 				Cooldown.Use();
 				Audio.Cue("res://assets/sounds/enemy_fire.wav");
+			}
+
+			if (this is IBoss b && b.Enraged && !_tweened) {
+				_tweened = true;
+
+				var tween = CreateTween();
+				tween.TweenProperty(this, "modulate", Colors.Red, 0.5f);
 			}
 		}
 
@@ -59,8 +68,11 @@ namespace SpaceBreach.entity.model {
 
 		protected abstract void Move();
 
-		protected override void OnDamaged(Entity by) {
-			base.OnDamaged(by);
+		protected override void OnDamaged(Entity by, long value) {
+			if (by is Player p) {
+				p.SpCd.Credits += (uint) Mathf.Abs(value);
+			}
+
 			Audio.Cue("res://assets/sounds/enemy_hit.wav");
 		}
 
@@ -71,17 +83,17 @@ namespace SpaceBreach.entity.model {
 			}
 		}
 
-		public void _AreaEntered(Area2D entity) {
+		public virtual void _AreaEntered(Area2D entity) {
 			if (entity is Player p) {
 				p.AddHp(this, -Hp);
 				AddHp(this, -p.GetHp());
 			}
 		}
 
-		protected override void OnDestroy() {
+		protected override Task OnDestroy() {
 			base.OnDestroy();
 			var game = GetGame();
-			game.Score += (uint) (GetCost() * (1 + game.Streak / 10f));
+			game.Score += (uint) (GetCost() * (1 + game.Streak / 10f) * (this is IBoss ? 5 : 1));
 			game.Streak++;
 
 			if (_drop) {
@@ -93,6 +105,7 @@ namespace SpaceBreach.entity.model {
 			}
 
 			Audio.Cue("res://assets/sounds/enemy_explode.wav");
+			return Task.CompletedTask;
 		}
 	}
 }

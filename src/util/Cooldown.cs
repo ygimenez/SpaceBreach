@@ -7,16 +7,16 @@ namespace SpaceBreach.util {
 		private ulong _lastTick;
 		private bool _first = true;
 		private ulong _pauseTick;
-		private bool Paused {
+		public bool Paused {
 			get => _pauseTick > 0;
 			set {
 				if (value == Paused) return;
 
 				if (value) {
+					_pauseTick = _game.Tick;
+				} else {
 					_lastTick += _game.Tick - _pauseTick;
 					_pauseTick = 0;
-				} else {
-					_pauseTick = _game.Tick;
 				}
 			}
 		}
@@ -29,7 +29,7 @@ namespace SpaceBreach.util {
 		}
 
 		public bool Ready() {
-			if (_game.IsGameOver()) return false;
+			if (_game.IsGameOver() || Paused) return false;
 
 			return _first || _game.Tick - _lastTick >= Time;
 		}

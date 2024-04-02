@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=2]
+[gd_scene load_steps=28 format=2]
 
 [ext_resource path="res://src/scene/Game.cs" type="Script" id=1]
 [ext_resource path="res://assets/textures/projectiles.tres" type="Texture" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://src/scene/Activator.cs" type="Script" id=5]
 [ext_resource path="res://assets/fonts/SpaceMono.ttf" type="DynamicFontData" id=6]
 [ext_resource path="res://src/scene/PauseMenu.cs" type="Script" id=7]
+[ext_resource path="res://src/scene/BossHp.cs" type="Script" id=8]
 [ext_resource path="res://src/util/AutoFont.cs" type="Script" id=9]
 [ext_resource path="res://joystick/virtual_joystick.tscn" type="PackedScene" id=10]
 [ext_resource path="res://src/component/Controller.cs" type="Script" id=11]
@@ -140,6 +141,10 @@ tracks/0/keys = {
 [sub_resource type="AtlasTexture" id=11]
 atlas = ExtResource( 12 )
 region = Rect2( 13, 3, 3, 3 )
+
+[sub_resource type="DynamicFont" id=16]
+size = 15
+font_data = ExtResource( 6 )
 
 [node name="Control" type="Control"]
 anchor_right = 1.0
@@ -433,3 +438,28 @@ margin_bottom = 197.0
 icon = SubResource( 11 )
 flat = true
 expand_icon = true
+
+[node name="MaxSizeContainer3" type="MarginContainer" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 300.0
+margin_top = -188.0
+margin_right = -300.0
+margin_bottom = -155.0
+custom_constants/margin_right = 0
+custom_constants/margin_top = 0
+custom_constants/margin_left = 0
+custom_constants/margin_bottom = 0
+script = ExtResource( 13 )
+max_size = Vector2( 500, -1 )
+
+[node name="BossHp" type="ProgressBar" parent="MaxSizeContainer3"]
+visible = false
+margin_right = 500.0
+margin_bottom = 33.0
+custom_fonts/font = SubResource( 16 )
+rounded = true
+script = ExtResource( 8 )
+
+[node name="Tween" type="Tween" parent="MaxSizeContainer3/BossHp"]

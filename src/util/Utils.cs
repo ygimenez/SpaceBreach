@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Godot;
 using Godot.Collections;
 using SpaceBreach.entity.model;
@@ -11,7 +12,9 @@ using Object = Godot.Object;
 
 namespace SpaceBreach.util {
 	public static class Utils {
-		public static readonly RandomNumberGenerator Rng = new RandomNumberGenerator();
+		public static readonly RandomNumberGenerator Rng = new RandomNumberGenerator {
+			Seed = (ulong) (DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond)
+		};
 
 		public static void Connect(this Node node, string signal, Object self, string method, params object[] args) {
 			node.Connect(signal, self, method, new Array(args));
@@ -74,26 +77,8 @@ namespace SpaceBreach.util {
 			return value ? 1 : 0;
 		}
 
-		public static int Clamp(this int val, int min, int max) {
-			if (val < min) return min;
-
-			return val > max ? max : val;
-		}
-
-		public static long Clamp(this long val, long min, long max) {
-			if (val < min) return min;
-
-			return val > max ? max : val;
-		}
-
-		public static float Clamp(this float val, float min, float max) {
-			if (val < min) return min;
-
-			return val > max ? max : val;
-		}
-
 		public static Vector2 Clamp(this Vector2 pos, Vector2 min, Vector2 max) {
-			return new Vector2(pos.x.Clamp(min.x, max.x), pos.y.Clamp(min.y, max.y));
+			return new Vector2(Mathf.Clamp(pos.x, min.x, max.x), Mathf.Clamp(pos.y, min.y, max.y));
 		}
 
 		public static bool IsBetween(this int val, int min, int max) {
@@ -202,6 +187,15 @@ namespace SpaceBreach.util {
 			var path = type.Namespace?.Replace("SpaceBreach.", "").Replace('.', '/');
 
 			return GD.Load<PackedScene>($"res://src/{path}/{type.Name}.tscn");
+		}
+
+		public static async Task Delay(this Node node, float millis) {
+			var tickTime = 1000f / Engine.IterationsPerSecond;
+
+			await node.ToSignal(
+				node.GetTree().CreateTimer(Mathf.Stepify(millis, tickTime) / 1000, false),
+				"timeout"
+			);
 		}
 	}
 }

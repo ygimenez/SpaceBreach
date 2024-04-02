@@ -28,7 +28,7 @@ namespace SpaceBreach.util {
 				box *= PercentOfParent;
 			}
 
-			_font.Size = (int) (box * FontSize / width).Clamp(0, FontSize);
+			_font.Size = (int) Mathf.Clamp(box * FontSize / width, 0, FontSize);
 		}
 	}
 }

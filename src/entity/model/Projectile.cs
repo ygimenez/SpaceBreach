@@ -9,6 +9,8 @@ namespace SpaceBreach.entity.model {
 		[Export]
 		public uint Damage;
 
+		public Vector2 Size => GetNode<Sprite>("Sprite").GetRect().Size;
+
 		public Entity Source;
 
 		protected Projectile(float speed, uint damage) {

@@ -4,26 +4,23 @@ using SpaceBreach.entity.model;
 using SpaceBreach.util;
 
 namespace SpaceBreach.entity.enemy {
-	public abstract class Waver : Enemy {
+	public abstract class Waver : Enemy, ICannotSpawn {
 		private int _angle;
 
 		protected Waver() : base(hp: 125, 0.75f, speed: 0.35f) {
 		}
 
 		protected override bool Shoot() {
-			var cannons = GetNode("Cannons");
-			if (cannons != null && cannons.GetChildCount() > 0) {
-				var proj = GD.Load<PackedScene>("res://src/entity/projectile/EnemyOrb.tscn");
-				var world = GetGame().GetSafeArea().GetNode<Node2D>("World");
+			var proj = GD.Load<PackedScene>("res://src/entity/projectile/EnemyOrb.tscn");
+			var world = GetGame().GetSafeArea().GetNode<Node2D>("World");
 
-				var shot = 0;
-				foreach (Position2D cannon in cannons.GetChildren()) {
-					world.AddChild(proj.Instance<Projectile>().With(p => {
-						p.Source = this;
-						p.GlobalPosition = world.ToLocal(cannon.GlobalPosition);
-						p.RotationDegrees = 180 + 30 - 15 * shot++;
-					}));
-				}
+			var shot = 0;
+			foreach (Position2D cannon in Cannons) {
+				world.AddChild(proj.Instance<Projectile>().With(p => {
+					p.Source = this;
+					p.GlobalPosition = world.ToLocal(cannon.GlobalPosition);
+					p.RotationDegrees = 180 + 15 - 10 * shot++;
+				}));
 			}
 
 			return true;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Godot;
 using SpaceBreach.entity.interfaces;
 using SpaceBreach.entity.misc;
@@ -15,15 +16,14 @@ namespace SpaceBreach.scene {
 			.Where(t => t.IsSubclassOf(typeof(Enemy)))
 			.ToList();
 
-		private Player _player;
 		private uint _score;
-
 		public ulong Tick;
 		public uint Score {
 			get => _score;
 			set => _score = (uint) Mathf.Max(0, value);
 		}
 
+		public Player Player;
 		public uint SpawnPool;
 		public uint Level = 1;
 		public uint Highscore;
@@ -51,8 +51,8 @@ namespace SpaceBreach.scene {
 
 			var world = GetSafeArea().GetNode<Node2D>("World");
 			world.AddChild(GD.Load<PackedScene>("res://src/entity/player/Fighter.tscn").Instance<Player>().With(p => {
-				_player = p;
-				_player.GlobalPosition = world.ToLocal(GetNode<Control>("GameArea/Spawn").GetGlobalRect().GetCenter());
+				Player = p;
+				Player.GlobalPosition = world.ToLocal(GetNode<Control>("GameArea/Spawn").GetGlobalRect().GetCenter());
 			}));
 
 			world.AddChild(GD.Load<PackedScene>("res://src/entity/misc/FallingText.tscn").Instance<FallingText>().With(t => {
@@ -92,16 +92,19 @@ namespace SpaceBreach.scene {
 			var stats = GetNode<Label>("GameArea/PlayerStats");
 			stats.Visible = !IsGameOver();
 			stats.Text = $@"
-			HP: {_player.GetHp()}/{_player.BaseHp}
-			Special: {(_player.SpCd.Ready() ? "READY!" : $"[{Utils.PrcntBar(_player.SpCd.Charge(), 8)}]")}
+			HP: {Player.GetHp()}/{Player.BaseHp}
+			Special: {(Player.SpCd.Ready() ? "READY!" : $"[{Utils.PrcntBar(Player.SpCd.Charge(), 8)}]")}
 			Score (x{decimal.Round((decimal) (1 + Streak / 10f), 1)}): {Score}
 			{(Highscore > 0 ? $"Highscore: {Highscore}" : "")}
 			".Trim();
 
-			if (!IsGameOver() && Boss == null && Utils.Rng.Randfn() > 0.995 && SpawnPool > 0) {
+			if (!IsGameOver() && Boss == null && Utils.Rng.Randf() > 0.9 && SpawnPool > 0) {
 				var world = GetSafeArea().GetNode<Node2D>("World");
 
-				world.AddChild(Utils.Load(_enemies.Random()).Instance<Enemy>().With(e => {
+				var chosen = _enemies.Random();
+				if (typeof(ICannotSpawn).IsAssignableFrom(chosen)) return;
+
+				world.AddChild(Utils.Load(chosen).Instance<Enemy>().With(e => {
 					var spawn = GetNode<Control>("GameArea/MaxSizeContainer2/EnemySpawn").GetGlobalRect();
 					e.GlobalPosition = world.ToLocal(spawn.Position + spawn.Size * new Vector2(Utils.Rng.Randf(), 0.25f));
 
@@ -122,14 +125,14 @@ namespace SpaceBreach.scene {
 
 		public override void _PhysicsProcess(float delta) {
 			if (TextLeft == 0) {
-				if (Tick++ % 2000 == 0) {
+				if (Tick++ % 2000 == 0 && SpawnPool < Level * 8) {
 					SpawnPool++;
 				}
 			}
 
 			GetSafeArea().GetNode<CPUParticles2D>("Stars").With(s => {
-				s.SpeedScale = _player.Speed;
-				(s.Texture as AtlasTexture).Margin = new Rect2(Vector2.Zero, new Vector2(0, -20 + 100 * _player.Speed / 10));
+				s.SpeedScale = Player.Speed;
+				(s.Texture as AtlasTexture).Margin = new Rect2(Vector2.Zero, new Vector2(0, -20 + 100 * Player.Speed / 10));
 			});
 		}
 
@@ -168,7 +171,7 @@ namespace SpaceBreach.scene {
 		}
 
 		public bool IsGameOver() {
-			return !IsInstanceValid(_player) || _player.GetHp() == 0;
+			return !IsInstanceValid(Player) || Player.GetHp() == 0;
 		}
 	}
 }

@@ -1,4 +1,7 @@
-﻿using Godot;
+﻿using System.Threading.Tasks;
+using Godot;
+using Godot.Collections;
+using SpaceBreach.entity.interfaces;
 using SpaceBreach.scene;
 using SpaceBreach.util;
 
@@ -22,6 +25,20 @@ namespace SpaceBreach.entity.model {
 		[Signal]
 		public delegate void Death(Entity entity);
 
+		public Vector2 Size => GetNode<Sprite>("Sprite").GetRect().Size;
+
+		protected Array Cannons {
+			get {
+				var cannons = GetNode("Cannons");
+				if (cannons != null && cannons.GetChildCount() > 0) {
+					return cannons.GetChildren();
+				}
+
+				return new Array();
+			}
+		}
+
+		private SceneTreeTween _tween;
 		protected uint Hp;
 		public float RawSpeed;
 		public float RawActionSpeed = 1;
@@ -30,6 +47,16 @@ namespace SpaceBreach.entity.model {
 		protected Entity(uint baseHp, float speed = 1) {
 			BaseHp = Hp = baseHp;
 			Speed = speed;
+		}
+
+		public override void _Ready() {
+			if (this is IBoss) {
+				var bar = GetGame().GetNode<ProgressBar>("MaxSizeContainer3/BossHp");
+
+				_tween?.Kill();
+				_tween = CreateTween();
+				_tween.TweenProperty(bar, "value", Hp, 1);
+			}
 		}
 
 		protected Game GetGame() {
@@ -42,21 +69,31 @@ namespace SpaceBreach.entity.model {
 
 		public void AddHp(Entity source, long value) {
 			if (this is Enemy && !Visible) return;
+			if (this is IBoss b && !b.Ready) return;
+
 			if (source != this && value < 0) {
-				OnDamaged(source);
+				OnDamaged(source, value);
 			}
 
-			Hp = (uint) (Hp + value).Clamp(0, BaseHp);
+			Hp = (uint) Mathf.Clamp(Hp + value, 0, BaseHp);
+			if (this is IBoss) {
+				var bar = GetGame().GetNode<ProgressBar>("MaxSizeContainer3/BossHp");
+
+				_tween?.Kill();
+				_tween = CreateTween();
+				_tween.TweenProperty(bar, "value", Hp, 1);
+			}
+
 			if (Hp == 0) {
-				QueueFree();
-				OnDestroy();
+				OnDestroy().ContinueWith(_ => QueueFree());
 			}
 		}
 
-		protected virtual void OnDamaged(Entity by) {
+		protected virtual void OnDamaged(Entity by, long value) {
 		}
 
-		protected virtual void OnDestroy() {
+		protected virtual Task OnDestroy() {
+			return Task.CompletedTask;
 		}
 	}
 }

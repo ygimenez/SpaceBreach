@@ -40,10 +40,10 @@ namespace SpaceBreach.util {
 			Engine.TargetFps = 60;
 			Engine.IterationsPerSecond = 120;
 
-#if DEBUG_MODE
+			#if DEBUG_MODE
 			GetTree().DebugCollisionsHint = true;
 			GetTree().DebugNavigationHint = true;
-#endif
+			#endif
 		}
 
 		public static async Task LoadLeaderboard() {
