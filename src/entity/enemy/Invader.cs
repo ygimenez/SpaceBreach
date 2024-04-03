@@ -4,7 +4,7 @@ using SpaceBreach.entity.model;
 using SpaceBreach.util;
 
 namespace SpaceBreach.entity.enemy {
-	public abstract class Invader : Enemy, ICannotSpawn {
+	public abstract class Invader : Enemy {
 		private int _drift;
 
 		protected Invader() : base(hp: 100, speed: 0.25f) {
@@ -17,7 +17,7 @@ namespace SpaceBreach.entity.enemy {
 
 		protected override bool Shoot() {
 			var proj = GD.Load<PackedScene>("res://src/entity/projectile/EnemyBullet.tscn");
-			var world = GetGame().GetSafeArea().GetNode<Node2D>("World");
+			var world = Game.GetSafeArea().GetNode<Node2D>("World");
 
 			foreach (Position2D cannon in Cannons) {
 				world.AddChild(proj.Instance<Projectile>().With(p => {
@@ -31,7 +31,7 @@ namespace SpaceBreach.entity.enemy {
 		}
 
 		protected override void Move() {
-			var safe = GetGame().GetSafeArea().GetGlobalRect();
+			var safe = Game.GetSafeArea().GetGlobalRect();
 			if (GlobalPosition.x < safe.Position.x) {
 				_drift = 1;
 			} else if (GlobalPosition.x > safe.End.x) {

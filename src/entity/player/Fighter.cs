@@ -10,7 +10,7 @@ namespace SpaceBreach.entity.player {
 
 		protected override bool Shoot() {
 			var proj = GD.Load<PackedScene>("res://src/entity/projectile/PlayerBullet.tscn");
-			var world = GetGame().GetSafeArea().GetNode<Node2D>("World");
+			var world = Game.GetSafeArea().GetNode<Node2D>("World");
 
 			foreach (Position2D cannon in Cannons) {
 				for (var i = 0; i < Projectiles; i++) {
@@ -20,7 +20,7 @@ namespace SpaceBreach.entity.player {
 						p.Source = this;
 						p.GlobalPosition = world.ToLocal(cannon.GlobalPosition);
 						p.RotationDegrees = RotationDegrees + (15 - offset);
-						p.Damage = (uint) (p.Damage / Projectiles + p.Damage * 0.25f * (Projectiles - 1));
+						p.Damage = (uint) (p.Damage / Projectiles + p.Damage * 0.25f * (Projectiles - 1) * DamageMult);
 					}));
 				}
 			}
@@ -31,7 +31,7 @@ namespace SpaceBreach.entity.player {
 
 		protected override bool Special() {
 			var proj = GD.Load<PackedScene>("res://src/entity/projectile/PlayerBomb.tscn");
-			var world = GetGame().GetSafeArea().GetNode<Node2D>("World");
+			var world = Game.GetSafeArea().GetNode<Node2D>("World");
 
 			foreach (Position2D cannon in Cannons) {
 				for (var i = 0; i < Projectiles; i++) {
@@ -39,6 +39,7 @@ namespace SpaceBreach.entity.player {
 						p.Source = this;
 						p.GlobalPosition = world.ToLocal(cannon.GlobalPosition);
 						p.RotationDegrees = RotationDegrees;
+						p.Damage = (uint) (p.Damage * DamageMult);
 					}));
 				}
 			}

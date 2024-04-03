@@ -19,6 +19,8 @@ namespace SpaceBreach.scene {
 			}
 		}
 
+		private float _origTimeScale;
+
 		public override void _Ready() {
 			GetNode<Button>("Back").Connect("pressed", this, nameof(_BackPressed));
 			GetNode<Button>("Leaderboard/Submit").Connect("pressed", this, nameof(_SubmitPressed));
@@ -82,12 +84,16 @@ namespace SpaceBreach.scene {
 				anim.Play("Countdown");
 				cd.Visible = true;
 			} else {
+				_origTimeScale = Engine.TimeScale;
+				Engine.TimeScale = 1;
 				GetTree().Paused = true;
 				cd.Visible = false;
 			}
 		}
 
 		public void _Unpause() {
+			Engine.TimeScale = _origTimeScale;
+			_origTimeScale = 0;
 			GetTree().Paused = false;
 			GetNode<Label>("../Countdown").Visible = false;
 		}

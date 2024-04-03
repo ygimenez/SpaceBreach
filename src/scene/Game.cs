@@ -16,8 +16,10 @@ namespace SpaceBreach.scene {
 			.Where(t => t.IsSubclassOf(typeof(Enemy)))
 			.ToList();
 
+		private bool _online;
 		private uint _score;
 		public ulong Tick;
+		public ulong SpawnTick = 10000;
 		public uint Score {
 			get => _score;
 			set => _score = (uint) Mathf.Max(0, value);
@@ -25,21 +27,41 @@ namespace SpaceBreach.scene {
 
 		public Player Player;
 		public uint SpawnPool;
-		public uint Level = 1;
 		public uint Highscore;
 		public uint TextLeft;
 		public uint Streak;
 		public Enemy Boss;
 
+		private uint _level = 1;
+		public uint Level {
+			get => _level;
+			set {
+				if (value > _level) {
+					var back = GetNode<ColorRect>("Background");
+					var rng = new RandomNumberGenerator { Seed = (ulong) value.GetHashCode() };
+
+					var tween = CreateTween();
+					tween.TweenProperty(back, "color", new Color(
+						rng.Randf() / 3, rng.Randf() / 3, rng.Randf() / 3
+					), 2);
+				}
+
+				_level = value;
+			}
+		}
+
 		public override void _Ready() {
+			_online = Global.Online;
+
 			CallDeferred(nameof(_Initialize));
-			if (Global.Online && Global.Leaderboard.Count > 0) {
+			if (_online && Global.Leaderboard.Count > 0) {
 				Highscore = Global.Leaderboard[0].Item2;
 			}
 		}
 
 		public void _Initialize() {
 			GetNode<Area2D>("GameArea/Area2D").AddCollision();
+			GetNode<Area2D>("GameArea/MaxSizeContainer/SafeArea/Area2D").AddCollision();
 			GetNode<Area2D>("GameArea/MaxSizeContainer/SafeArea/Area2D").AddCollision(false);
 
 			if (Global.Mobile) {
@@ -95,6 +117,7 @@ namespace SpaceBreach.scene {
 			HP: {Player.GetHp()}/{Player.BaseHp}
 			Special: {(Player.SpCd.Ready() ? "READY!" : $"[{Utils.PrcntBar(Player.SpCd.Charge(), 8)}]")}
 			Score (x{decimal.Round((decimal) (1 + Streak / 10f), 1)}): {Score}
+			Level: {SpawnTick}
 			{(Highscore > 0 ? $"Highscore: {Highscore}" : "")}
 			".Trim();
 
@@ -103,14 +126,11 @@ namespace SpaceBreach.scene {
 
 				var chosen = _enemies.Random();
 				if (typeof(ICannotSpawn).IsAssignableFrom(chosen)) return;
+				if (typeof(IBoss).IsAssignableFrom(chosen) != (SpawnTick / 10_000 == Level)) return;
 
 				world.AddChild(Utils.Load(chosen).Instance<Enemy>().With(e => {
 					var spawn = GetNode<Control>("GameArea/MaxSizeContainer2/EnemySpawn").GetGlobalRect();
 					e.GlobalPosition = world.ToLocal(spawn.Position + spawn.Size * new Vector2(Utils.Rng.Randf(), 0.25f));
-
-					world.AddChild(GD.Load<PackedScene>("res://src/entity/misc/Marker.tscn").Instance<Marker>().With(m => {
-						m.Tracked = e;
-					}));
 
 					if (e is IBoss) {
 						Boss = e;
@@ -128,6 +148,8 @@ namespace SpaceBreach.scene {
 				if (Tick++ % 2000 == 0 && SpawnPool < Level * 8) {
 					SpawnPool++;
 				}
+
+				SpawnTick = Math.Min(SpawnTick + 1, Level * 10_000);
 			}
 
 			GetSafeArea().GetNode<CPUParticles2D>("Stars").With(s => {
@@ -151,7 +173,7 @@ namespace SpaceBreach.scene {
 		public void _ShowGameOver() {
 			GetTree().Paused = true;
 			GetNode<Control>("PauseMenu").Visible = true;
-			if (Global.Online && Score > Highscore) {
+			if (_online && Score > Highscore) {
 				GetNode<Control>("PauseMenu/Leaderboard").Visible = true;
 				GetNode<Control>("PauseMenu/Back").Visible = false;
 			}
@@ -168,6 +190,26 @@ namespace SpaceBreach.scene {
 
 		public Control GetSafeArea() {
 			return GetNode<Control>("GameArea/MaxSizeContainer/SafeArea");
+		}
+
+		public void Nuke() {
+			var world = GetSafeArea().GetNode<Node2D>("World");
+			foreach (Node child in world.GetChildren()) {
+				switch (child) {
+					case IBoss _:
+						continue;
+					case Enemy e:
+						e.Kill();
+						break;
+					case Projectile _:
+						child.QueueFree();
+						break;
+				}
+			}
+
+			var rect = GetNode<ColorRect>("ColorRect");
+			rect.Modulate = Colors.White;
+			CreateTween().TweenProperty(rect, "modulate", new Color(Colors.White, 0), 2);
 		}
 
 		public bool IsGameOver() {

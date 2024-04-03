@@ -6,7 +6,7 @@ using SpaceBreach.util;
 namespace SpaceBreach.entity.misc {
 	public class Marker : Node2D {
 		[Export]
-		public Entity Tracked;
+		public Node2D Tracked;
 
 		public override void _Ready() {
 			Visible = false;
@@ -17,7 +17,7 @@ namespace SpaceBreach.entity.misc {
 		}
 
 		public override void _PhysicsProcess(float delta) {
-			if (!IsInstanceValid(Tracked) || Tracked.Visible) {
+			if (!IsInstanceValid(Tracked) || Tracked is ITracked t && t.Appeared) {
 				QueueFree();
 			} else {
 				var sprite = GetNode<Sprite>("Sprite");

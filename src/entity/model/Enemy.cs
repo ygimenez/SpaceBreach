@@ -8,10 +8,8 @@ using SpaceBreach.manager;
 using SpaceBreach.util;
 
 namespace SpaceBreach.entity.model {
-	public abstract class Enemy : Entity {
+	public abstract class Enemy : Entity, ITracked {
 		private readonly bool _drop;
-		private bool _tweened;
-
 		private readonly List<Type> _drops = typeof(Pickup).Assembly
 			.GetTypes()
 			.Where(t => t.IsSubclassOf(typeof(Pickup)))
@@ -21,6 +19,8 @@ namespace SpaceBreach.entity.model {
 		public float AttackRate;
 
 		protected Cooldown Cooldown;
+		private bool _tweened;
+		private bool _enraged;
 
 		protected Enemy(uint hp, float attackRate = 1, float speed = 1) : base(hp, speed) {
 			AttackRate = attackRate;
@@ -32,17 +32,19 @@ namespace SpaceBreach.entity.model {
 		}
 
 		public override void _Ready() {
-			base._Ready();
-			var game = GetGame();
+			var game = Game;
 
 			ActionSpeed = 1 + 0.2f * (game.Level - 1);
 			BaseHp = Hp = (uint) (BaseHp * game.Level * (_drop ? 1.5f : 1));
-			Cooldown = new Cooldown(game, (uint) (500 / AttackRate));
+			Cooldown = new Cooldown(game, this, 500);
 
 			Connect("area_entered", this, nameof(_AreaEntered));
+			base._Ready();
 		}
 
 		public override void _Process(float delta) {
+			Cooldown.Time = (uint) Mathf.Max(1, 500 / AttackRate);
+
 			if (Visible && Cooldown.Ready() && Shoot()) {
 				Cooldown.Use();
 				Audio.Cue("res://assets/sounds/enemy_fire.wav");
@@ -58,6 +60,11 @@ namespace SpaceBreach.entity.model {
 
 		public override void _PhysicsProcess(float delta) {
 			Move();
+
+			if (this is IBoss b && b.Enraged && !_enraged) {
+				_enraged = true;
+				OnEnrage();
+			}
 		}
 
 		public uint GetCost() {
@@ -70,16 +77,16 @@ namespace SpaceBreach.entity.model {
 
 		protected override void OnDamaged(Entity by, long value) {
 			if (by is Player p) {
-				p.SpCd.Credits += (uint) Mathf.Abs(value);
+				p.SpCd.Credits += (uint) Mathf.Abs(value * p.SpecialRate);
 			}
 
 			Audio.Cue("res://assets/sounds/enemy_hit.wav");
 		}
 
 		public override void _ExitTree() {
-			GetGame().SpawnPool++;
+			Game.SpawnPool++;
 			if (this is IBoss) {
-				GetGame().Boss = null;
+				Game.Boss = null;
 			}
 		}
 
@@ -90,14 +97,23 @@ namespace SpaceBreach.entity.model {
 			}
 		}
 
+		protected virtual void OnEnrage() {
+			ActionSpeed *= 1.5f;
+			var world = Game.GetSafeArea().GetNode<Node2D>("World");
+
+			world.AddChild(GD.Load<PackedScene>("res://src/entity/pickup/LargeHpPickup.tscn").Instance<Pickup>().With(p => {
+				p.Position = Position;
+			}));
+		}
+
 		protected override Task OnDestroy() {
 			base.OnDestroy();
-			var game = GetGame();
-			game.Score += (uint) (GetCost() * (1 + game.Streak / 10f) * (this is IBoss ? 5 : 1));
+			var game = Game;
+			game.Score += (uint) ((this is IBoss ? BaseHp : GetCost()) * (1 + game.Streak / 10f));
 			game.Streak++;
 
 			if (_drop) {
-				var world = GetGame().GetSafeArea().GetNode<Node2D>("World");
+				var world = Game.GetSafeArea().GetNode<Node2D>("World");
 
 				world.AddChild(Utils.Load(_drops.Random()).Instance<Pickup>().With(p => {
 					p.Position = Position;

@@ -4,15 +4,15 @@ using SpaceBreach.entity.model;
 using SpaceBreach.util;
 
 namespace SpaceBreach.entity.enemy {
-	public abstract class Waver : Enemy, ICannotSpawn {
+	public abstract class Waver : Enemy {
 		private int _angle;
 
 		protected Waver() : base(hp: 125, 0.75f, speed: 0.35f) {
 		}
 
 		protected override bool Shoot() {
-			var proj = GD.Load<PackedScene>("res://src/entity/projectile/EnemyOrb.tscn");
-			var world = GetGame().GetSafeArea().GetNode<Node2D>("World");
+			var proj = GD.Load<PackedScene>("res://src/entity/projectile/EnemyWavingOrb.tscn");
+			var world = Game.GetSafeArea().GetNode<Node2D>("World");
 
 			var shot = 0;
 			foreach (Position2D cannon in Cannons) {

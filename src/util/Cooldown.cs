@@ -1,9 +1,12 @@
 ﻿using Godot;
+using SpaceBreach.entity.model;
 using SpaceBreach.scene;
 
 namespace SpaceBreach.util {
 	public class Cooldown {
 		private readonly Game _game;
+		private readonly Entity _source;
+
 		private ulong _lastTick;
 		private bool _first = true;
 		private ulong _pauseTick;
@@ -23,22 +26,21 @@ namespace SpaceBreach.util {
 
 		public uint Time;
 
-		public Cooldown(Game game, uint time) {
+		public Cooldown(Game game, Entity source, uint time) {
 			_game = game;
+			_source = source;
 			Time = time;
 		}
 
 		public bool Ready() {
-			if (_game.IsGameOver() || Paused) return false;
+			if (_source.Dying || _game.IsGameOver() || Paused) return false;
 
-			return _first || _game.Tick - _lastTick >= Time;
+			return _first || _game.Tick - _lastTick >= Time / _source.ActionSpeed;
 		}
 
 		public void Use() {
-			if (Ready()) {
-				_lastTick = _game.Tick;
-				_first = false;
-			}
+			_lastTick = _game.Tick;
+			_first = false;
 		}
 
 		public ulong Remaining() {

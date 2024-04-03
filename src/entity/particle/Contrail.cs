@@ -23,7 +23,7 @@ namespace SpaceBreach.entity.particle {
 			if (_line == null || _ship == null) return;
 
 			_line.AddPoint(GlobalPosition);
-			if (_line.GetPointCount() > Length) {
+			while (_line.GetPointCount() > Length / Engine.TimeScale) {
 				_line.RemovePoint(0);
 			}
 

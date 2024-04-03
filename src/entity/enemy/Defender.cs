@@ -1,4 +1,5 @@
 using Godot;
+using SpaceBreach.entity.enemy.boss;
 using SpaceBreach.entity.interfaces;
 using SpaceBreach.entity.model;
 using SpaceBreach.util;
@@ -25,7 +26,7 @@ namespace SpaceBreach.entity.enemy {
 			}
 		}
 
-		protected Defender() : base(hp: 500, attackRate: 1.5f) {
+		protected Defender() : base(hp: 300) {
 		}
 
 		public override void _Ready() {
@@ -40,7 +41,7 @@ namespace SpaceBreach.entity.enemy {
 
 		protected override void Move() {
 			var parent = this.FindParent<Mothership>();
-			var safe = GetGame().GetSafeArea().GetGlobalRect();
+			var safe = Game.GetSafeArea().GetGlobalRect();
 
 			if (parent.Enraged) {
 				if (_posFac >= 1 && !_expanded) {
@@ -63,8 +64,8 @@ namespace SpaceBreach.entity.enemy {
 			}
 
 			GlobalPosition = PreviousOrbit.LinearInterpolate(TargetOrbit, _posFac) + new Vector2(
-				Mathf.Sin(Mathf.Deg2Rad(parent.DefAngle * Speed + 36 * _index)) * _radius,
-				Mathf.Cos(Mathf.Deg2Rad(parent.DefAngle * Speed + 36 * _index)) * _radius
+				Mathf.Cos(Mathf.Deg2Rad(parent.DefAngle * Speed + 36 * _index)) * _radius,
+				Mathf.Sin(Mathf.Deg2Rad(parent.DefAngle * Speed + 36 * _index)) * _radius
 			);
 
 			if (_expanded && _posFac > 0.5) {
@@ -78,10 +79,10 @@ namespace SpaceBreach.entity.enemy {
 
 		protected override bool Shoot() {
 			var parent = this.FindParent<Mothership>();
-			if (parent.Enraged && _posFac >= 1 && _radius == _tgtRadius && Utils.Rng.Randf() > 0.9f) {
+			if (!parent.Dying && parent.Enraged && _posFac >= 1 && _radius == _tgtRadius && Utils.Rng.Randf() > 0.9f) {
 				var proj = GD.Load<PackedScene>("res://src/entity/projectile/EnemyBullet.tscn");
-				var world = GetGame().GetSafeArea().GetNode<Node2D>("World");
-				var game = GetGame();
+				var world = Game.GetSafeArea().GetNode<Node2D>("World");
+				var game = Game;
 
 				foreach (Position2D cannon in Cannons) {
 					world.AddChild(proj.Instance<Projectile>().With(p => {

@@ -2,6 +2,7 @@
 using Godot;
 using Godot.Collections;
 using SpaceBreach.entity.interfaces;
+using SpaceBreach.entity.misc;
 using SpaceBreach.scene;
 using SpaceBreach.util;
 
@@ -18,7 +19,7 @@ namespace SpaceBreach.entity.model {
 
 		[Export]
 		public float ActionSpeed {
-			get => RawActionSpeed * Global.ACTION_SPEED;
+			get => RawActionSpeed * Global.ACTION_SPEED * (this is Enemy ? Engine.TimeScale : 1);
 			set => RawActionSpeed = value;
 		}
 
@@ -26,6 +27,8 @@ namespace SpaceBreach.entity.model {
 		public delegate void Death(Entity entity);
 
 		public Vector2 Size => GetNode<Sprite>("Sprite").GetRect().Size;
+
+		protected Game Game => GetNode<Game>("/root/Control");
 
 		protected Array Cannons {
 			get {
@@ -38,11 +41,11 @@ namespace SpaceBreach.entity.model {
 			}
 		}
 
-		private SceneTreeTween _tween;
 		protected uint Hp;
 		public float RawSpeed;
 		public float RawActionSpeed = 1;
-		public new bool Visible;
+		public bool Appeared { get; set; }
+		public bool Dying;
 
 		protected Entity(uint baseHp, float speed = 1) {
 			BaseHp = Hp = baseHp;
@@ -51,23 +54,19 @@ namespace SpaceBreach.entity.model {
 
 		public override void _Ready() {
 			if (this is IBoss) {
-				var bar = GetGame().GetNode<ProgressBar>("MaxSizeContainer3/BossHp");
+				var bar = Game.GetNode<ProgressBar>("MaxSizeContainer3/BossHp");
 
-				_tween?.Kill();
-				_tween = CreateTween();
-				_tween.TweenProperty(bar, "value", Hp, 1);
+				var tween = CreateTween();
+				tween.TweenProperty(bar, "value", Hp, 1);
 			}
-		}
-
-		protected Game GetGame() {
-			return GetNode<Game>("/root/Control");
 		}
 
 		public uint GetHp() {
 			return Hp;
 		}
 
-		public void AddHp(Entity source, long value) {
+		public virtual void AddHp(Entity source, long value) {
+			if (Dying) return;
 			if (this is Enemy && !Visible) return;
 			if (this is IBoss b && !b.Ready) return;
 
@@ -77,16 +76,25 @@ namespace SpaceBreach.entity.model {
 
 			Hp = (uint) Mathf.Clamp(Hp + value, 0, BaseHp);
 			if (this is IBoss) {
-				var bar = GetGame().GetNode<ProgressBar>("MaxSizeContainer3/BossHp");
+				var bar = Game.GetNode<ProgressBar>("MaxSizeContainer3/BossHp");
 
-				_tween?.Kill();
-				_tween = CreateTween();
-				_tween.TweenProperty(bar, "value", Hp, 1);
+				var tween = CreateTween();
+				tween.TweenProperty(bar, "value", Hp, 1);
 			}
 
 			if (Hp == 0) {
-				OnDestroy().ContinueWith(_ => QueueFree());
+				Dying = true;
+				Kill();
 			}
+		}
+
+		public async void Kill() {
+			await OnDestroy();
+			if (this is IBoss) {
+				Game.Level++;
+			}
+
+			QueueFree();
 		}
 
 		protected virtual void OnDamaged(Entity by, long value) {
@@ -94,6 +102,15 @@ namespace SpaceBreach.entity.model {
 
 		protected virtual Task OnDestroy() {
 			return Task.CompletedTask;
+		}
+
+		public override void _EnterTree() {
+			if (this is ITracked) {
+				var world = Game.GetSafeArea().GetNode<Node2D>("World");
+				world.AddChild(GD.Load<PackedScene>("res://src/entity/misc/Marker.tscn").Instance<Marker>().With(m => {
+					m.Tracked = this;
+				}));
+			}
 		}
 	}
 }

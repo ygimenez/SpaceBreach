@@ -14,21 +14,26 @@ namespace SpaceBreach.entity.model {
 		[Export]
 		public float Projectiles;
 
+		[Export]
+		public float DamageMult;
+
 		public Cooldown AtkCd;
 		public CostCooldown SpCd;
 		private Vector2 _velocity = Vector2.Zero;
+		private uint _iframes;
 
-		protected Player(uint hp, float attackRate = 1, float specialRate = 1, float projectiles = 1, float speed = 1) : base(hp, speed) {
+		protected Player(uint hp, float attackRate = 1, float specialRate = 1, float projectiles = 1, float damageMult = 1, float speed = 1) : base(hp, speed) {
 			AttackRate = attackRate;
 			SpecialRate = specialRate;
 			Projectiles = projectiles;
+			DamageMult = damageMult;
 		}
 
 		public override void _Ready() {
-			base._Ready();
-			var game = GetGame();
-			AtkCd = new Cooldown(game, (uint) (200 / AttackRate / ActionSpeed));
-			SpCd = new CostCooldown(game, (uint) (7500 / SpecialRate / ActionSpeed));
+			var game = Game;
+			AtkCd = new Cooldown(game, this, 200);
+			SpCd = new CostCooldown(game, this, 2000);
+			ZIndex = 1;
 
 			var contGroup = GetNode("Contrails");
 			if (contGroup != null && contGroup.GetChildCount() > 0) {
@@ -38,9 +43,18 @@ namespace SpaceBreach.entity.model {
 					(anchor as Node)?.AddChild(cont.Instance());
 				}
 			}
+
+			base._Ready();
 		}
 
 		public override void _Process(float delta) {
+			AtkCd.Time = (uint) Mathf.Max(1, 200 / AttackRate);
+			if (_iframes > 0 && Utils.IsBetween(_iframes % 20, 0, 9)) {
+				Modulate = Colors.Transparent;
+			} else {
+				Modulate = Colors.White;
+			}
+
 			if (Input.IsActionPressed("shoot") && AtkCd.Ready() && Shoot()) {
 				AtkCd.Use();
 			}
@@ -57,6 +71,14 @@ namespace SpaceBreach.entity.model {
 			).LimitLength() * Speed);
 
 			Translate(_velocity);
+			if (Engine.TimeScale < 1 && Game.Tick % 20 == 0) {
+				var world = Game.GetSafeArea().GetNode<Node2D>("World");
+				Utils.AddGhost(world, GetNode<Sprite>("Sprite"), 0.5f);
+			}
+
+			if (_iframes > 0) {
+				_iframes--;
+			}
 		}
 
 		private void Accelerate(Vector2 mov) {
@@ -80,13 +102,20 @@ namespace SpaceBreach.entity.model {
 			}
 		}
 
+		public override void AddHp(Entity source, long value) {
+			if (value < 0 && _iframes > 0) return;
+			base.AddHp(source, value);
+		}
+
 		protected override void OnDamaged(Entity by, long value) {
+			_iframes = 200;
+			Game.Streak = 0;
 			Audio.Cue("res://assets/sounds/player_hit.wav");
 		}
 
 		protected override Task OnDestroy() {
 			base.OnDestroy();
-			GetGame().PlayerDeath(this);
+			Game.PlayerDeath(this);
 			Audio.Cue("res://assets/sounds/player_explode.wav");
 			return Task.CompletedTask;
 		}

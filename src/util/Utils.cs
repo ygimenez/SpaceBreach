@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Godot;
-using Godot.Collections;
 using SpaceBreach.entity.model;
 using SpaceBreach.scene;
 using Array = Godot.Collections.Array;
@@ -141,6 +140,8 @@ namespace SpaceBreach.util {
 
 		public static string PrcntBar(float prcnt, int width) {
 			var left = (int) (width * prcnt);
+			if (left < 0 || width - left < 0) return "";
+
 			return new string('|', left) + new string(' ', width - left);
 		}
 
@@ -179,6 +180,18 @@ namespace SpaceBreach.util {
 			}
 		}
 
+		public static void AddGhost(Node2D source, Sprite copy, float duration) {
+			var ghost = (Sprite) copy.Duplicate();
+			ghost.Position = source.ToLocal(copy.GlobalPosition);
+			ghost.Rotation = copy.GetParent<Node2D>().Rotation;
+			ghost.Modulate = Colors.MidnightBlue;
+			source.AddChild(ghost);
+
+			var tween = ghost.CreateTween();
+			tween.TweenProperty(ghost, "modulate", new Color(Colors.MidnightBlue, 0), duration);
+			tween.TweenCallback(ghost, "queue_free");
+		}
+
 		public static T Random<T>(this List<T> list) {
 			return list[Rng.RandiRange(0, list.Count - 1)];
 		}
@@ -193,7 +206,7 @@ namespace SpaceBreach.util {
 			var tickTime = 1000f / Engine.IterationsPerSecond;
 
 			await node.ToSignal(
-				node.GetTree().CreateTimer(Mathf.Stepify(millis, tickTime) / 1000, false),
+				node.GetTree().CreateTimer(Mathf.Stepify(millis * Engine.TimeScale, tickTime) / 1000, false),
 				"timeout"
 			);
 		}

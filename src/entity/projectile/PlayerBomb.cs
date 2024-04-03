@@ -5,7 +5,7 @@ using SpaceBreach.util;
 
 namespace SpaceBreach.entity.projectile {
 	public abstract class PlayerBomb : Projectile {
-		private uint _fuse = 150;
+		private float _fuse = 150;
 
 		protected PlayerBomb() : base(speed: 1, damage: 0) {
 		}
@@ -13,7 +13,7 @@ namespace SpaceBreach.entity.projectile {
 		public override void _PhysicsProcess(float delta) {
 			base._PhysicsProcess(delta);
 
-			if (--_fuse == 0) {
+			if ((_fuse -= Engine.TimeScale) == 0) {
 				OnHit(null);
 			}
 		}

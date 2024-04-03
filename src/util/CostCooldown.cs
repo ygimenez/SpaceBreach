@@ -1,27 +1,28 @@
 ﻿using Godot;
+using SpaceBreach.entity.model;
 using SpaceBreach.scene;
 
 namespace SpaceBreach.util {
 	public class CostCooldown {
 		private readonly Game _game;
+		private readonly Entity _source;
 
 		public uint Credits, Cost;
 
-		public CostCooldown(Game game, uint cost) {
+		public CostCooldown(Game game, Entity source, uint cost) {
 			_game = game;
+			_source = source;
 			Cost = Credits = cost;
 		}
 
 		public bool Ready() {
-			if (_game.IsGameOver()) return false;
+			if (_source.Dying || _game.IsGameOver()) return false;
 
-			return Credits >= Cost;
+			return Credits >= Cost / _source.ActionSpeed;
 		}
 
 		public void Use() {
-			if (Ready()) {
-				Credits = 0;
-			}
+			Credits = 0;
 		}
 
 		public ulong Remaining() {

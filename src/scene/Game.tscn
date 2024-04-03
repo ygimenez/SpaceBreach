@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=2]
+[gd_scene load_steps=29 format=2]
 
 [ext_resource path="res://src/scene/Game.cs" type="Script" id=1]
 [ext_resource path="res://assets/textures/projectiles.tres" type="Texture" id=2]
@@ -13,9 +13,10 @@
 [ext_resource path="res://src/component/Controller.cs" type="Script" id=11]
 [ext_resource path="res://assets/sprites/icons.png" type="Texture" id=12]
 [ext_resource path="res://addons/MaxSizeContainer/max_size_container.gd" type="Script" id=13]
+[ext_resource path="res://src/util/NonOccluding.cs" type="Script" id=14]
 
 [sub_resource type="StyleBoxFlat" id=12]
-bg_color = Color( 0, 0, 0, 1 )
+bg_color = Color( 0, 0, 0, 0 )
 border_width_left = 1
 border_width_right = 1
 border_color = Color( 1, 1, 1, 1 )
@@ -24,68 +25,6 @@ border_color = Color( 1, 1, 1, 1 )
 atlas = ExtResource( 2 )
 region = Rect2( 0, 0, 2, 24 )
 margin = Rect2( 0, 0, 0, -20 )
-
-[sub_resource type="DynamicFont" id=3]
-size = 40
-font_data = ExtResource( 6 )
-
-[sub_resource type="DynamicFont" id=13]
-size = 30
-extra_spacing_char = 10
-font_data = ExtResource( 6 )
-
-[sub_resource type="AtlasTexture" id=15]
-atlas = ExtResource( 12 )
-region = Rect2( 1, 52, 14, 10 )
-
-[sub_resource type="DynamicFont" id=4]
-size = 100
-font_data = ExtResource( 6 )
-
-[sub_resource type="Animation" id=5]
-resource_name = "Countdown"
-length = 2.25
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:text")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0, 0.7, 1.5 ),
-"transitions": PoolRealArray( 1, 1, 1 ),
-"update": 1,
-"values": [ "3", "2", "1" ]
-}
-tracks/1/type = "method"
-tracks/1/path = NodePath("../PauseMenu")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/keys = {
-"times": PoolRealArray( 2.2 ),
-"transitions": PoolRealArray( 1 ),
-"values": [ {
-"args": [  ],
-"method": "_Unpause"
-} ]
-}
-
-[sub_resource type="Animation" id=6]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/path = NodePath(".:text")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/keys = {
-"times": PoolRealArray( 0 ),
-"transitions": PoolRealArray( 1 ),
-"update": 0,
-"values": [ "3" ]
-}
 
 [sub_resource type="DynamicFont" id=7]
 size = 60
@@ -138,13 +77,79 @@ tracks/0/keys = {
 "values": [ Color( 1, 0, 0, 1 ) ]
 }
 
+[sub_resource type="DynamicFont" id=16]
+size = 15
+font_data = ExtResource( 6 )
+
 [sub_resource type="AtlasTexture" id=11]
 atlas = ExtResource( 12 )
 region = Rect2( 13, 3, 3, 3 )
 
-[sub_resource type="DynamicFont" id=16]
-size = 15
+[sub_resource type="DynamicFont" id=3]
+size = 40
+outline_size = 2
+outline_color = Color( 0, 0, 0, 1 )
 font_data = ExtResource( 6 )
+
+[sub_resource type="DynamicFont" id=13]
+size = 30
+extra_spacing_char = 10
+font_data = ExtResource( 6 )
+
+[sub_resource type="AtlasTexture" id=15]
+atlas = ExtResource( 12 )
+region = Rect2( 1, 52, 14, 10 )
+
+[sub_resource type="DynamicFont" id=4]
+size = 100
+outline_size = 2
+outline_color = Color( 0, 0, 0, 1 )
+font_data = ExtResource( 6 )
+
+[sub_resource type="Animation" id=5]
+resource_name = "Countdown"
+length = 2.25
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:text")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.7, 1.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ "3", "2", "1" ]
+}
+tracks/1/type = "method"
+tracks/1/path = NodePath("../PauseMenu")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 2.2 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "_Unpause"
+} ]
+}
+
+[sub_resource type="Animation" id=6]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:text")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ "3" ]
+}
 
 [node name="Control" type="Control"]
 anchor_right = 1.0
@@ -159,6 +164,11 @@ __meta__ = {
 "_edit_horizontal_guides_": [ 301.0 ],
 "_edit_vertical_guides_": [ 400.0 ]
 }
+
+[node name="Background" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 1 )
 
 [node name="GameArea" type="Control" parent="."]
 anchor_right = 1.0
@@ -254,9 +264,9 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 margin_left = -20.0
-margin_top = -264.0
+margin_top = -325.0
 margin_right = 20.0
-margin_bottom = -224.0
+margin_bottom = -285.0
 grow_horizontal = 2
 grow_vertical = 2
 __meta__ = {
@@ -299,6 +309,89 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 flat = true
 script = ExtResource( 11 )
+
+[node name="Warning" type="Label" parent="."]
+pause_mode = 2
+visible = false
+modulate = Color( 1, 0, 0, 1 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -129.0
+margin_top = -45.0
+margin_right = 130.0
+margin_bottom = 45.0
+custom_fonts/font = SubResource( 7 )
+text = "WARNING"
+align = 1
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Sprite" type="Sprite" parent="Warning"]
+position = Vector2( 0.5, 46 )
+scale = Vector2( 2, 2 )
+texture = SubResource( 14 )
+offset = Vector2( -16, 0 )
+
+[node name="Sprite2" type="Sprite" parent="Warning"]
+position = Vector2( 259.5, 46 )
+scale = Vector2( 2, 2 )
+texture = SubResource( 14 )
+offset = Vector2( 16, 0 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Warning"]
+anims/Flash = SubResource( 8 )
+anims/RESET = SubResource( 9 )
+
+[node name="MaxSizeContainer3" type="MarginContainer" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 300.0
+margin_top = -227.0
+margin_right = -300.0
+margin_bottom = -194.0
+custom_constants/margin_right = 0
+custom_constants/margin_top = 0
+custom_constants/margin_left = 0
+custom_constants/margin_bottom = 0
+script = ExtResource( 13 )
+max_size = Vector2( 500, -1 )
+
+[node name="BossHp" type="ProgressBar" parent="MaxSizeContainer3"]
+margin_right = 500.0
+margin_bottom = 33.0
+custom_fonts/font = SubResource( 16 )
+rounded = true
+script = ExtResource( 8 )
+
+[node name="Tween" type="Tween" parent="MaxSizeContainer3/BossHp"]
+
+[node name="Area2D" type="Area2D" parent="MaxSizeContainer3/BossHp"]
+collision_layer = 0
+collision_mask = 122
+script = ExtResource( 14 )
+
+[node name="ColorRect" type="ColorRect" parent="."]
+modulate = Color( 1, 1, 1, 0 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -1.0
+margin_bottom = -1.0
+
+[node name="Pause" type="Button" parent="."]
+pause_mode = 2
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -198.0
+margin_top = 156.0
+margin_right = -158.0
+margin_bottom = 197.0
+icon = SubResource( 11 )
+flat = true
+expand_icon = true
 
 [node name="PauseMenu" type="Control" parent="."]
 pause_mode = 2
@@ -391,75 +484,3 @@ align = 1
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Countdown"]
 anims/Countdown = SubResource( 5 )
 anims/RESET = SubResource( 6 )
-
-[node name="Warning" type="Label" parent="."]
-pause_mode = 2
-visible = false
-modulate = Color( 1, 0, 0, 1 )
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -129.0
-margin_top = -45.0
-margin_right = 130.0
-margin_bottom = 45.0
-custom_fonts/font = SubResource( 7 )
-text = "WARNING"
-align = 1
-__meta__ = {
-"_edit_group_": true
-}
-
-[node name="Sprite" type="Sprite" parent="Warning"]
-position = Vector2( 0.5, 46 )
-scale = Vector2( 2, 2 )
-texture = SubResource( 14 )
-offset = Vector2( -16, 0 )
-
-[node name="Sprite2" type="Sprite" parent="Warning"]
-position = Vector2( 259.5, 46 )
-scale = Vector2( 2, 2 )
-texture = SubResource( 14 )
-offset = Vector2( 16, 0 )
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="Warning"]
-anims/Flash = SubResource( 8 )
-anims/RESET = SubResource( 9 )
-
-[node name="Pause" type="Button" parent="."]
-pause_mode = 2
-anchor_left = 1.0
-anchor_right = 1.0
-margin_left = -198.0
-margin_top = 156.0
-margin_right = -158.0
-margin_bottom = 197.0
-icon = SubResource( 11 )
-flat = true
-expand_icon = true
-
-[node name="MaxSizeContainer3" type="MarginContainer" parent="."]
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 300.0
-margin_top = -188.0
-margin_right = -300.0
-margin_bottom = -155.0
-custom_constants/margin_right = 0
-custom_constants/margin_top = 0
-custom_constants/margin_left = 0
-custom_constants/margin_bottom = 0
-script = ExtResource( 13 )
-max_size = Vector2( 500, -1 )
-
-[node name="BossHp" type="ProgressBar" parent="MaxSizeContainer3"]
-visible = false
-margin_right = 500.0
-margin_bottom = 33.0
-custom_fonts/font = SubResource( 16 )
-rounded = true
-script = ExtResource( 8 )
-
-[node name="Tween" type="Tween" parent="MaxSizeContainer3/BossHp"]

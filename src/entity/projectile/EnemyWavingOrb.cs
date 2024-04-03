@@ -2,10 +2,10 @@ using Godot;
 using SpaceBreach.entity.model;
 
 namespace SpaceBreach.entity.projectile {
-	public abstract class EnemyOrb : Projectile {
+	public abstract class EnemyWavingOrb : Projectile {
 		private int _angle;
 
-		protected EnemyOrb() : base(speed: 0.8f, damage: 75) {
+		protected EnemyWavingOrb() : base(speed: 0.8f, damage: 75) {
 		}
 
 		public override void _Process(float delta) {
