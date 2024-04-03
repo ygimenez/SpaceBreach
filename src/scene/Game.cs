@@ -19,7 +19,7 @@ namespace SpaceBreach.scene {
 		private bool _online;
 		private uint _score;
 		public ulong Tick;
-		public ulong SpawnTick = 10000;
+		public ulong SpawnTick;
 		public uint Score {
 			get => _score;
 			set => _score = (uint) Mathf.Max(0, value);
@@ -117,7 +117,7 @@ namespace SpaceBreach.scene {
 			HP: {Player.GetHp()}/{Player.BaseHp}
 			Special: {(Player.SpCd.Ready() ? "READY!" : $"[{Utils.PrcntBar(Player.SpCd.Charge(), 8)}]")}
 			Score (x{decimal.Round((decimal) (1 + Streak / 10f), 1)}): {Score}
-			Level: {SpawnTick}
+			Level: {Level}
 			{(Highscore > 0 ? $"Highscore: {Highscore}" : "")}
 			".Trim();
 
