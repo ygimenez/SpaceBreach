@@ -109,7 +109,7 @@ namespace SpaceBreach.entity.model {
 		protected override Task OnDestroy() {
 			base.OnDestroy();
 			var game = Game;
-			game.Score += (uint) ((this is IBoss ? BaseHp : GetCost()) * (1 + game.Streak / 10f));
+			game.Score += (uint) ((this is IBoss ? BaseHp : GetCost()) * (1 + game.Streak / 10f) * (this is IBoss ? 5 : 1));
 			game.Streak++;
 
 			if (_drop) {
