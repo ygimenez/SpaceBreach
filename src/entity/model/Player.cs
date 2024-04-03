@@ -49,7 +49,7 @@ namespace SpaceBreach.entity.model {
 
 		public override void _Process(float delta) {
 			AtkCd.Time = (uint) Mathf.Max(1, 200 / AttackRate);
-			if (_iframes > 0 && Utils.IsBetween(_iframes % 20, 0, 9)) {
+			if (_iframes > 0 && Utils.IsBetween(_iframes % 50, 0, 24)) {
 				Modulate = Colors.Transparent;
 			} else {
 				Modulate = Colors.White;
