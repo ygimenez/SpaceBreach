@@ -26,6 +26,10 @@ atlas = ExtResource( 2 )
 region = Rect2( 0, 0, 2, 24 )
 margin = Rect2( 0, 0, 0, -20 )
 
+[sub_resource type="DynamicFont" id=16]
+size = 15
+font_data = ExtResource( 6 )
+
 [sub_resource type="DynamicFont" id=7]
 size = 60
 font_data = ExtResource( 6 )
@@ -76,10 +80,6 @@ tracks/0/keys = {
 "update": 0,
 "values": [ Color( 1, 0, 0, 1 ) ]
 }
-
-[sub_resource type="DynamicFont" id=16]
-size = 15
-font_data = ExtResource( 6 )
 
 [sub_resource type="AtlasTexture" id=11]
 atlas = ExtResource( 12 )
@@ -284,6 +284,42 @@ margin_right = 20.0
 margin_bottom = 20.0
 rect_pivot_offset = Vector2( 20, 20 )
 
+[node name="MaxSizeContainer3" type="MarginContainer" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 300.0
+margin_top = -227.0
+margin_right = -300.0
+margin_bottom = -194.0
+custom_constants/margin_right = 0
+custom_constants/margin_top = 0
+custom_constants/margin_left = 0
+custom_constants/margin_bottom = 0
+script = ExtResource( 13 )
+max_size = Vector2( 500, -1 )
+
+[node name="BossHp" type="ProgressBar" parent="MaxSizeContainer3"]
+margin_right = 500.0
+margin_bottom = 33.0
+custom_fonts/font = SubResource( 16 )
+rounded = true
+script = ExtResource( 8 )
+
+[node name="Tween" type="Tween" parent="MaxSizeContainer3/BossHp"]
+
+[node name="Area2D" type="Area2D" parent="MaxSizeContainer3/BossHp"]
+collision_layer = 0
+collision_mask = 122
+script = ExtResource( 14 )
+
+[node name="ColorRect" type="ColorRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -1.0
+margin_bottom = -1.0
+color = Color( 1, 1, 1, 0 )
+
 [node name="Mobile" type="Control" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -344,42 +380,6 @@ offset = Vector2( 16, 0 )
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Warning"]
 anims/Flash = SubResource( 8 )
 anims/RESET = SubResource( 9 )
-
-[node name="MaxSizeContainer3" type="MarginContainer" parent="."]
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 300.0
-margin_top = -227.0
-margin_right = -300.0
-margin_bottom = -194.0
-custom_constants/margin_right = 0
-custom_constants/margin_top = 0
-custom_constants/margin_left = 0
-custom_constants/margin_bottom = 0
-script = ExtResource( 13 )
-max_size = Vector2( 500, -1 )
-
-[node name="BossHp" type="ProgressBar" parent="MaxSizeContainer3"]
-margin_right = 500.0
-margin_bottom = 33.0
-custom_fonts/font = SubResource( 16 )
-rounded = true
-script = ExtResource( 8 )
-
-[node name="Tween" type="Tween" parent="MaxSizeContainer3/BossHp"]
-
-[node name="Area2D" type="Area2D" parent="MaxSizeContainer3/BossHp"]
-collision_layer = 0
-collision_mask = 122
-script = ExtResource( 14 )
-
-[node name="ColorRect" type="ColorRect" parent="."]
-modulate = Color( 1, 1, 1, 0 )
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_top = -1.0
-margin_bottom = -1.0
 
 [node name="Pause" type="Button" parent="."]
 pause_mode = 2

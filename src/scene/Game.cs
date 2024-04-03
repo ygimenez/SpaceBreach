@@ -208,8 +208,8 @@ namespace SpaceBreach.scene {
 			}
 
 			var rect = GetNode<ColorRect>("ColorRect");
-			rect.Modulate = Colors.White;
-			CreateTween().TweenProperty(rect, "modulate", new Color(Colors.White, 0), 2);
+			rect.Color = Colors.White;
+			CreateTween().TweenProperty(rect, "color", new Color(Colors.White, 0), 2);
 		}
 
 		public bool IsGameOver() {
