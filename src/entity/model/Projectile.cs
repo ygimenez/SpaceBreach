@@ -42,9 +42,7 @@ namespace SpaceBreach.entity.model {
 
 				GlobalTranslate(ang * Speed * Global.ACTION_SPEED * Engine.TimeScale);
 			}
-		}
 
-		public override void _Process(float delta) {
 			foreach (var area in GetOverlappingAreas()) {
 				if (area is Entity e) {
 					OnHit(e);

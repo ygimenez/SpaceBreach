@@ -8,7 +8,7 @@ namespace SpaceBreach.entity.enemy {
 	public abstract class Waver : Enemy {
 		private int _angle;
 
-		protected Waver() : base(hp: 125, 0.75f, speed: 0.35f) {
+		protected Waver() : base(hp: 75, 0.75f, speed: 0.35f) {
 		}
 
 		protected override bool Shoot() {

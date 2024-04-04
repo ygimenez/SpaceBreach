@@ -303,7 +303,7 @@ namespace SpaceBreach.entity.enemy.boss {
 				for (var j = 0; j < 25; j++) {
 					if (Dying || Game.IsGameOver()) return;
 
-					var rotSpeed = invert ? -1 : 1;
+					var rotSpeed = invert ? -0.5f : 0.5f;
 
 					for (var i = 0; i < 8; i++) {
 						if (Dying || Game.IsGameOver()) return;

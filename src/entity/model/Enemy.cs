@@ -25,19 +25,19 @@ namespace SpaceBreach.entity.model {
 
 		protected Enemy(uint hp, float attackRate = 1, float speed = 1) : base(hp, speed) {
 			AttackRate = attackRate;
-
 			_drop = Utils.Rng.Randfn() > 0.9;
-			if (_drop) {
-				GetNode<Node2D>("Sprite").SelfModulate = Colors.Yellow;
-			}
 		}
 
 		public override void _Ready() {
 			var game = Game;
 
-			ActionSpeed = 1 + 0.2f * (game.Level - 1);
-			BaseHp = Hp = (uint) (BaseHp * game.Level * (_drop ? 1.5f : 1));
+			ActionSpeed = 1 + 0.1f * (game.Level - 1);
+			BaseHp = Hp = (uint) (BaseHp * game.Level * (_drop ? 1.25f : 1));
 			Cooldown = new Cooldown(game, this, 500);
+
+			if (_drop) {
+				GetNode<Node2D>("Sprite").SelfModulate = Colors.Yellow;
+			}
 
 			Connect("area_entered", this, nameof(_AreaEntered));
 			base._Ready();

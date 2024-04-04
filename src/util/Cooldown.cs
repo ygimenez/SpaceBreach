@@ -33,7 +33,7 @@ namespace SpaceBreach.util {
 		}
 
 		public bool Ready() {
-			if (_source.Dying || _game.IsGameOver() || Paused) return false;
+			if (_source.Dying || _game.IsGameOver() || Paused || !_source.Visible) return false;
 
 			return _first || _game.Tick - _lastTick >= Time / _source.ActionSpeed;
 		}
