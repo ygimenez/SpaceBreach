@@ -121,7 +121,7 @@ namespace SpaceBreach.scene {
 			{(Highscore > 0 ? $"Highscore: {Highscore}" : "")}
 			".Trim();
 
-			if (!IsGameOver() && Boss == null && Utils.Rng.Randf() > 0.9 && SpawnPool > 0) {
+			if (!IsGameOver() && Boss == null && Utils.Rng.Randf() > 0.95 && SpawnPool > 0) {
 				var world = GetSafeArea().GetNode<Node2D>("World");
 
 				var chosen = _enemies.Random();
@@ -145,11 +145,12 @@ namespace SpaceBreach.scene {
 
 		public override void _PhysicsProcess(float delta) {
 			if (TextLeft == 0) {
-				if (Tick++ % 2000 == 0 && SpawnPool < Level * 8) {
-					SpawnPool++;
-				}
+				Tick++;
 
 				SpawnTick = Math.Min(SpawnTick + 1, Level * 10_000);
+				if (SpawnTick % 2000 == 0) {
+					SpawnPool++;
+				}
 			}
 
 			GetSafeArea().GetNode<CPUParticles2D>("Stars").With(s => {

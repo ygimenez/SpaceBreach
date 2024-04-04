@@ -81,7 +81,10 @@ namespace SpaceBreach.entity.model {
 		}
 
 		public override void _ExitTree() {
-			Game.SpawnPool++;
+			if (!(this is ICannotSpawn)) {
+				Game.SpawnPool++;
+			}
+
 			if (this is IBoss) {
 				Game.Boss = null;
 			}
