@@ -30,11 +30,21 @@ namespace SpaceBreach.entity.model {
 			Damage = damage;
 		}
 
-		public override void _Process(float delta) {
+		public override void _PhysicsProcess(float delta) {
 			if (Speed != 0) {
-				GlobalTranslate(Vector2.Up.Rotated(Rotation) * Speed * Global.ACTION_SPEED * Engine.TimeScale);
-			}
+				var vec = Vector2.Up;
+				var num1 = Utils.FSin(RotationDegrees);
+				var num2 = Utils.FCos(RotationDegrees);
+				var ang = new Vector2(
+					vec.x * num2 - vec.y * num1,
+					vec.x * num1 + vec.y * num2
+				);
 
+				GlobalTranslate(ang * Speed * Global.ACTION_SPEED * Engine.TimeScale);
+			}
+		}
+
+		public override void _Process(float delta) {
 			foreach (var area in GetOverlappingAreas()) {
 				if (area is Entity e) {
 					OnHit(e);
@@ -93,6 +103,7 @@ namespace SpaceBreach.entity.model {
 
 		public void Release() {
 			if (Released) return;
+
 			Released = true;
 
 			if (GetParent() != null) {

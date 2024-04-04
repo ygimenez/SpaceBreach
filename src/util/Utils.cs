@@ -195,7 +195,8 @@ namespace SpaceBreach.util {
 			ghost.Position = source.ToLocal(copy.GlobalPosition);
 			ghost.Rotation = copy.GetParent<Node2D>().Rotation;
 			ghost.Modulate = Colors.MidnightBlue;
-			source.AddChildBelowNode(copy.GetParent(), ghost);
+			source.AddChild(ghost);
+			source.MoveChild(ghost, 0);
 
 			var tween = ghost.CreateTween();
 			tween.TweenProperty(ghost, "modulate", new Color(Colors.MidnightBlue, 0), duration);
@@ -222,11 +223,11 @@ namespace SpaceBreach.util {
 		}
 
 		public static float FCos(float deg) {
-			return Cos[(int) (deg * 10 % 3600)];
+			return Cos[(int) Mathf.PosMod(deg * 10, 3600)];
 		}
 
 		public static float FSin(float deg) {
-			return Sin[(int) (deg * 10 % 3600)];
+			return Sin[(int) Mathf.PosMod(deg * 10, 3600)];
 		}
 	}
 }

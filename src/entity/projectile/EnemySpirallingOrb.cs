@@ -10,7 +10,7 @@ namespace SpaceBreach.entity.projectile {
 		private Vector2 _epicenter;
 		private float _angle, _radius;
 
-		protected EnemySpirallingOrb() : base(speed: 5, damage: 10) {
+		protected EnemySpirallingOrb() : base(speed: 3, damage: 10) {
 		}
 
 		public override void _Ready() {
@@ -18,7 +18,7 @@ namespace SpaceBreach.entity.projectile {
 			_angle = RotationDegrees;
 		}
 
-		public override void _Process(float delta) {
+		public override void _PhysicsProcess(float delta) {
 			_angle += RotationSpeed;
 			_radius += Speed;
 
