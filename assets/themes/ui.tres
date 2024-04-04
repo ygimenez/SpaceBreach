@@ -16,6 +16,7 @@
 [ext_resource path="res://assets/textures/updown.tres" type="Texture" id=14]
 
 [sub_resource type="AtlasTexture" id=6]
+flags = 1
 atlas = ExtResource( 3 )
 region = Rect2( 48, 0, 16, 32 )
 
@@ -24,14 +25,17 @@ region = Rect2( 48, 0, 16, 32 )
 [sub_resource type="StyleBoxEmpty" id=8]
 
 [sub_resource type="AtlasTexture" id=3]
+flags = 1
 atlas = ExtResource( 3 )
 region = Rect2( 32, 32, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=10]
+flags = 1
 atlas = ExtResource( 3 )
 region = Rect2( 16, 32, 16, 16 )
 
 [sub_resource type="AtlasTexture" id=2]
+flags = 1
 atlas = ExtResource( 3 )
 region = Rect2( 41, 19, 9, 10 )
 
@@ -56,10 +60,12 @@ border_width_bottom = 1
 border_color = Color( 1, 1, 1, 1 )
 
 [sub_resource type="AtlasTexture" id=14]
+flags = 1
 atlas = ExtResource( 3 )
 region = Rect2( 32, 11, 16, 5 )
 
 [sub_resource type="AtlasTexture" id=12]
+flags = 1
 atlas = ExtResource( 3 )
 region = Rect2( 48, 48, 32, 16 )
 

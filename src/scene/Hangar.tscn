@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://src/scene/BaseMenu.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/scene/Hangar.cs" type="Script" id=2]
+
+[node name="Control" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+
+[node name="Label" parent="." index="1"]
+margin_right = 260.0
+text = "HANGAR"
+
+[node name="Ships" type="GridContainer" parent="." index="2"]
+margin_left = 400.0
+margin_top = 6.0
+margin_right = 792.0
+margin_bottom = 594.0
+columns = 4
+
+[node name="Description" type="Label" parent="." index="3"]
+margin_left = 8.0
+margin_top = 96.0
+margin_right = 392.0
+margin_bottom = 594.0

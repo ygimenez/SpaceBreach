@@ -19,6 +19,9 @@ namespace SpaceBreach.entity.model {
 		[Export]
 		public float AttackRate;
 
+		[Export]
+		public float Weight;
+
 		protected Cooldown Cooldown;
 		private bool _tweened;
 		private bool _enraged;
@@ -69,7 +72,7 @@ namespace SpaceBreach.entity.model {
 		}
 
 		public uint GetCost() {
-			return (uint) (BaseHp * AttackRate);
+			return (uint) (BaseHp * AttackRate * Cannons.Count);
 		}
 
 		protected abstract bool Shoot();

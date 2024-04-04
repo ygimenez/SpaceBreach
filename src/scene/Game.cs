@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Godot;
 using SpaceBreach.entity.interfaces;
 using SpaceBreach.entity.misc;
@@ -11,10 +9,27 @@ using SpaceBreach.util;
 
 namespace SpaceBreach.scene {
 	public abstract class Game : Control {
-		private readonly List<Type> _enemies = typeof(Enemy).Assembly
-			.GetTypes()
-			.Where(t => t.IsSubclassOf(typeof(Enemy)))
-			.ToList();
+		private static readonly WeightedList<Type> _enemies = new WeightedList<Type>();
+
+		static Game() {
+			var enemies = typeof(Enemy).Assembly
+				.GetTypes()
+				.Where(t => t.IsSubclassOf(typeof(Enemy)) && !typeof(ICannotSpawn).IsAssignableFrom(t))
+				.Select(t => Utils.Load(t).Instance<Enemy>())
+				.ToList();
+
+			var max = enemies
+				.Where(e => !(e is IBoss))
+				.Max(e => e.GetCost());
+
+			foreach (var enemy in enemies) {
+				if (enemy is IBoss) {
+					_enemies.Add(enemy.GetType(), int.MaxValue);
+				} else {
+					_enemies.Add(enemy.GetType(), (int) (max - enemy.GetCost()));
+				}
+			}
+		}
 
 		private bool _online;
 		private uint _score;
@@ -124,7 +139,7 @@ namespace SpaceBreach.scene {
 			if (!IsGameOver() && Boss == null && Utils.Rng.Randf() > 0.95 && SpawnPool > 0) {
 				var world = GetSafeArea().GetNode<Node2D>("World");
 
-				var chosen = _enemies.Random();
+				var chosen = _enemies.Next();
 				if (typeof(ICannotSpawn).IsAssignableFrom(chosen)) return;
 				if (typeof(IBoss).IsAssignableFrom(chosen) != (SpawnTick / 10_000 == Level)) return;
 

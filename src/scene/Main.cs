@@ -64,7 +64,7 @@ namespace SpaceBreach.scene {
 		}
 
 		private void _PlayPressed() {
-			GetTree().Append("res://src/scene/Game.tscn");
+			GetTree().Append("res://src/scene/Hangar.tscn");
 		}
 
 		private void _LeaderboardPressed() {

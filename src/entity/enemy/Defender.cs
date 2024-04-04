@@ -82,13 +82,12 @@ namespace SpaceBreach.entity.enemy {
 			var parent = this.FindParent<Mothership>();
 			if (!parent.Dying && parent.Enraged && _posFac >= 1 && _radius == _tgtRadius && Utils.Rng.Randf() > 0.9f) {
 				var world = Game.GetSafeArea().GetNode<Node2D>("World");
-				var game = Game;
 
 				foreach (Position2D cannon in Cannons) {
 					world.AddChild(Projectile.Poll<EnemyBullet>().With(p => {
 						p.Source = this;
 						p.GlobalPosition = world.ToLocal(cannon.GlobalPosition);
-						p.Rotation = game.Player.GlobalPosition.AngleToPoint(cannon.GlobalPosition) + Mathf.Deg2Rad(90);
+						p.Rotation = Game.Player.GlobalPosition.AngleToPoint(cannon.GlobalPosition) + Mathf.Deg2Rad(90);
 					}));
 				}
 

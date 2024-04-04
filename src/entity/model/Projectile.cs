@@ -105,7 +105,7 @@ namespace SpaceBreach.entity.model {
 			Released = true;
 
 			if (GetParent() != null) {
-				GetParent().RemoveChild(this);
+				GetParent().CallDeferred("remove_child", this);
 			}
 
 			Pool.TryGetValue(GetType(), out var pool);
