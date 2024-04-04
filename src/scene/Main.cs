@@ -1,9 +1,34 @@
+using System.Linq;
 using Godot;
+using SpaceBreach.entity.interfaces;
+using SpaceBreach.entity.model;
 using SpaceBreach.manager;
 using SpaceBreach.util;
 
 namespace SpaceBreach.scene {
 	public abstract class Main : Control {
+		static Main() {
+			var subs = typeof(Projectile).Assembly
+				.GetTypes()
+				.Where(t => t.IsSubclassOf(typeof(Projectile)))
+				.ToList();
+
+			foreach (var type in subs) {
+				if (type.Namespace != null) {
+					if (typeof(ISplash).IsAssignableFrom(type)) {
+						continue;
+					}
+
+					if (type.Namespace.ToLower().Contains("player")) {
+						Projectile.Preload(type, 64);
+						continue;
+					}
+				}
+
+				Projectile.Preload(type, 1024);
+			}
+		}
+
 		public override async void _Ready() {
 			new ConfigFile().With(ed => ed.Load("res://export_presets.cfg"));
 			GetNode<Label>("Version").Text = Global.VERSION;

@@ -33,7 +33,6 @@ namespace SpaceBreach.entity.model {
 			var game = Game;
 			AtkCd = new Cooldown(game, this, 200);
 			SpCd = new CostCooldown(game, this, 2000);
-			ZIndex = 1;
 
 			var contGroup = GetNode("Contrails");
 			if (contGroup != null && contGroup.GetChildCount() > 0) {
@@ -104,6 +103,7 @@ namespace SpaceBreach.entity.model {
 
 		public override void AddHp(Entity source, long value) {
 			if (value < 0 && _iframes > 0) return;
+
 			base.AddHp(source, value);
 		}
 
@@ -116,6 +116,10 @@ namespace SpaceBreach.entity.model {
 		protected override Task OnDestroy() {
 			base.OnDestroy();
 			Game.PlayerDeath(this);
+			GetParent().AddChild(GD.Load<PackedScene>("res://src/entity/misc/PlayerDeath.tscn").Instance<Node2D>().With(d =>
+				d.Position = Position
+			));
+
 			Audio.Cue("res://assets/sounds/player_explode.wav");
 			return Task.CompletedTask;
 		}

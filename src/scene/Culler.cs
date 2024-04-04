@@ -1,4 +1,5 @@
 using Godot;
+using SpaceBreach.entity.model;
 
 namespace SpaceBreach.scene {
 	public abstract class Culler : Area2D {
@@ -7,7 +8,11 @@ namespace SpaceBreach.scene {
 		}
 
 		public void _AreaExited(Area2D entity) {
-			entity.QueueFree();
+			if (entity is Projectile p) {
+				p.Release();
+			} else {
+				entity.QueueFree();
+			}
 		}
 	}
 }

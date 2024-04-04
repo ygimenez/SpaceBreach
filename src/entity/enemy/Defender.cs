@@ -2,6 +2,7 @@ using Godot;
 using SpaceBreach.entity.enemy.boss;
 using SpaceBreach.entity.interfaces;
 using SpaceBreach.entity.model;
+using SpaceBreach.entity.projectile;
 using SpaceBreach.util;
 
 namespace SpaceBreach.entity.enemy {
@@ -64,8 +65,8 @@ namespace SpaceBreach.entity.enemy {
 			}
 
 			GlobalPosition = PreviousOrbit.LinearInterpolate(TargetOrbit, _posFac) + new Vector2(
-				Mathf.Cos(Mathf.Deg2Rad(parent.DefAngle * Speed + 36 * _index)) * _radius,
-				Mathf.Sin(Mathf.Deg2Rad(parent.DefAngle * Speed + 36 * _index)) * _radius
+				Utils.FCos(parent.DefAngle * Speed + 36 * _index) * _radius,
+				Utils.FSin(parent.DefAngle * Speed + 36 * _index) * _radius
 			);
 
 			if (_expanded && _posFac > 0.5) {
@@ -80,12 +81,11 @@ namespace SpaceBreach.entity.enemy {
 		protected override bool Shoot() {
 			var parent = this.FindParent<Mothership>();
 			if (!parent.Dying && parent.Enraged && _posFac >= 1 && _radius == _tgtRadius && Utils.Rng.Randf() > 0.9f) {
-				var proj = GD.Load<PackedScene>("res://src/entity/projectile/EnemyBullet.tscn");
 				var world = Game.GetSafeArea().GetNode<Node2D>("World");
 				var game = Game;
 
 				foreach (Position2D cannon in Cannons) {
-					world.AddChild(proj.Instance<Projectile>().With(p => {
+					world.AddChild(Projectile.Poll<EnemyBullet>().With(p => {
 						p.Source = this;
 						p.GlobalPosition = world.ToLocal(cannon.GlobalPosition);
 						p.Rotation = game.Player.GlobalPosition.AngleToPoint(cannon.GlobalPosition) + Mathf.Deg2Rad(90);

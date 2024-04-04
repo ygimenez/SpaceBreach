@@ -1,6 +1,7 @@
 using Godot;
 using SpaceBreach.entity.interfaces;
 using SpaceBreach.entity.model;
+using SpaceBreach.entity.projectile;
 using SpaceBreach.util;
 
 namespace SpaceBreach.entity.enemy {
@@ -16,11 +17,10 @@ namespace SpaceBreach.entity.enemy {
 		}
 
 		protected override bool Shoot() {
-			var proj = GD.Load<PackedScene>("res://src/entity/projectile/EnemyBullet.tscn");
 			var world = Game.GetSafeArea().GetNode<Node2D>("World");
 
 			foreach (Position2D cannon in Cannons) {
-				world.AddChild(proj.Instance<Projectile>().With(p => {
+				world.AddChild(Projectile.Poll<EnemyBullet>().With(p => {
 					p.Source = this;
 					p.GlobalPosition = world.ToLocal(cannon.GlobalPosition);
 					p.RotationDegrees = RotationDegrees + 180;

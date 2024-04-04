@@ -2,19 +2,21 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/marker.png-7a97a9be6e0cba85a4e2cb590d97440b.stex"
+path.s3tc="res://.import/marker.png-7a97a9be6e0cba85a4e2cb590d97440b.s3tc.stex"
+path.etc="res://.import/marker.png-7a97a9be6e0cba85a4e2cb590d97440b.etc.stex"
 metadata={
-"vram_texture": false
+"imported_formats": [ "s3tc", "etc" ],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/sprites/marker.png"
-dest_files=[ "res://.import/marker.png-7a97a9be6e0cba85a4e2cb590d97440b.stex" ]
+dest_files=[ "res://.import/marker.png-7a97a9be6e0cba85a4e2cb590d97440b.s3tc.stex", "res://.import/marker.png-7a97a9be6e0cba85a4e2cb590d97440b.etc.stex" ]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/lossy_quality=0.7
 compress/hdr_mode=0
 compress/bptc_ldr=0

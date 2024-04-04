@@ -19,7 +19,7 @@ namespace SpaceBreach.scene {
 		private bool _online;
 		private uint _score;
 		public ulong Tick;
-		public ulong SpawnTick;
+		public ulong SpawnTick = 10000;
 		public uint Score {
 			get => _score;
 			set => _score = (uint) Mathf.Max(0, value);
@@ -201,8 +201,8 @@ namespace SpaceBreach.scene {
 					case Enemy e:
 						e.Kill();
 						break;
-					case Projectile _:
-						child.QueueFree();
+					case Projectile p:
+						p.Release();
 						break;
 				}
 			}

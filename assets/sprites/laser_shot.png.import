@@ -2,19 +2,21 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/laser_shot.png-0f38dd37a5148e2b45a66875a1511b8a.stex"
+path.s3tc="res://.import/laser_shot.png-0f38dd37a5148e2b45a66875a1511b8a.s3tc.stex"
+path.etc="res://.import/laser_shot.png-0f38dd37a5148e2b45a66875a1511b8a.etc.stex"
 metadata={
-"vram_texture": false
+"imported_formats": [ "s3tc", "etc" ],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/sprites/laser_shot.png"
-dest_files=[ "res://.import/laser_shot.png-0f38dd37a5148e2b45a66875a1511b8a.stex" ]
+dest_files=[ "res://.import/laser_shot.png-0f38dd37a5148e2b45a66875a1511b8a.s3tc.stex", "res://.import/laser_shot.png-0f38dd37a5148e2b45a66875a1511b8a.etc.stex" ]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/lossy_quality=0.7
 compress/hdr_mode=0
 compress/bptc_ldr=0

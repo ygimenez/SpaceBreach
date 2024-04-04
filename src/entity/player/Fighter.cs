@@ -1,5 +1,6 @@
 ﻿using Godot;
 using SpaceBreach.entity.model;
+using SpaceBreach.entity.projectile;
 using SpaceBreach.manager;
 using SpaceBreach.util;
 
@@ -9,14 +10,13 @@ namespace SpaceBreach.entity.player {
 		}
 
 		protected override bool Shoot() {
-			var proj = GD.Load<PackedScene>("res://src/entity/projectile/PlayerBullet.tscn");
 			var world = Game.GetSafeArea().GetNode<Node2D>("World");
 
 			foreach (Position2D cannon in Cannons) {
 				for (var i = 0; i < Projectiles; i++) {
 					var offset = 30 / (Projectiles + 1) * (i + 1);
 
-					world.AddChild(proj.Instance<Projectile>().With(p => {
+					world.AddChild(Projectile.Poll<PlayerBullet>().With(p => {
 						p.Source = this;
 						p.GlobalPosition = world.ToLocal(cannon.GlobalPosition);
 						p.RotationDegrees = RotationDegrees + (15 - offset);
@@ -30,12 +30,11 @@ namespace SpaceBreach.entity.player {
 		}
 
 		protected override bool Special() {
-			var proj = GD.Load<PackedScene>("res://src/entity/projectile/PlayerBomb.tscn");
 			var world = Game.GetSafeArea().GetNode<Node2D>("World");
 
 			foreach (Position2D cannon in Cannons) {
 				for (var i = 0; i < Projectiles; i++) {
-					world.AddChild(proj.Instance<Projectile>().With(p => {
+					world.AddChild(Projectile.Poll<PlayerBomb>().With(p => {
 						p.Source = this;
 						p.GlobalPosition = world.ToLocal(cannon.GlobalPosition);
 						p.RotationDegrees = RotationDegrees;

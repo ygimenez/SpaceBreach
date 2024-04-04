@@ -40,7 +40,7 @@ window/size/viewport_height=600
 
 [editor_plugins]
 
-enabled=PoolStringArray( "res://addons/MaxSizeContainer/plugin.cfg" )
+enabled=PoolStringArray( "res://addons/ImportCleaner/plugin.cfg", "res://addons/MaxSizeContainer/plugin.cfg" )
 
 [global]
 
@@ -102,9 +102,15 @@ pause={
 
 project/assembly_name="SpaceBreach"
 
+[physics]
+
+2d/thread_model=2
+2d/cell_size=64
+
 [rendering]
 
 quality/driver/driver_name="GLES2"
 vram_compression/import_etc=true
 vram_compression/import_etc2=false
 environment/default_clear_color=Color( 0, 0, 0, 1 )
+quality/depth/hdr=false

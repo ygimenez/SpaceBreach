@@ -4,8 +4,9 @@
 [ext_resource path="res://src/entity/projectile/splash/PlayerExplosion.cs" type="Script" id=2]
 
 [sub_resource type="AtlasTexture" id=11]
+flags = 1
 atlas = ExtResource( 1 )
-region = Rect2( 0, 120, 960, 120 )
+region = Rect2( 0, 128, 1024, 128 )
 
 [sub_resource type="CircleShape2D" id=10]
 radius = 39.1152
@@ -63,6 +64,18 @@ tracks/3/keys = {
 "method": "queue_free"
 } ]
 }
+tracks/4/type = "value"
+tracks/4/path = NodePath(".:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0, 0.3, 0.8 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
 
 [sub_resource type="Animation" id=13]
 length = 0.001
@@ -101,6 +114,18 @@ tracks/2/keys = {
 "transitions": PoolRealArray( 1 ),
 "update": 0,
 "values": [ false ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath(".:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ) ]
 }
 
 [node name="Area2D" type="Area2D"]

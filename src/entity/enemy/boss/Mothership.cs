@@ -73,11 +73,14 @@ namespace SpaceBreach.entity.enemy.boss {
 		}
 
 		protected override bool Shoot() {
-			Cooldown.Paused = true;
-			NextSkill.Invoke()
-				.ContinueWith(_ => Cooldown.Paused = false);
-
+			UseSkill();
 			return true;
+		}
+
+		private async void UseSkill() {
+			Cooldown.Paused = true;
+			await NextSkill.Invoke();
+			Cooldown.Paused = false;
 		}
 
 		protected override async Task OnDestroy() {
@@ -90,7 +93,6 @@ namespace SpaceBreach.entity.enemy.boss {
 		private async Task LaserCross() {
 			var player = Game.Player;
 
-			var laser = GD.Load<PackedScene>("res://src/entity/projectile/splash/EnemyLaser.tscn");
 			var safe = Game.GetSafeArea();
 			var world = safe.GetNode<Node2D>("World");
 
@@ -103,7 +105,7 @@ namespace SpaceBreach.entity.enemy.boss {
 						safe.RectSize.y * Utils.Rng.RandiRange(0, 1)
 					);
 
-					world.AddChild(laser.Instance<Projectile>().With(l => {
+					world.AddChild(Projectile.Poll<EnemyLaser>(false).With(l => {
 						l.Source = this;
 						l.Position = offset;
 						l.Rotation = player.GlobalPosition.AngleToPoint(world.ToGlobal(offset)) + Mathf.Deg2Rad(90);
@@ -119,7 +121,7 @@ namespace SpaceBreach.entity.enemy.boss {
 						if (Dying || Game.IsGameOver()) return;
 
 						var offset = new Vector2(safe.RectSize.x * i, 0);
-						world.AddChild(laser.Instance<Projectile>().With(l => {
+						world.AddChild(Projectile.Poll<EnemyLaser>(false).With(l => {
 							l.Source = this;
 							l.Position = offset;
 							l.Rotation = player.GlobalPosition.AngleToPoint(world.ToGlobal(offset)) + Mathf.Deg2Rad(90);
@@ -132,10 +134,9 @@ namespace SpaceBreach.entity.enemy.boss {
 		}
 
 		private async Task MeteorMaze() {
-			var meteor = GD.Load<PackedScene>("res://src/entity/projectile/EnemyMeteor.tscn");
-			var sample = meteor.Instance<EnemyMeteor>();
+			var sample = Projectile.Poll<EnemyMeteor>();
 			var size = sample.Size;
-			sample.QueueFree();
+			sample.Release();
 
 			var safe = Game.GetSafeArea();
 			var world = safe.GetNode<Node2D>("World");
@@ -161,10 +162,10 @@ namespace SpaceBreach.entity.enemy.boss {
 						}
 
 						var offset = new Vector2(
-							Mathf.Cos(Mathf.Deg2Rad(10 * i)) * radius,
-							Mathf.Sin(Mathf.Deg2Rad(10 * i)) * radius
+							Utils.FCos(10 * i) * radius,
+							Utils.FSin(10 * i) * radius
 						);
-						world.AddChild(meteor.Instance<EnemyMeteor>().With(l => {
+						world.AddChild(Projectile.Poll<EnemyMeteor>().With(l => {
 							l.Source = this;
 							l.Position = safe.RectSize / 2 + offset;
 							l.Target = safe.RectSize / 2;
@@ -218,7 +219,7 @@ namespace SpaceBreach.entity.enemy.boss {
 								break;
 						}
 
-						world.AddChild(meteor.Instance<Projectile>().With(l => {
+						world.AddChild(Projectile.Poll<EnemyMeteor>().With(l => {
 							l.Source = this;
 							l.Position = offset;
 							l.RotationDegrees = 90 * dir;
@@ -233,18 +234,16 @@ namespace SpaceBreach.entity.enemy.boss {
 		private async Task MortarBarrage() {
 			var player = Game.Player;
 
-			var laser = GD.Load<PackedScene>("res://src/entity/projectile/splash/EnemyMortar.tscn");
 			var safe = Game.GetSafeArea();
 			var world = safe.GetNode<Node2D>("World");
 
 			if (Enraged) {
-				var mortar = GD.Load<PackedScene>("res://src/entity/projectile/splash/EnemyMortar.tscn");
-				var sample = mortar.Instance<EnemyMortar>();
+				var sample = Projectile.Poll<EnemyMortar>(false);
 				var size = sample.Size;
-				sample.QueueFree();
+				sample.Release();
 
 				var hitPos = Vector2.Zero;
-				world.AddChild(laser.Instance<Projectile>().With(l => {
+				world.AddChild(Projectile.Poll<EnemyMortar>(false).With(l => {
 					l.Source = this;
 					l.Position = hitPos = player.Position;
 				}));
@@ -273,7 +272,7 @@ namespace SpaceBreach.entity.enemy.boss {
 						}
 
 						var distance = i;
-						world.AddChild(laser.Instance<Projectile>().With(l => {
+						world.AddChild(Projectile.Poll<EnemyMortar>(false).With(l => {
 							l.Source = this;
 							l.Position = hitPos + offset * distance;
 						}));
@@ -285,7 +284,7 @@ namespace SpaceBreach.entity.enemy.boss {
 				for (var i = 0; i < 10; i++) {
 					if (Dying || Game.IsGameOver()) return;
 
-					world.AddChild(laser.Instance<Projectile>().With(l => {
+					world.AddChild(Projectile.Poll<EnemyMortar>(false).With(l => {
 						l.Source = this;
 						l.Position = player.Position + player.Size * new Vector2(Utils.Rng.Randf() - 0.5f, Utils.Rng.Randf() - 0.5f) * 5;
 					}));
@@ -296,7 +295,6 @@ namespace SpaceBreach.entity.enemy.boss {
 		}
 
 		private async Task BulletHell() {
-			var orb = GD.Load<PackedScene>("res://src/entity/projectile/EnemySpirallingOrb.tscn");
 			var safe = Game.GetSafeArea();
 			var world = safe.GetNode<Node2D>("World");
 
@@ -311,7 +309,7 @@ namespace SpaceBreach.entity.enemy.boss {
 						if (Dying || Game.IsGameOver()) return;
 
 						var ang = 45 * i;
-						world.AddChild(orb.Instance<EnemySpirallingOrb>().With(l => {
+						world.AddChild(Projectile.Poll<EnemySpirallingOrb>().With(l => {
 							l.Source = this;
 							l.Position = Position;
 							l.RotationDegrees = ang;
@@ -330,7 +328,7 @@ namespace SpaceBreach.entity.enemy.boss {
 						if (Dying || Game.IsGameOver()) return;
 
 						var ang = 60 + 30 * i;
-						world.AddChild(orb.Instance<EnemySpirallingOrb>().With(l => {
+						world.AddChild(Projectile.Poll<EnemySpirallingOrb>().With(l => {
 							l.Source = this;
 							l.Position = Position;
 							l.RotationDegrees = ang;

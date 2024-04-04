@@ -1,5 +1,6 @@
 using Godot;
 using SpaceBreach.entity.model;
+using SpaceBreach.util;
 
 namespace SpaceBreach.entity.projectile {
 	public abstract class EnemySpirallingOrb : Projectile {
@@ -9,7 +10,7 @@ namespace SpaceBreach.entity.projectile {
 		private Vector2 _epicenter;
 		private float _angle, _radius;
 
-		protected EnemySpirallingOrb() : base(speed: 3, damage: 10) {
+		protected EnemySpirallingOrb() : base(speed: 5, damage: 10) {
 		}
 
 		public override void _Ready() {
@@ -22,9 +23,15 @@ namespace SpaceBreach.entity.projectile {
 			_radius += Speed;
 
 			Position = _epicenter + new Vector2(
-				Mathf.Cos(Mathf.Deg2Rad(_angle)) * _radius,
-				Mathf.Sin(Mathf.Deg2Rad(_angle)) * _radius
+				Utils.FCos(_angle) * _radius,
+				Utils.FSin(_angle) * _radius
 			);
+
+			foreach (var area in GetOverlappingAreas()) {
+				if (area is Entity e) {
+					OnHit(e);
+				}
+			}
 		}
 	}
 }

@@ -1,17 +1,18 @@
 using Godot;
 using SpaceBreach.entity.model;
+using SpaceBreach.entity.projectile.splash;
 using SpaceBreach.manager;
 using SpaceBreach.util;
 
 namespace SpaceBreach.entity.projectile {
 	public abstract class PlayerBomb : Projectile {
-		private float _fuse = 150;
+		private float _fuse = 50;
 
-		protected PlayerBomb() : base(speed: 1, damage: 0) {
+		protected PlayerBomb() : base(speed: 3, damage: 0) {
 		}
 
-		public override void _PhysicsProcess(float delta) {
-			base._PhysicsProcess(delta);
+		public override void _Process(float delta) {
+			base._Process(delta);
 
 			if ((_fuse -= Engine.TimeScale) == 0) {
 				OnHit(null);
@@ -19,14 +20,13 @@ namespace SpaceBreach.entity.projectile {
 		}
 
 		protected override void OnHit(Entity entity) {
-			var explode = GD.Load<PackedScene>("res://src/entity/projectile/splash/PlayerExplosion.tscn");
-
-			GetParent().CallDeferred("add_child", explode.Instance<Projectile>().With(p => {
+			GetParent().CallDeferred("add_child", Poll<PlayerExplosion>(false).With(p => {
 				p.Source = Source;
 				p.Position = Position;
-				p.Damage += (uint) (p.Damage * (1 - _fuse / 150f));
+				p.Damage += (uint) (p.Damage * (1 - _fuse / 50));
 			}));
-			QueueFree();
+
+			Release();
 			Audio.Cue("res://assets/sounds/bomb_explode.wav");
 		}
 	}

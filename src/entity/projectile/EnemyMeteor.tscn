@@ -4,8 +4,9 @@
 [ext_resource path="res://src/entity/projectile/EnemyMeteor.cs" type="Script" id=2]
 
 [sub_resource type="AtlasTexture" id=5]
+flags = 1
 atlas = ExtResource( 1 )
-region = Rect2( 100, 108, 60, 52 )
+region = Rect2( 68, 76, 60, 52 )
 
 [sub_resource type="Animation" id=6]
 length = 0.001

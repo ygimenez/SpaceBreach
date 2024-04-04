@@ -15,6 +15,16 @@ namespace SpaceBreach.util {
 			Seed = (ulong) (DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond)
 		};
 
+		private static readonly float[] Cos = new float[3600];
+		private static readonly float[] Sin = new float[3600];
+
+		static Utils() {
+			for (var i = 0; i < 3600; i++) {
+				Cos[i] = Mathf.Cos(Mathf.Deg2Rad(i / 10f));
+				Sin[i] = Mathf.Sin(Mathf.Deg2Rad(i / 10f));
+			}
+		}
+
 		public static void Connect(this Node node, string signal, Object self, string method, params object[] args) {
 			node.Connect(signal, self, method, new Array(args));
 		}
@@ -185,7 +195,7 @@ namespace SpaceBreach.util {
 			ghost.Position = source.ToLocal(copy.GlobalPosition);
 			ghost.Rotation = copy.GetParent<Node2D>().Rotation;
 			ghost.Modulate = Colors.MidnightBlue;
-			source.AddChild(ghost);
+			source.AddChildBelowNode(copy.GetParent(), ghost);
 
 			var tween = ghost.CreateTween();
 			tween.TweenProperty(ghost, "modulate", new Color(Colors.MidnightBlue, 0), duration);
@@ -209,6 +219,14 @@ namespace SpaceBreach.util {
 				node.GetTree().CreateTimer(Mathf.Stepify(millis * Engine.TimeScale, tickTime) / 1000, false),
 				"timeout"
 			);
+		}
+
+		public static float FCos(float deg) {
+			return Cos[(int) (deg * 10 % 3600)];
+		}
+
+		public static float FSin(float deg) {
+			return Sin[(int) (deg * 10 % 3600)];
 		}
 	}
 }

@@ -1,11 +1,15 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://assets/sprites/projectiles.png" type="Texture" id=1]
 [ext_resource path="res://src/entity/projectile/PlayerBomb.cs" type="Script" id=2]
 
 [sub_resource type="AtlasTexture" id=1]
+flags = 1
 atlas = ExtResource( 1 )
 region = Rect2( 3, 0, 12, 20 )
+
+[sub_resource type="RectangleShape2D" id=2]
+extents = Vector2( 6, 10 )
 
 [node name="Area2D" type="Area2D"]
 collision_layer = 4
@@ -19,7 +23,6 @@ __meta__ = {
 position = Vector2( 0, -10 )
 texture = SubResource( 1 )
 
-[node name="Collision" type="CollisionPolygon2D" parent="."]
-position = Vector2( -0.39991, -9.99998 )
-rotation = -3.14159
-polygon = PoolVector2Array( -4.39988, 10, -6.39991, -1.99996, -6.39994, -9.99996, 5.60006, -9.99999, 5.60009, -1.99999, 3.60012, 10 )
+[node name="Collision" type="CollisionShape2D" parent="."]
+position = Vector2( 0, -10 )
+shape = SubResource( 2 )

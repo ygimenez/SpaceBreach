@@ -1,7 +1,7 @@
-[gd_scene load_steps=29 format=2]
+[gd_scene load_steps=30 format=2]
 
 [ext_resource path="res://src/scene/Game.cs" type="Script" id=1]
-[ext_resource path="res://assets/textures/projectiles.tres" type="Texture" id=2]
+[ext_resource path="res://assets/sprites/projectiles.png" type="Texture" id=2]
 [ext_resource path="res://assets/themes/ui.tres" type="Theme" id=3]
 [ext_resource path="res://src/scene/Culler.cs" type="Script" id=4]
 [ext_resource path="res://src/scene/Activator.cs" type="Script" id=5]
@@ -21,8 +21,13 @@ border_width_left = 1
 border_width_right = 1
 border_color = Color( 1, 1, 1, 1 )
 
-[sub_resource type="AtlasTexture" id=2]
+[sub_resource type="AtlasTexture" id=17]
+flags = 1
 atlas = ExtResource( 2 )
+
+[sub_resource type="AtlasTexture" id=2]
+flags = 1
+atlas = SubResource( 17 )
 region = Rect2( 0, 0, 2, 24 )
 margin = Rect2( 0, 0, 0, -20 )
 
@@ -35,8 +40,9 @@ size = 60
 font_data = ExtResource( 6 )
 
 [sub_resource type="AtlasTexture" id=14]
+flags = 1
 atlas = ExtResource( 12 )
-region = Rect2( 49, 66, 30, 28 )
+region = Rect2( 80, 0, 30, 28 )
 
 [sub_resource type="Animation" id=8]
 resource_name = "Flash"
@@ -82,6 +88,7 @@ tracks/0/keys = {
 }
 
 [sub_resource type="AtlasTexture" id=11]
+flags = 1
 atlas = ExtResource( 12 )
 region = Rect2( 13, 3, 3, 3 )
 
@@ -97,6 +104,7 @@ extra_spacing_char = 10
 font_data = ExtResource( 6 )
 
 [sub_resource type="AtlasTexture" id=15]
+flags = 1
 atlas = ExtResource( 12 )
 region = Rect2( 1, 52, 14, 10 )
 
