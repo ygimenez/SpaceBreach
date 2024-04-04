@@ -26,7 +26,7 @@ namespace SpaceBreach.entity.model {
 		protected Enemy(uint hp, float attackRate = 1, float speed = 1) : base(hp, speed) {
 			AttackRate = attackRate;
 
-			_drop = true; //Utils.Rng.Randfn() > 0.9;
+			_drop = Utils.Rng.Randfn() > 0.9;
 			if (_drop) {
 				GetNode<Node2D>("Sprite").SelfModulate = Colors.Yellow;
 			}

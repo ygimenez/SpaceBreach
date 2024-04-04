@@ -147,10 +147,11 @@ namespace SpaceBreach.scene {
 			if (TextLeft == 0) {
 				Tick++;
 
-				SpawnTick = Math.Min(SpawnTick + 1, Level * 10_000);
 				if (SpawnTick % 2000 == 0) {
 					SpawnPool++;
 				}
+
+				SpawnTick = Math.Min(SpawnTick + 1, Level * 10_000);
 			}
 
 			GetSafeArea().GetNode<CPUParticles2D>("Stars").With(s => {
