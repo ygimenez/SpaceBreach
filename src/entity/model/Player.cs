@@ -72,7 +72,7 @@ namespace SpaceBreach.entity.model {
 			Translate(_velocity);
 			if (Engine.TimeScale < 1 && Game.Tick % 20 == 0) {
 				var world = Game.GetSafeArea().GetNode<Node2D>("World");
-				Utils.AddGhost(world, GetNode<Sprite>("Sprite"), 0.5f);
+				Utils.AddGhost(world, GetNode<Node2D>("Sprite"), 0.5f);
 			}
 
 			if (_iframes > 0) {

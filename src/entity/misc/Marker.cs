@@ -20,13 +20,13 @@ namespace SpaceBreach.entity.misc {
 			if (!IsInstanceValid(Tracked) || Tracked is ITracked t && t.Appeared) {
 				QueueFree();
 			} else {
-				var sprite = GetNode<Sprite>("Sprite");
+				var sprite = GetNode<Node2D>("Sprite");
 				var constraint = this.FindParent<Control>().GetGlobalRect();
 
 				GlobalPosition = Tracked.GlobalPosition.Clamp(constraint.Position, constraint.End);
 				sprite.Rotation = Tracked.Position.AngleToPoint(Position);
 
-				var skull = sprite.GetNode<Sprite>("Skull");
+				var skull = sprite.GetNode<Node2D>("Skull");
 				skull.Visible = Tracked is IBoss;
 				skull.Rotation = -sprite.Rotation;
 				Visible = true;

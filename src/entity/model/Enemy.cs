@@ -10,6 +10,7 @@ using SpaceBreach.util;
 namespace SpaceBreach.entity.model {
 	public abstract class Enemy : Entity, ITracked {
 		private readonly bool _drop;
+
 		private readonly List<Type> _drops = typeof(Pickup).Assembly
 			.GetTypes()
 			.Where(t => t.IsSubclassOf(typeof(Pickup)))
@@ -25,9 +26,9 @@ namespace SpaceBreach.entity.model {
 		protected Enemy(uint hp, float attackRate = 1, float speed = 1) : base(hp, speed) {
 			AttackRate = attackRate;
 
-			_drop = Utils.Rng.Randfn() > 0.9;
+			_drop = true; //Utils.Rng.Randfn() > 0.9;
 			if (_drop) {
-				SelfModulate = Colors.Yellow;
+				GetNode<Node2D>("Sprite").SelfModulate = Colors.Yellow;
 			}
 		}
 
@@ -76,10 +77,6 @@ namespace SpaceBreach.entity.model {
 		protected abstract void Move();
 
 		protected override void OnDamaged(Entity by, long value) {
-			if (by is Player p) {
-				p.SpCd.Credits += (uint) Mathf.Abs(Mathf.Min(value, BaseHp / 4f) * p.SpecialRate);
-			}
-
 			Audio.Cue("res://assets/sounds/enemy_hit.wav");
 		}
 
@@ -111,6 +108,7 @@ namespace SpaceBreach.entity.model {
 			var game = Game;
 			game.Score += (uint) ((this is IBoss ? BaseHp : GetCost()) * (1 + game.Streak / 10f) * (this is IBoss ? 5 : 1));
 			game.Streak++;
+			game.Player.SpCd.Credits += (uint) Mathf.Abs(BaseHp * game.Player.SpecialRate);
 
 			if (_drop) {
 				var world = Game.GetSafeArea().GetNode<Node2D>("World");

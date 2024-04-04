@@ -190,8 +190,8 @@ namespace SpaceBreach.util {
 			}
 		}
 
-		public static void AddGhost(Node2D source, Sprite copy, float duration) {
-			var ghost = (Sprite) copy.Duplicate();
+		public static void AddGhost(Node2D source, Node2D copy, float duration) {
+			var ghost = (Node2D) copy.Duplicate();
 			ghost.Position = source.ToLocal(copy.GlobalPosition);
 			ghost.Rotation = copy.GetParent<Node2D>().Rotation;
 			ghost.Modulate = Colors.MidnightBlue;
