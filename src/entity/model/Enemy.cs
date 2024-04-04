@@ -77,7 +77,7 @@ namespace SpaceBreach.entity.model {
 
 		protected override void OnDamaged(Entity by, long value) {
 			if (by is Player p) {
-				p.SpCd.Credits += (uint) Mathf.Abs(value * p.SpecialRate);
+				p.SpCd.Credits += (uint) Mathf.Abs(Mathf.Min(value, BaseHp / 4f) * p.SpecialRate);
 			}
 
 			Audio.Cue("res://assets/sounds/enemy_hit.wav");
