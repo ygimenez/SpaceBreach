@@ -10,7 +10,6 @@ namespace SpaceBreach.entity.projectile {
 		}
 
 		public override void _Process(float delta) {
-			base._Process(delta);
 			Speed = 0.8f * Mathf.Abs(Utils.FSin(_angle += 5));
 		}
 	}

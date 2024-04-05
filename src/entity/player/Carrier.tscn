@@ -1,33 +1,41 @@
 [gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://src/entity/player/Fighter.cs" type="Script" id=1]
+[ext_resource path="res://src/entity/player/Carrier.cs" type="Script" id=1]
 [ext_resource path="res://assets/sprites/ships.png" type="Texture" id=2]
 [ext_resource path="res://assets/sounds/player_shoot.wav" type="AudioStream" id=3]
 
 [sub_resource type="AtlasTexture" id=1]
 flags = 1
 atlas = ExtResource( 2 )
-region = Rect2( 0, 0, 28, 29 )
+region = Rect2( 29, 0, 28, 29 )
 
 [node name="Ship" type="Area2D"]
 collision_layer = 18
 collision_mask = 9
 script = ExtResource( 1 )
-Description = "Standard-issue UDF fighter, paired with a trusty MK-I Hull Breaker torpedo allows this nimble ship to defeat any foe.
+Description = "Heavily armored drone carrier, made from technology harvested from alien mothership debris.
+Requires good aiming and positioning skills, but greatly rewards those who can master it.
 
-Recommended for new players."
+Drones deal 10% more damage each time they ricochet."
 
 [node name="Sprite" type="Sprite" parent="."]
-position = Vector2( 0, 1 )
+position = Vector2( 0, -3 )
 texture = SubResource( 1 )
 
 [node name="Collision" type="CollisionPolygon2D" parent="."]
-polygon = PoolVector2Array( 0, -15, 14, 3, 14, 15, 0, 16, -14, 15, -14, 3 )
+position = Vector2( 0, -4 )
+polygon = PoolVector2Array( -3, -14, 3, -14, 12, -6, 14, -2, 14, 10, 12, 14, 0, 16, -12, 14, -14, 10, -14, -2, -12, -6 )
 
 [node name="Thrusters" type="Node2D" parent="."]
 
 [node name="Position2D" type="Position2D" parent="Thrusters"]
-position = Vector2( 0, 16 )
+position = Vector2( -6, 8 )
+__meta__ = {
+"_gizmo_extents_": 0.0
+}
+
+[node name="Position2D2" type="Position2D" parent="Thrusters"]
+position = Vector2( 6, 8 )
 __meta__ = {
 "_gizmo_extents_": 0.0
 }
@@ -35,24 +43,18 @@ __meta__ = {
 [node name="Contrails" type="Node2D" parent="."]
 
 [node name="Position2D" type="Position2D" parent="Contrails"]
-position = Vector2( -14, 10 )
+position = Vector2( -14, 5 )
 __meta__ = {
 "_gizmo_extents_": 0.0
 }
 
 [node name="Position2D2" type="Position2D" parent="Contrails"]
-position = Vector2( 14, 10 )
+position = Vector2( 14, 5 )
 __meta__ = {
 "_gizmo_extents_": 0.0
 }
 
 [node name="Cannons" type="Node2D" parent="."]
-
-[node name="Position2D" type="Position2D" parent="Cannons"]
-position = Vector2( 0, -15 )
-__meta__ = {
-"_gizmo_extents_": 0.0
-}
 
 [node name="Shoot" type="AudioStreamPlayer" parent="."]
 stream = ExtResource( 3 )

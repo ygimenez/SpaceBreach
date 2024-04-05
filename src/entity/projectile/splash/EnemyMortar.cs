@@ -9,7 +9,7 @@ namespace SpaceBreach.entity.projectile.splash {
 		protected EnemyMortar() : base(speed: 0, damage: 125) {
 		}
 
-		protected override void OnHit(Entity entity) {
+		protected override void OnEntityHit(Entity entity) {
 			if (_hits.Add(entity)) {
 				entity.AddHp(Source, -Damage);
 			}

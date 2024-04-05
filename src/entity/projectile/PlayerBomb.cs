@@ -15,11 +15,11 @@ namespace SpaceBreach.entity.projectile {
 			base._PhysicsProcess(delta);
 
 			if ((_fuse -= Engine.TimeScale) == 0) {
-				OnHit(null);
+				OnEntityHit(null);
 			}
 		}
 
-		protected override void OnHit(Entity entity) {
+		protected override void OnEntityHit(Entity entity) {
 			GetParent().CallDeferred("add_child", Poll<PlayerExplosion>(false).With(p => {
 				p.Source = Source;
 				p.Position = Position;

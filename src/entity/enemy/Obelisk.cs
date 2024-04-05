@@ -1,6 +1,7 @@
 using Godot;
 using SpaceBreach.entity.model;
 using SpaceBreach.entity.projectile;
+using SpaceBreach.scene;
 using SpaceBreach.util;
 
 namespace SpaceBreach.entity.enemy {

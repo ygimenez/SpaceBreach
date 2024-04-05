@@ -10,15 +10,37 @@ script = ExtResource( 2 )
 margin_right = 260.0
 text = "HANGAR"
 
-[node name="Ships" type="GridContainer" parent="." index="2"]
-margin_left = 400.0
-margin_top = 6.0
-margin_right = 792.0
-margin_bottom = 594.0
-columns = 4
-
-[node name="Description" type="Label" parent="." index="3"]
+[node name="Start" type="Button" parent="." index="2"]
 margin_left = 8.0
-margin_top = 96.0
-margin_right = 392.0
-margin_bottom = 594.0
+margin_top = 60.0
+margin_right = 144.0
+margin_bottom = 108.0
+text = "START"
+
+[node name="Ships" type="HFlowContainer" parent="." index="3"]
+anchor_left = 0.5
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 6.0
+margin_right = -8.0
+margin_bottom = -6.0
+
+[node name="Description" type="RichTextLabel" parent="." index="4"]
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = 144.0
+margin_right = -8.0
+margin_bottom = -264.0
+bbcode_enabled = true
+
+[node name="Stats" type="Label" parent="." index="5"]
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = 8.0
+margin_top = -264.0
+margin_right = -8.0
+margin_bottom = -6.0
+valign = 2

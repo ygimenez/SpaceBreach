@@ -29,7 +29,7 @@ namespace SpaceBreach.entity.projectile {
 
 			foreach (var area in GetOverlappingAreas()) {
 				if (area is Entity e) {
-					OnHit(e);
+					OnEntityHit(e);
 				}
 			}
 		}

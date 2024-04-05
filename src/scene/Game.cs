@@ -11,26 +11,6 @@ namespace SpaceBreach.scene {
 	public abstract class Game : Control {
 		private static readonly WeightedList<Type> _enemies = new WeightedList<Type>();
 
-		static Game() {
-			var enemies = typeof(Enemy).Assembly
-				.GetTypes()
-				.Where(t => t.IsSubclassOf(typeof(Enemy)) && !typeof(ICannotSpawn).IsAssignableFrom(t))
-				.Select(t => Utils.Load(t).Instance<Enemy>())
-				.ToList();
-
-			var max = enemies
-				.Where(e => !(e is IBoss))
-				.Max(e => e.GetCost());
-
-			foreach (var enemy in enemies) {
-				if (enemy is IBoss) {
-					_enemies.Add(enemy.GetType(), int.MaxValue);
-				} else {
-					_enemies.Add(enemy.GetType(), (int) (max - enemy.GetCost()));
-				}
-			}
-		}
-
 		private bool _online;
 		private uint _score;
 		public ulong Tick;
@@ -40,7 +20,7 @@ namespace SpaceBreach.scene {
 			set => _score = (uint) Mathf.Max(0, value);
 		}
 
-		public Player Player;
+		public static Player Player;
 		public uint SpawnPool;
 		public uint Highscore;
 		public uint TextLeft;
@@ -72,11 +52,25 @@ namespace SpaceBreach.scene {
 			if (_online && Global.Leaderboard.Count > 0) {
 				Highscore = Global.Leaderboard[0].Item2;
 			}
+
+			var enemies = typeof(Enemy).Assembly
+				.GetTypes()
+				.Where(t => t.IsSubclassOf(typeof(Enemy)) && !typeof(ICannotSpawn).IsAssignableFrom(t))
+				.Select(t => Utils.Load(t).Instance<Enemy>())
+				.ToList();
+
+			var max = enemies
+				.Where(e => !(e is IBoss))
+				.Max(e => e.GetCost());
+
+			foreach (var enemy in enemies) {
+				_enemies.Add(enemy.GetType(), (int) (max - enemy.GetCost()));
+			}
 		}
 
 		public void _Initialize() {
 			GetNode<Area2D>("GameArea/Area2D").AddCollision();
-			GetNode<Area2D>("GameArea/MaxSizeContainer/SafeArea/Area2D").AddCollision();
+			GetNode<Area2D>("GameArea/MaxSizeContainer/SafeArea/Activator").AddCollision();
 			GetNode<Area2D>("GameArea/MaxSizeContainer/SafeArea/Area2D").AddCollision(false);
 
 			if (Global.Mobile) {
@@ -87,8 +81,7 @@ namespace SpaceBreach.scene {
 			}
 
 			var world = GetSafeArea().GetNode<Node2D>("World");
-			world.AddChild(GD.Load<PackedScene>("res://src/entity/player/Fighter.tscn").Instance<Player>().With(p => {
-				Player = p;
+			world.AddChild(Player.With(p => {
 				Player.GlobalPosition = world.ToLocal(GetNode<Control>("GameArea/Spawn").GetGlobalRect().GetCenter());
 			}));
 

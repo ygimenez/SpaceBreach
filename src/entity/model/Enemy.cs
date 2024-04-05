@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Godot;
 using SpaceBreach.entity.interfaces;
 using SpaceBreach.manager;
+using SpaceBreach.scene;
 using SpaceBreach.util;
 
 namespace SpaceBreach.entity.model {
@@ -72,7 +73,7 @@ namespace SpaceBreach.entity.model {
 		}
 
 		public uint GetCost() {
-			return (uint) (BaseHp * AttackRate * Cannons.Count);
+			return (uint) (BaseHp * AttackRate * Cannons.Count * (this is IBoss ? 5 : 1));
 		}
 
 		protected abstract bool Shoot();
@@ -101,7 +102,7 @@ namespace SpaceBreach.entity.model {
 		}
 
 		protected virtual void OnEnrage() {
-			ActionSpeed *= 1.5f;
+			ActionSpeed *= 1.25f;
 			var world = Game.GetSafeArea().GetNode<Node2D>("World");
 
 			world.AddChild(GD.Load<PackedScene>("res://src/entity/pickup/LargeHpPickup.tscn").Instance<Pickup>().With(p => {
@@ -112,9 +113,9 @@ namespace SpaceBreach.entity.model {
 		protected override Task OnDestroy() {
 			base.OnDestroy();
 			var game = Game;
-			game.Score += (uint) ((this is IBoss ? BaseHp : GetCost()) * (1 + game.Streak / 10f) * (this is IBoss ? 5 : 1));
+			game.Score += (uint) ((this is IBoss ? BaseHp : GetCost()) * (1 + game.Streak / 10f));
 			game.Streak++;
-			game.Player.SpCd.Credits += (uint) Mathf.Abs(BaseHp * game.Player.SpecialRate);
+			Game.Player.SpCd.Credits += (uint) Mathf.Abs(BaseHp * Game.Player.SpecialRate);
 
 			if (_drop) {
 				var world = Game.GetSafeArea().GetNode<Node2D>("World");

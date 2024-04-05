@@ -30,7 +30,7 @@ namespace SpaceBreach.entity.model {
 
 		protected Game Game => GetNode<Game>("/root/Control");
 
-		protected Array Cannons {
+		public Array Cannons {
 			get {
 				var cannons = GetNode("Cannons");
 				if (cannons != null && cannons.GetChildCount() > 0) {

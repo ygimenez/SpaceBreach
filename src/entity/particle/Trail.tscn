@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://src/entity/particle/Contrail.cs" type="Script" id=1]
+[ext_resource path="res://src/entity/particle/Trail.cs" type="Script" id=1]
 
 [sub_resource type="Gradient" id=1]
 offsets = PoolRealArray( 0, 0.863874, 1 )

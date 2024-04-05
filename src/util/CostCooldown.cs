@@ -17,6 +17,7 @@ namespace SpaceBreach.util {
 
 		public bool Ready() {
 			if (_source.Dying || _game.IsGameOver()) return false;
+			if (_source is Player p && p.SpecialRate == 0) return true;
 
 			return Credits >= Cost / _source.ActionSpeed;
 		}

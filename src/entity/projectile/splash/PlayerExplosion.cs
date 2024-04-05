@@ -14,7 +14,7 @@ namespace SpaceBreach.entity.projectile.splash {
 			Scale = Vector2.One * (0.5f + Damage * 0.5f / 100);
 		}
 
-		protected override void OnHit(Entity entity) {
+		protected override void OnEntityHit(Entity entity) {
 			if (_hits.Add(entity)) {
 				entity.AddHp(Source, -Damage);
 			}

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Godot;
 using SpaceBreach.entity.model;
@@ -228,6 +229,10 @@ namespace SpaceBreach.util {
 
 		public static float FSin(float deg) {
 			return Sin[(int) Mathf.PosMod(deg * 10, 3600)];
+		}
+
+		public static string Unindent(this string str) {
+			return Regex.Replace(str, @"^[ \t]+", "", RegexOptions.Multiline | RegexOptions.Compiled);
 		}
 	}
 }

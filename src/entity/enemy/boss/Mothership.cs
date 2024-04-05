@@ -6,13 +6,14 @@ using SpaceBreach.entity.interfaces;
 using SpaceBreach.entity.model;
 using SpaceBreach.entity.projectile;
 using SpaceBreach.entity.projectile.splash;
+using SpaceBreach.scene;
 using SpaceBreach.util;
 
 namespace SpaceBreach.entity.enemy.boss {
 	public abstract class Mothership : Enemy, IBoss {
 		private readonly List<Func<Task>> _skills = new List<Func<Task>>();
 
-		public int DefAngle;
+		public int DefenderAngle;
 		public bool Ready { get; private set; }
 		public bool Enraged => Hp <= BaseHp / 2;
 		private bool _right = Utils.Rng.Randf() > 0.5f;
@@ -46,7 +47,7 @@ namespace SpaceBreach.entity.enemy.boss {
 
 		protected override async void Move() {
 			var parent = this.FindParent<Control>();
-			DefAngle++;
+			DefenderAngle++;
 
 			if (Position.y < parent.RectSize.y / 20) {
 				Translate(new Vector2(0, Speed));

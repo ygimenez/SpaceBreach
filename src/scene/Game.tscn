@@ -185,7 +185,8 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="Area2D" type="Area2D" parent="GameArea"]
-collision_mask = 255
+collision_layer = 0
+collision_mask = 254
 script = ExtResource( 4 )
 
 [node name="ReferenceRect" type="ReferenceRect" parent="GameArea"]
@@ -229,7 +230,11 @@ initial_velocity_random = 0.5
 color = Color( 1, 1, 1, 0.196078 )
 
 [node name="Area2D" type="Area2D" parent="GameArea/MaxSizeContainer/SafeArea"]
-collision_mask = 2
+collision_mask = 6
+
+[node name="Activator" type="Area2D" parent="GameArea/MaxSizeContainer/SafeArea"]
+collision_layer = 0
+collision_mask = 6
 script = ExtResource( 5 )
 
 [node name="World" type="Node2D" parent="GameArea/MaxSizeContainer/SafeArea"]

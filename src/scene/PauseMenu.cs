@@ -50,7 +50,7 @@ namespace SpaceBreach.scene {
 
 		public void _BackPressed() {
 			GetTree().Paused = false;
-			GetTree().Pop();
+			GetTree().PopUntil(_ => false);
 		}
 
 		public void _MakeUppercase(string text, LineEdit edit) {

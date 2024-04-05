@@ -15,21 +15,18 @@ namespace SpaceBreach.manager {
 		public static void Pop(this SceneTree tree) {
 			if (Stack.Count <= 1) return;
 
-			if (Stack.Count > 0) {
+			if (Stack.Count > 1) {
 				Stack.Pop();
-				if (Stack.Count > 0) {
-					tree.Append(Stack.Peek());
-				}
+				tree.ChangeSceneTo(GD.Load<PackedScene>(Stack.Peek()));
 			}
 		}
 
 		public static void PopUntil(this SceneTree tree, Predicate<string> condition) {
-			while (Stack.Count > 0) {
+			while (Stack.Count > 1) {
 				var next = Stack.Peek();
-				if (Stack.Count > 1 && !condition.Invoke(next)) {
+				if (!condition.Invoke(next)) {
+					Stack.Pop();
 					tree.Pop();
-				} else {
-					break;
 				}
 			}
 		}

@@ -1,8 +1,10 @@
+using System.Linq;
 using Godot;
 using SpaceBreach.entity.enemy.boss;
 using SpaceBreach.entity.interfaces;
 using SpaceBreach.entity.model;
 using SpaceBreach.entity.projectile;
+using SpaceBreach.scene;
 using SpaceBreach.util;
 
 namespace SpaceBreach.entity.enemy {
@@ -32,12 +34,7 @@ namespace SpaceBreach.entity.enemy {
 
 		public override void _Ready() {
 			base._Ready();
-
-			foreach (var child in GetParent().GetChildren()) {
-				if (child is Defender) {
-					_index++;
-				}
-			}
+			_index = GetParent().GetChildren().OfType<Defender>().Count();
 		}
 
 		protected override void Move() {
@@ -65,8 +62,8 @@ namespace SpaceBreach.entity.enemy {
 			}
 
 			GlobalPosition = PreviousOrbit.LinearInterpolate(TargetOrbit, _posFac) + new Vector2(
-				Utils.FCos(parent.DefAngle * Speed + 36 * _index) * _radius,
-				Utils.FSin(parent.DefAngle * Speed + 36 * _index) * _radius
+				Utils.FCos(parent.DefenderAngle * Speed + 36 * _index) * _radius,
+				Utils.FSin(parent.DefenderAngle * Speed + 36 * _index) * _radius
 			);
 
 			if (_expanded && _posFac > 0.5) {

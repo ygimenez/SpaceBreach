@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=26 format=2]
+[gd_resource type="Theme" load_steps=29 format=2]
 
 [ext_resource path="res://assets/textures/panel_normal.tres" type="StyleBox" id=1]
 [ext_resource path="res://assets/fonts/SpaceMono.tres" type="DynamicFont" id=2]
@@ -14,6 +14,9 @@
 [ext_resource path="res://assets/textures/grabber.tres" type="StyleBox" id=12]
 [ext_resource path="res://assets/textures/v_slider.tres" type="StyleBox" id=13]
 [ext_resource path="res://assets/textures/updown.tres" type="Texture" id=14]
+[ext_resource path="res://assets/fonts/SpaceMono-Bold.tres" type="DynamicFont" id=15]
+[ext_resource path="res://assets/fonts/SpaceMono-Italic.tres" type="DynamicFont" id=16]
+[ext_resource path="res://assets/fonts/SpaceMono-BoldItalic.tres" type="DynamicFont" id=17]
 
 [sub_resource type="AtlasTexture" id=6]
 flags = 1
@@ -120,6 +123,9 @@ PopupPanel/styles/panel = ExtResource( 1 )
 ProgressBar/colors/font_color = Color( 0.498039, 0.498039, 0.498039, 1 )
 ProgressBar/styles/bg = ExtResource( 1 )
 ProgressBar/styles/fg = SubResource( 9 )
+RichTextLabel/fonts/bold_font = ExtResource( 15 )
+RichTextLabel/fonts/bold_italics_font = ExtResource( 17 )
+RichTextLabel/fonts/italics_font = ExtResource( 16 )
 SpinBox/icons/updown = ExtResource( 14 )
 TabContainer/colors/font_color_bg = Color( 1, 1, 1, 1 )
 TabContainer/colors/font_color_disabled = Color( 1, 1, 1, 0.27451 )

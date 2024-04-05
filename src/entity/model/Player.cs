@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Godot;
+using SpaceBreach.entity.particle;
 using SpaceBreach.manager;
 using SpaceBreach.util;
 
@@ -16,6 +17,9 @@ namespace SpaceBreach.entity.model {
 
 		[Export]
 		public float DamageMult;
+
+		[Export(PropertyHint.MultilineText)]
+		public string Description;
 
 		public Cooldown AtkCd;
 		public CostCooldown SpCd;
@@ -36,10 +40,14 @@ namespace SpaceBreach.entity.model {
 
 			var contGroup = GetNode("Contrails");
 			if (contGroup != null && contGroup.GetChildCount() > 0) {
-				var cont = GD.Load<PackedScene>("res://src/entity/particle/Contrail.tscn");
+				var cont = GD.Load<PackedScene>("res://src/entity/particle/Trail.tscn");
+				var world = Game.GetSafeArea().GetNode<Node2D>("World");
 
-				foreach (var anchor in contGroup.GetChildren()) {
-					(anchor as Node)?.AddChild(cont.Instance());
+				foreach (Position2D anchor in contGroup.GetChildren()) {
+					world.AddChild(cont.Instance<Trail>().With(t => {
+						t.Ship = this;
+						t.Source = anchor;
+					}));
 				}
 			}
 
@@ -58,7 +66,7 @@ namespace SpaceBreach.entity.model {
 				AtkCd.Use();
 			}
 
-			if (Input.IsActionPressed("special") && SpCd.Ready() && Special()) {
+			if (Input.IsActionJustPressed("special") && SpCd.Ready() && Special()) {
 				SpCd.Use();
 			}
 		}
