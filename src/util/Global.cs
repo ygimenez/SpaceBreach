@@ -13,7 +13,7 @@ namespace SpaceBreach.util {
 	public abstract class Global : Node {
 		public static Global Instance;
 		public const string CFG_PATH = "user://settings.cfg";
-		public const string VERSION = "0.0.2-DEV";
+		public const string VERSION = "0.0.3-DEV";
 		public const float ACTION_SPEED = 2;
 
 		public static readonly List<(string, uint)> Leaderboard = new List<(string, uint)>();
