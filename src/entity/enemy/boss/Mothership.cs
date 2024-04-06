@@ -38,7 +38,7 @@ namespace SpaceBreach.entity.enemy.boss {
 			}
 		}
 
-		protected Mothership() : base(hp: 300, speed: 0.15f) {
+		protected Mothership() : base(hp: 3000, speed: 0.15f) {
 		}
 
 		public override void _Ready() {

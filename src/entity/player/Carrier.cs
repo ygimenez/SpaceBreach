@@ -31,9 +31,11 @@ namespace SpaceBreach.entity.player {
 		protected override bool Shoot() {
 			if (Defending) return false;
 
+			var shot = false;
 			var world = Game.GetSafeArea().GetNode<Node2D>("World");
 			var drones = GetChildren().OfType<PlayerDrone>().ToList();
 			foreach (var drone in drones) {
+				if (drone.Cooldown > 0) continue;
 				var pos = drone.GlobalPosition;
 
 				RemoveChild(drone);
@@ -41,9 +43,11 @@ namespace SpaceBreach.entity.player {
 					d.Speed = 2;
 					d.Position = world.ToLocal(pos);
 				}));
+
+				shot = true;
 			}
 
-			return true;
+			return shot;
 		}
 
 		protected override bool Special() {
