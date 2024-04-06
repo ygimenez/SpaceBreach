@@ -15,7 +15,7 @@ namespace SpaceBreach.scene {
 		private bool _online;
 		private uint _score;
 		public ulong Tick;
-		public ulong SpawnTick = 10000;
+		public ulong SpawnTick;
 		private ulong _lastSpawnTick;
 
 		public uint Score {
