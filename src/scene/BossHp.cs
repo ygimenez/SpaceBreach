@@ -2,7 +2,7 @@ using Godot;
 using SpaceBreach.util;
 
 namespace SpaceBreach.scene {
-	public class BossHp : ProgressBar {
+	public abstract class BossHp : ProgressBar {
 		public override void _Process(float delta) {
 			var game = this.FindParent<Game>();
 

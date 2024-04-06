@@ -27,7 +27,7 @@ namespace SpaceBreach.entity.model {
 		private bool _tweened;
 		private bool _enraged;
 
-		protected Enemy(uint hp, float attackRate = 1, float speed = 1) : base(hp, speed) {
+		protected Enemy(uint hp = 100, float attackRate = 1, float speed = 1) : base(hp, speed) {
 			AttackRate = attackRate;
 			_drop = Utils.Rng.Randfn() > 0.9;
 		}
@@ -91,6 +91,7 @@ namespace SpaceBreach.entity.model {
 
 			if (this is IBoss) {
 				Game.Boss = null;
+				Audio.TransitionMusic("res://assets/sounds/music/main.tres");
 			}
 		}
 

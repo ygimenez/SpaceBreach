@@ -29,24 +29,14 @@ namespace SpaceBreach.entity.model {
 		public Vector2 MovementVector {
 			get => _movVec;
 			set {
-				Vector2.Up.Rotated(Rotation);
+				base.Rotation = value.Angle() + Mathf.Pi / 2;
 				_movVec = value;
 			}
 		}
 
 		public new float Rotation {
 			get => base.Rotation;
-			set {
-				var vec = Vector2.Up;
-				var num1 = Utils.FSin(Mathf.Rad2Deg(value));
-				var num2 = Utils.FCos(Mathf.Rad2Deg(value));
-				MovementVector = new Vector2(
-					vec.x * num2 - vec.y * num1,
-					vec.x * num1 + vec.y * num2
-				).Normalized();
-
-				base.Rotation = value;
-			}
+			set => RotationDegrees = Mathf.Rad2Deg(value);
 		}
 
 		public new float RotationDegrees {
@@ -55,12 +45,12 @@ namespace SpaceBreach.entity.model {
 				var vec = Vector2.Up;
 				var num1 = Utils.FSin((int) value);
 				var num2 = Utils.FCos((int) value);
-				MovementVector = new Vector2(
+				_movVec = new Vector2(
 					vec.x * num2 - vec.y * num1,
 					vec.x * num1 + vec.y * num2
 				).Normalized();
 
-				base.RotationDegrees = value;
+				base.RotationDegrees = Mathf.PosMod(value, 360);
 			}
 		}
 

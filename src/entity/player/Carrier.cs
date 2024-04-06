@@ -9,12 +9,12 @@ namespace SpaceBreach.entity.player {
 		public bool Defending;
 		public uint DroneAngle;
 
-		protected Carrier() : base(hp: 300, attackRate: 1.5f, speed: 0.45f, specialRate: 0, projectiles: 1, damageMult: 1.25f) {
+		protected Carrier() : base(hp: 300, attackRate: 1.5f, speed: 0.45f, specialRate: 0, projectiles: 3, damageMult: 1.25f) {
 		}
 
 		public override void _Process(float delta) {
 			base._Process(delta);
-			DroneAngle += (uint) (Defending ? 2 : 5);
+			DroneAngle += (uint) (Defending ? 1.5 : 3);
 
 			var drones = GetChildren().OfType<PlayerDrone>().ToList();
 			if (drones.Count < Projectiles) {

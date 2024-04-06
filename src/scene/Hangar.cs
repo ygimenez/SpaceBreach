@@ -83,7 +83,7 @@ namespace SpaceBreach.scene {
 					l.Text = $@"
 					Armor:        [{Utils.PrcntBar(ship.BaseHp / (float) _base.BaseHp / 2, 10)}]
 					Damage:       [{Utils.PrcntBar(ship.DamageMult / _base.DamageMult / 2, 10)}]
-					Bullets:      [{Utils.PrcntBar(ship.Projectiles * ship.Cannons.Count / (_base.Projectiles * _base.Cannons.Count) / 2, 10)}]
+					Projectiles:  [{Utils.PrcntBar(ship.Projectiles * ship.Cannons.Count / (_base.Projectiles * _base.Cannons.Count) / 2, 10)}]
 					Fire rate:    [{Utils.PrcntBar(ship.AttackRate / _base.AttackRate / 2, 10)}]
 					SP recovery:  {(ship.SpecialRate > 0 ? $"[{Utils.PrcntBar(ship.SpecialRate / _base.SpecialRate / 2, 10)}]" : "N/A")}
 					Speed:        [{Utils.PrcntBar(ship.Speed / _base.Speed / 2, 10)}]

@@ -9,23 +9,31 @@ using SpaceBreach.util;
 
 namespace SpaceBreach.scene {
 	public abstract class Game : Control {
-		private static readonly WeightedList<Type> _enemies = new WeightedList<Type>();
+		private static readonly WeightedList<Type> Bosses = new WeightedList<Type>();
+		private static readonly WeightedList<Type> Enemies = new WeightedList<Type>();
 
 		private bool _online;
 		private uint _score;
 		public ulong Tick;
-		public ulong SpawnTick;
+		public ulong SpawnTick = 10000;
+		private ulong _lastSpawnTick;
+
 		public uint Score {
 			get => _score;
 			set => _score = (uint) Mathf.Max(0, value);
 		}
 
 		public static Player Player;
-		public uint SpawnPool;
 		public uint Highscore;
 		public uint TextLeft;
 		public uint Streak;
 		public Enemy Boss;
+
+		private int _spawnPool;
+		public int SpawnPool {
+			get => _spawnPool;
+			set => _spawnPool = Mathf.Max(0, value);
+		}
 
 		private uint _level = 1;
 		public uint Level {
@@ -37,7 +45,7 @@ namespace SpaceBreach.scene {
 
 					var tween = CreateTween();
 					tween.TweenProperty(back, "color", new Color(
-						rng.Randf() / 3, rng.Randf() / 3, rng.Randf() / 3
+						rng.Randf() / 5, rng.Randf() / 5, rng.Randf() / 5
 					), 2);
 				}
 
@@ -59,12 +67,20 @@ namespace SpaceBreach.scene {
 				.Select(t => Utils.Load(t).Instance<Enemy>())
 				.ToList();
 
-			var max = enemies
+			var maxNormal = enemies
 				.Where(e => !(e is IBoss))
 				.Max(e => e.GetCost());
 
+			var maxBoss = enemies
+				.Where(e => e is IBoss)
+				.Max(e => e.GetCost());
+
 			foreach (var enemy in enemies) {
-				_enemies.Add(enemy.GetType(), (int) (max - enemy.GetCost()));
+				if (enemy is IBoss) {
+					Bosses.Add(enemy.GetType(), (int) (maxBoss - enemy.GetCost()));
+				} else {
+					Enemies.Add(enemy.GetType(), (int) (maxNormal - enemy.GetCost()));
+				}
 			}
 		}
 
@@ -132,9 +148,8 @@ namespace SpaceBreach.scene {
 			if (!IsGameOver() && Boss == null && Utils.Rng.Randf() > 0.95 && SpawnPool > 0) {
 				var world = GetSafeArea().GetNode<Node2D>("World");
 
-				var chosen = _enemies.Next();
+				var chosen = SpawnTick / 10_000 == Level ? Bosses.Next() : Enemies.Next();
 				if (typeof(ICannotSpawn).IsAssignableFrom(chosen)) return;
-				if (typeof(IBoss).IsAssignableFrom(chosen) != (SpawnTick / 10_000 == Level)) return;
 
 				world.AddChild(Utils.Load(chosen).Instance<Enemy>().With(e => {
 					var spawn = GetNode<Control>("GameArea/MaxSizeContainer2/EnemySpawn").GetGlobalRect();
@@ -143,7 +158,6 @@ namespace SpaceBreach.scene {
 					if (e is IBoss) {
 						Boss = e;
 						GetNode<AnimationPlayer>("Warning/AnimationPlayer").Play("Flash");
-						Audio.Cue("res://assets/sounds/warning.wav");
 					}
 
 					SpawnPool--;
@@ -155,8 +169,9 @@ namespace SpaceBreach.scene {
 			if (TextLeft == 0) {
 				Tick++;
 
-				if (SpawnTick % 2000 == 0) {
+				if (SpawnTick != _lastSpawnTick && SpawnTick % 2000 == 0) {
 					SpawnPool++;
+					_lastSpawnTick = SpawnTick;
 				}
 
 				SpawnTick = Math.Min(SpawnTick + 1, Level * 10_000);
@@ -220,6 +235,7 @@ namespace SpaceBreach.scene {
 			var rect = GetNode<ColorRect>("ColorRect");
 			rect.Color = Colors.White;
 			CreateTween().TweenProperty(rect, "color", new Color(Colors.White, 0), 2);
+			Audio.Cue("res://assets/sounds/big_explosion.wav");
 		}
 
 		public bool IsGameOver() {

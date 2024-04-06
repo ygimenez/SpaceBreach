@@ -3,7 +3,7 @@ using SpaceBreach.entity.model;
 using SpaceBreach.util;
 
 namespace SpaceBreach.entity.pickup {
-	public class ChronoPickup : Pickup {
+	public abstract class ChronoPickup : Pickup {
 		public override void _Ready() {
 			base._Ready();
 			if (Engine.TimeScale < 1) {

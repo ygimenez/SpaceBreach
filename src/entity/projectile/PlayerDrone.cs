@@ -1,9 +1,9 @@
 using Godot;
-using Godot.Collections;
 using SpaceBreach.entity.interfaces;
 using SpaceBreach.entity.model;
 using SpaceBreach.entity.particle;
 using SpaceBreach.entity.player;
+using SpaceBreach.manager;
 using SpaceBreach.util;
 
 namespace SpaceBreach.entity.projectile {
@@ -83,7 +83,14 @@ namespace SpaceBreach.entity.projectile {
 		protected override void OnEntityHit(Entity entity) {
 			var parent = GetParent();
 			if (!(parent is Carrier carrier)) {
-				base.OnEntityHit(entity);
+				if (entity != null && Damage > 0) {
+					entity.AddHp(Source, (long) (-Damage * (1 + 0.1f * (5 - _bounces))));
+				}
+
+				if (_bounces == 0) {
+					Release();
+				}
+
 				return;
 			}
 
@@ -120,8 +127,9 @@ namespace SpaceBreach.entity.projectile {
 			ray.ForceRaycastUpdate();
 
 			if (ray.IsColliding()) {
-				MovementVector = GlobalPosition.Bounce(ray.GetCollisionNormal());
-				GD.Print(RotationDegrees);
+				MovementVector = MovementVector.Bounce(ray.GetCollisionNormal());
+				_bounces--;
+				Audio.Cue("res://assets/sounds/ricochet.wav");
 			}
 
 			ray.Enabled = false;

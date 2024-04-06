@@ -3,7 +3,7 @@ using SpaceBreach.scene;
 using SpaceBreach.util;
 
 namespace SpaceBreach.entity.misc {
-	public class FallingText : Node2D {
+	public abstract class FallingText : Node2D {
 		[Export]
 		public string Text = "";
 

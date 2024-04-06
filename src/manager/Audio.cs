@@ -29,9 +29,35 @@ namespace SpaceBreach.manager {
 		public static void StopMusic() {
 			if (Global.Instance.HasNode("Music")) {
 				var player = Global.Instance.GetNode<AudioStreamPlayer>("Music");
+
 				player.Stop();
 				player.QueueFree();
 			}
+		}
+
+		public static void TransitionMusic(string to, uint ramp = 0) {
+			var master = Global.Cfg.GetV("vol_master", 100) / 100f;
+			var music = Global.Cfg.GetV("vol_music", 50) / 100f;
+			var volume = music * master;
+
+			AudioStreamPlayer player;
+			if (Global.Instance.HasNode("Music")) {
+				player = Global.Instance.GetNode<AudioStreamPlayer>("Music");
+				player.Stop();
+
+				volume = GD.Db2Linear(player.VolumeDb);
+			} else {
+				player = new AudioStreamPlayer { Name = "Music" };
+				player.VolumeDb = GD.Linear2Db(0);
+				Global.Instance.AddChild(player);
+			}
+
+			var tween = player.CreateTween();
+			tween.TweenProperty(player, "volume_db", GD.Linear2Db(0), ramp);
+			tween.TweenCallback(player, "stop");
+			tween.TweenProperty(player, "stream", GD.Load<AudioStreamSample>(to), 0);
+			tween.TweenCallback(player, "play");
+			tween.TweenProperty(player, "volume_db", volume, ramp);
 		}
 
 		public static void Cue(string path) {

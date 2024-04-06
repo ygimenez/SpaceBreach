@@ -1,7 +1,7 @@
 using Godot;
 
 namespace SpaceBreach.util {
-	public class NonOccluding : Area2D {
+	public abstract class NonOccluding : Area2D {
 		private Color _oldModulate;
 
 		public override void _Ready() {

@@ -4,7 +4,7 @@ using SpaceBreach.entity.model;
 using SpaceBreach.util;
 
 namespace SpaceBreach.entity.misc {
-	public class Marker : Node2D {
+	public abstract class Marker : Node2D {
 		[Export]
 		public Node2D Tracked;
 

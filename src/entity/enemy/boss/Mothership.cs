@@ -6,6 +6,7 @@ using SpaceBreach.entity.interfaces;
 using SpaceBreach.entity.model;
 using SpaceBreach.entity.projectile;
 using SpaceBreach.entity.projectile.splash;
+using SpaceBreach.manager;
 using SpaceBreach.scene;
 using SpaceBreach.util;
 
@@ -37,7 +38,7 @@ namespace SpaceBreach.entity.enemy.boss {
 			}
 		}
 
-		protected Mothership() : base(hp: 3000, speed: 0.15f) {
+		protected Mothership() : base(hp: 300, speed: 0.15f) {
 		}
 
 		public override void _Ready() {
@@ -85,7 +86,19 @@ namespace SpaceBreach.entity.enemy.boss {
 		}
 
 		protected override async Task OnDestroy() {
-			await this.Delay(5000);
+			Audio.StopMusic();
+			var size = Size;
+			for (var i = 0; i < 10; i++) {
+				AddChild(Projectile.Poll<PlayerExplosion>(false).With(l => {
+					l.Source = this;
+					l.Damage = 0;
+					l.Position = -size / 2 + size * Utils.Rng.Randf();
+					l.Scale *= 1 + Utils.Rng.Randf();
+				}));
+
+				Audio.Cue("res://assets/sounds/mini_explosion.wav");
+				await this.Delay(500);
+			}
 			Game.Nuke();
 
 			await base.OnDestroy();
