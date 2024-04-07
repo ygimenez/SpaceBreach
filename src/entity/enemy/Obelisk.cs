@@ -10,7 +10,7 @@ namespace SpaceBreach.entity.enemy {
 		private float _fac;
 		private uint _timeLeft;
 
-		protected Obelisk() : base(hp: 200, speed: 0.005f) {
+		protected Obelisk() : base(hp: 200, speed: 0.0025f) {
 		}
 
 		public override void _Ready() {

@@ -164,11 +164,11 @@ namespace SpaceBreach.entity.enemy.boss {
 
 					var radius = Mathf.Max(safe.RectSize.x, safe.RectSize.y);
 
-					for (var i = 0; i < 36; i++) {
+					for (var i = 0; i < 18; i++) {
 						if (Dying || Game.IsGameOver()) return;
 
 						var hole = holes > 0 && Utils.Rng.Randf() > 0.75;
-						if (adjHole || hole || i >= 36 - holes) {
+						if (adjHole || hole || i >= 18 - holes) {
 							holes--;
 							adjHole = !adjHole;
 
@@ -176,8 +176,8 @@ namespace SpaceBreach.entity.enemy.boss {
 						}
 
 						var offset = new Vector2(
-							Utils.FCos(10 * i) * radius,
-							Utils.FSin(10 * i) * radius
+							Utils.FCos(20 * i) * radius,
+							Utils.FSin(20 * i) * radius
 						);
 						world.AddChild(Projectile.Poll<EnemyMeteor>().With(l => {
 							l.Source = this;
@@ -191,7 +191,6 @@ namespace SpaceBreach.entity.enemy.boss {
 			} else {
 				var lastDir = -1;
 				var direction = -1;
-				var amount = (int) safe.RectSize.x / Mathf.Max(size.x, size.y);
 
 				for (var j = 0; j < 4; j++) {
 					if (Dying || Game.IsGameOver()) return;
@@ -205,6 +204,7 @@ namespace SpaceBreach.entity.enemy.boss {
 
 					var holes = 3;
 					var adjHole = false;
+					var amount = (int) (direction % 2 == 0 ? safe.RectSize.x : safe.RectSize.y) / Mathf.Max(size.x, size.y);
 
 					for (var i = 0; i < amount; i++) {
 						if (Dying || Game.IsGameOver()) return;
@@ -226,7 +226,7 @@ namespace SpaceBreach.entity.enemy.boss {
 								offset = new Vector2(-size.x * 3, size.y * i);
 								break;
 							case 2:
-								offset = new Vector2(size.x * i, -size.x * 3);
+								offset = new Vector2(size.x * i, -size.y * 3);
 								break;
 							case 3:
 								offset = new Vector2(safe.RectSize.y + size.x * 3, size.y * i);
@@ -317,7 +317,7 @@ namespace SpaceBreach.entity.enemy.boss {
 				for (var j = 0; j < 25; j++) {
 					if (Dying || Game.IsGameOver()) return;
 
-					var rotSpeed = invert ? -0.5f : 0.5f;
+					var rotSpeed = invert ? -0.25f : 0.25f;
 
 					for (var i = 0; i < 8; i++) {
 						if (Dying || Game.IsGameOver()) return;

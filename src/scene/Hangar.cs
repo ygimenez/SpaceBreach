@@ -60,6 +60,9 @@ namespace SpaceBreach.scene {
 			}
 
 			GetNode<Button>("Start").Disabled = _selected == null;
+			GetNode<Control>("Ships").With(c => {
+				c.RectSize = new Vector2(RectSize.x / 3, c.RectSize.y);
+			});
 		}
 
 		public void _StartPressed() {
@@ -71,27 +74,22 @@ namespace SpaceBreach.scene {
 			_selected = ship == _selected ? null : ship;
 
 			if (_selected != null) {
-				GetNode<RichTextLabel>("Description").With(l =>
+				GetNode<RichTextLabel>("MaxSizeContainer/Description").With(l =>
 					l.BbcodeText = $@"
 					[b]{ship.GetType().Name}[/b]
 
 					{ship.Description}
-					".Trim().Unindent()
-				);
 
-				GetNode<Label>("Stats").With(l =>
-					l.Text = $@"
 					Armor:        [{Utils.PrcntBar(ship.BaseHp / (float) _base.BaseHp / 2, 10)}]
 					Damage:       [{Utils.PrcntBar(ship.DamageMult / _base.DamageMult / 2, 10)}]
 					Projectiles:  [{Utils.PrcntBar(ship.Projectiles * ship.Cannons.Count / (_base.Projectiles * _base.Cannons.Count) / 2, 10)}]
 					Fire rate:    [{Utils.PrcntBar(ship.AttackRate / _base.AttackRate / 2, 10)}]
 					SP recovery:  {(ship.SpecialRate > 0 ? $"[{Utils.PrcntBar(ship.SpecialRate / _base.SpecialRate / 2, 10)}]" : "N/A")}
 					Speed:        [{Utils.PrcntBar(ship.Speed / _base.Speed / 2, 10)}]
-					".Trim()
+					".Trim().Unindent()
 				);
 			} else {
 				GetNode<RichTextLabel>("Description").Text = "";
-				GetNode<Label>("Stats").Text = "";
 			}
 		}
 
